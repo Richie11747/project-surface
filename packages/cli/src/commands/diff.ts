@@ -11,7 +11,7 @@ import {
   buildSurface,
   diffSurfaces,
   readSurface,
-  runGit,
+  showFileAtRef,
   validateSurface,
   SURFACE_FILE,
 } from "@project-surface/core";
@@ -95,10 +95,10 @@ function section(title: string, diff: { added: string[]; removed: string[]; chan
 }
 
 function surfaceAtRef(root: string, ref: string): Surface | null {
-  const result = runGit(root, ["show", `${ref}:${SURFACE_FILE}`]);
-  if (!result.ok) return null;
+  const raw = showFileAtRef(root, ref, SURFACE_FILE);
+  if (raw === null) return null;
   try {
-    const parsed: unknown = JSON.parse(result.stdout);
+    const parsed: unknown = JSON.parse(raw);
     return validateSurface(parsed).valid ? (parsed as Surface) : null;
   } catch {
     return null;

@@ -31,6 +31,7 @@ export { emptyResult } from "@project-surface/core";
 export {
   classifyCommand,
   extractEnvNames,
+  isSafeCommandToken,
   provenance,
   source,
   type ProvenanceInput,

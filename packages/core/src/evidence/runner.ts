@@ -19,6 +19,7 @@
  */
 
 import { spawnSync } from "node:child_process";
+import { realpathSync } from "node:fs";
 import { isAbsolute, relative, resolve } from "node:path";
 import { sanitizeOutput } from "../redact.js";
 import type { Command, Surface, Timestamp, VerificationRecord } from "../schema/types.js";
@@ -53,17 +54,29 @@ export function resolveAllowedCommand(surface: Surface, commandId: string): Comm
   return found;
 }
 
+/**
+ * The working directory must be inside the project both lexically and
+ * physically: a `cwd` that names a symlinked directory pointing elsewhere
+ * would pass a string comparison and still run the command outside the tree.
+ */
 function safeCwd(root: string, cwd: string): string {
   const target = resolve(root, cwd || ".");
-  const rel = relative(resolve(root), target);
-  if (rel.startsWith("..") || isAbsolute(rel)) throw new UnsafeWorkingDirectoryError(cwd);
+  const contained = (base: string, candidate: string): boolean => {
+    const rel = relative(base, candidate);
+    return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+  };
+  if (!contained(resolve(root), target)) throw new UnsafeWorkingDirectoryError(cwd);
+  try {
+    if (!contained(realpathSync(root), realpathSync(target))) throw new UnsafeWorkingDirectoryError(cwd);
+  } catch (error) {
+    if (error instanceof UnsafeWorkingDirectoryError) throw error;
+    /* Missing directory: spawn will report that itself. */
+  }
   return target;
 }
 
 export interface RunOptions {
   timeoutMs?: number;
-  /** Extra arguments appended to the command, already shell-safe. */
-  extraArgs?: string;
   now: Timestamp;
 }
 
@@ -80,7 +93,7 @@ export function runCommand(
 ): VerificationRecord {
   const cwd = safeCwd(root, command.cwd);
   const timeout = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
-  const line = options.extraArgs ? `${command.run} ${options.extraArgs}` : command.run;
+  const line = command.run;
 
   const started = Date.now();
   const result = spawnSync(line, {

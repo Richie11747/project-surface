@@ -38,6 +38,7 @@ const PATTERNS: readonly Pattern[] = Object.freeze([
   { name: "bearer", re: /\b(Bearer|Basic)\s+[A-Za-z0-9._~+/=-]{12,}/gi, replace: `$1 ${REDACTION}` },
   { name: "aws-access-key", re: /\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g, replace: REDACTION },
   { name: "openai-key", re: /\bsk-[A-Za-z0-9_-]{16,}\b/g, replace: REDACTION },
+  { name: "stripe-key", re: /\b[sr]k_(?:live|test)_[A-Za-z0-9]{10,}\b/g, replace: REDACTION },
   { name: "github-token", re: /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{20,}\b/g, replace: REDACTION },
   { name: "github-pat", re: /\bgithub_pat_[A-Za-z0-9_]{20,}\b/g, replace: REDACTION },
   { name: "slack-token", re: /\bxox[abposr]-[A-Za-z0-9-]{10,}\b/g, replace: REDACTION },
@@ -83,6 +84,14 @@ export function redactPaths(input: string, root?: string): string {
     }
   }
   out = out.replace(/(?:[A-Za-z]:)?[\\/](?:Users|home)[\\/][^\\/\s:",]+/g, "~");
+  /* Any other absolute path with at least two segments - CI workspaces
+     (/builds/group/project, D:\agent\_work\1\s), container mounts, custom
+     install locations. Relative paths and URLs (preceded by ':' or '/') are
+     left alone. */
+  out = out.replace(
+    /(?<![\w:./~\\])(?:[A-Za-z]:)?[\\/](?:[^\\/\s:"',;)]+[\\/])+[^\\/\s:"',;)]*/g,
+    "<path>"
+  );
   return out;
 }
 

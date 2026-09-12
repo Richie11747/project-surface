@@ -206,10 +206,12 @@ Evidence linking is where this differs from a filename heuristic. If a test **im
 ## Trust and safety
 
 - **Local-first and read-only by default.** Core makes zero network calls and never writes to your source files.
-- **Only one code path executes anything** - `evidence/runner.ts` - and it will only run a command that already exists in the surface document.
+- **Only one code path runs a project command** - `evidence/runner.ts` - and it will only run a command that already exists in the surface document, from a working directory physically inside the project. The only other spawn site is `git/git.ts`, which invokes a fixed `git` binary with an argument array (no shell) for read-only queries, and refuses refs that look like options.
+- **Symlinks are never followed.** A repository can commit a link to `~/.ssh/id_rsa`; the file reader refuses anything whose real path leaves the project root.
+- **Adapters refuse to build command lines from suspicious names.** A `package.json` script key containing shell metacharacters is skipped rather than turned into a `run` string.
 - **`surface_verify` over MCP is gated twice**: the operator must set `PROJECT_SURFACE_ALLOW_EXEC=1`, *and* the command must already be in the document. There is no parameter through which a caller can supply a shell string, only an id to look up. The worst an adversarial prompt can achieve is running a command the project already declares.
-- **Secrets never enter the document.** Environment variable *names* are surfaced; values are never read. All captured output passes through one redaction funnel before it is stored.
-- **No absolute paths.** The conformance suite fails any adapter that leaks a machine path.
+- **Secrets never enter the document by design; captured output is best-effort.** Environment variable *names* are surfaced; values are never read. All captured command output passes through one redaction funnel (key assignments, bearer headers, connection strings, well-known token prefixes, private-key blocks) before it is stored - a pattern blocklist, so treat it as defense in depth, not a guarantee, and keep secrets out of test output.
+- **No absolute paths.** The conformance suite fails any adapter that leaks a machine path, and any absolute path in captured output is replaced before storage.
 
 ---
 

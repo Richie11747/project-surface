@@ -7,7 +7,7 @@
  * structured configuration, not guessed.
  */
 
-import { classifyCommand, provenance, source } from "@project-surface/adapter-sdk";
+import { classifyCommand, isSafeCommandToken, provenance, source } from "@project-surface/adapter-sdk";
 import { commandId, constraintId, packageIdFromPath } from "@project-surface/core";
 import type {
   AdapterContext,
@@ -46,7 +46,7 @@ export function detectPackageManager(ctx: AdapterContext): { name: string; evide
   const root = ctx.readJson<PackageJson>("package.json");
   if (root?.packageManager) {
     const name = root.packageManager.split("@")[0];
-    if (name) return { name, evidence: "package.json" };
+    if (name && isSafeCommandToken(name)) return { name, evidence: "package.json" };
   }
   for (const [file, name] of LOCKFILES) {
     if (ctx.exists(file)) return { name, evidence: file };
@@ -88,6 +88,8 @@ export function commandsFrom(
   for (const pkg of packages) {
     for (const [name, script] of Object.entries(pkg.json.scripts ?? {})) {
       if (typeof script !== "string" || script.trim().length === 0) continue;
+      /* A script key is arbitrary JSON text and ends up on a shell line. */
+      if (!isSafeCommandToken(name)) continue;
       commands.push({
         id: commandId(name, pkg.info.id),
         run: `${manager} run ${name}`,

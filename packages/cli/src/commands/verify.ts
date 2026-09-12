@@ -78,13 +78,22 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
      fingerprint, so rebuild from the updated document rather than leaving that
      to the next `init`. If the rebuild fails, the raw results are still saved. */
   writeSurface(options.root, updated);
-  const { surface: rebuilt, warnings } = await buildSurface({
-    root: options.root,
-    adapters: builtinAdapters,
-    previous: updated,
-    now,
-  });
-  writeSurface(options.root, rebuilt);
+  const warnings: string[] = [];
+  try {
+    const rebuild = await buildSurface({
+      root: options.root,
+      adapters: builtinAdapters,
+      previous: updated,
+      now,
+    });
+    warnings.push(...rebuild.warnings);
+    writeSurface(options.root, rebuild.surface);
+  } catch (error) {
+    warnings.push(
+      `Results were recorded, but the surface could not be rebuilt: ${(error as Error).message}. ` +
+        `Run surface init to propagate them.`
+    );
+  }
 
   if (options.json) {
     printJson({ results: results.map((r) => ({ id: r.command.id, run: r.command.run, ...r.record })), warnings });

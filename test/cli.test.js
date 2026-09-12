@@ -88,6 +88,44 @@ test("a verified claim goes stale when its owner file changes, and doctor --stri
   }
 });
 
+test("verify runs a recorded command and promotes the capability it proves", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+
+    const verify = surface(root, "verify", "--command", "test", "--json");
+    assert.equal(verify.code, 0, verify.stderr);
+    const report = JSON.parse(verify.stdout);
+    assert.equal(report.results[0].id, "test");
+    assert.equal(report.results[0].status, "passed");
+    assert.deepEqual(report.warnings, []);
+
+    /* No second init: verify rebuilds the document itself. */
+    const inspect = surface(root, "inspect", "checkout.create", "--json");
+    const doc = JSON.parse(inspect.stdout);
+    const claim = doc.capability ?? doc;
+    assert.equal(claim.freshness.status, "fresh");
+    assert.ok(claim.confidence >= 0.95, `confidence ${claim.confidence}`);
+
+    const evidence = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8")).evidence;
+    assert.ok(evidence.some((e) => e.status === "passed"), "evidence should record the observed pass");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("verify refuses a command that is not in the document", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    const result = surface(root, "verify", "--command", "rm -rf /");
+    assert.equal(result.code, 1);
+    assert.match(result.stderr, /not present in the surface document/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("every command answers --help and unknown commands fail", () => {
   for (const cmd of ["init", "inspect", "map", "verify", "impact", "context", "diff", "doctor", "report", "mcp"]) {
     const help = surface(".", cmd, "--help");

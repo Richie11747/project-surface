@@ -75,8 +75,30 @@ export function hashObjects(root: string, paths: string[]): Map<string, string> 
   return out;
 }
 
+/**
+ * A revision name that is safe to hand to git as a positional argument.
+ *
+ * `ref` comes from a CLI flag or an MCP tool parameter. git is spawned with
+ * an argv array, so there is no shell to inject into - but a value beginning
+ * with `-` would be parsed as a git option (`--output=<path>` writes a file),
+ * which is the one thing an untrusted caller must not be able to do.
+ */
+const SAFE_REF = /^[A-Za-z0-9][A-Za-z0-9._\/~^@{}-]{0,255}$/;
+
+export function isSafeRef(ref: string): boolean {
+  return SAFE_REF.test(ref) && !ref.includes("..") && !ref.includes("@{");
+}
+
+/** Contents of a tracked file at a revision, or null when absent or the ref is unsafe. */
+export function showFileAtRef(root: string, ref: string, file: string): string | null {
+  if (!isSafeRef(ref)) return null;
+  const r = runGit(root, ["show", `${ref}:${file}`]);
+  return r.ok ? r.stdout : null;
+}
+
 /** Paths changed between `ref` and the working tree. */
 export function changedSince(root: string, ref: string): string[] | null {
+  if (!isSafeRef(ref)) return null;
   const r = runGit(root, ["diff", "--name-only", `${ref}...HEAD`]);
   if (!r.ok) return null;
   const committed = r.stdout.split("\n").filter(Boolean);

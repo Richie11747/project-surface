@@ -128,9 +128,11 @@ export {
   changedSince,
   hashObjects,
   isRepository,
+  isSafeRef,
   listFiles,
   readGitInfo,
   runGit,
+  showFileAtRef,
   stagedPaths,
   toIsoUtc,
 } from "./git/git.js";

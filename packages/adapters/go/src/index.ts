@@ -11,7 +11,7 @@
  * is no way to run one at all.
  */
 
-import { emptyResult, findContracts, isOnPath, provenance, source } from "@project-surface/adapter-sdk";
+import { emptyResult, findContracts, isOnPath, isSafeCommandToken, provenance, source } from "@project-surface/adapter-sdk";
 import type {
   Adapter,
   AdapterContext,
@@ -75,6 +75,7 @@ function standardCommands(ctx: AdapterContext): DraftCommand[] {
 
   for (const main of ctx.match(/^cmd\/[^/]+\/main\.go$/)) {
     const name = main.split("/")[1] ?? "main";
+    if (!isSafeCommandToken(name)) continue;
     commands.push({
       id: commandId(`run-${name}`),
       run: `go run ./cmd/${name}`,

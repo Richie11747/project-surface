@@ -9,7 +9,7 @@
  * taken so consumers know how trustworthy the listing is.
  */
 
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { lstatSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { listFiles } from "../git/git.js";
 
@@ -84,10 +84,35 @@ export function walkProject(root: string, maxFiles: number = MAX_FILES): WalkRes
   return { files: collected.sort(), truncated, source: "filesystem" };
 }
 
+/**
+ * Resolve a project-relative path to something that is physically inside the
+ * project, or null.
+ *
+ * A repository can commit a symlink pointing anywhere on the machine - a
+ * private key, a credentials file - and `git ls-files` lists it like any other
+ * path. Reading through it would hand that content to an adapter or, via
+ * `surface_context`, straight back to an MCP caller. So the real path must sit
+ * under the real root, and the final component must not be a link at all.
+ */
+export function resolveInside(root: string, relPath: string): string | null {
+  const full = join(root, relPath);
+  try {
+    if (lstatSync(full).isSymbolicLink()) return null;
+    const realRoot = realpathSync(root);
+    const real = realpathSync(full);
+    if (real !== realRoot && !real.startsWith(realRoot + sep)) return null;
+    return full;
+  } catch {
+    return null;
+  }
+}
+
 /** Read a project file, returning null rather than throwing on any failure. */
 export function readFileSafe(root: string, relPath: string): string | null {
+  const target = resolveInside(root, relPath);
+  if (target === null) return null;
   try {
-    return readFileSync(join(root, relPath), "utf8");
+    return readFileSync(target, "utf8");
   } catch {
     return null;
   }
@@ -104,10 +129,5 @@ export function readJsonSafe<T>(root: string, relPath: string): T | null {
 }
 
 export function existsSafe(root: string, relPath: string): boolean {
-  try {
-    statSync(join(root, relPath));
-    return true;
-  } catch {
-    return false;
-  }
+  return resolveInside(root, relPath) !== null;
 }

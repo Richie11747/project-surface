@@ -16,6 +16,8 @@ const LEAKS = [
   ["bearer header", "Authorization: Bearer abcdefghijklmnopqrstuvwxyz012345"],
   ["connection string", "postgres://appuser:hunter2@db.internal:5432/app"],
   ["password field", "password=correct-horse-battery"],
+  ["stripe secret key", "key sk_live_" + "EXAMPLEabcdefghijklmnop"],
+  ["stripe restricted key", "key rk_test_" + "EXAMPLEabcdefghijklmnop"],
 ];
 
 for (const [name, input] of LEAKS) {
@@ -51,6 +53,17 @@ test("home directories are stripped even without a known root", () => {
   assert.ok(!redactPaths("/home/alice/code/app/main.go").includes("alice"));
   const winPath = ["C:", "Users", "Alice", "code", "app"].join(String.fromCharCode(92));
   assert.ok(!redactPaths(winPath).includes("Alice"), redactPaths(winPath));
+});
+
+test("absolute paths of any shape are stripped, relative paths and URLs are kept", () => {
+  const out = redactPaths(
+    "at /builds/group/project/src/a.ts and D:\\agent\\_work\\1\\s\\b.ts, see ./src/c.ts or src/d.ts and https://example.com/x/y"
+  );
+  assert.ok(!out.includes("/builds/group"), out);
+  assert.ok(!out.includes("_work"), out);
+  assert.ok(out.includes("./src/c.ts"), out);
+  assert.ok(out.includes("src/d.ts"), out);
+  assert.ok(out.includes("https://example.com/x/y"), out);
 });
 
 test("output is truncated to a bounded size", () => {

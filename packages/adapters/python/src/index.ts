@@ -7,7 +7,7 @@
  */
 
 import { parse as parseToml } from "smol-toml";
-import { classifyCommand, emptyResult, findContracts, provenance, source } from "@project-surface/adapter-sdk";
+import { classifyCommand, emptyResult, findContracts, isSafeCommandToken, provenance, source } from "@project-surface/adapter-sdk";
 import type {
   Adapter,
   AdapterContext,
@@ -101,7 +101,7 @@ function packagingClaims(
 
   const commands: DraftCommand[] = [];
   for (const [name, target] of Object.entries(pyproject?.project?.scripts ?? {})) {
-    if (typeof target !== "string") continue;
+    if (typeof target !== "string" || !isSafeCommandToken(name)) continue;
     commands.push({
       id: commandId(name),
       run: name,

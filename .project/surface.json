@@ -1,6 +1,6 @@
 {
   "schema": "project-surface/v1",
-  "generatedAt": "2026-09-12T07:51:05Z",
+  "generatedAt": "2026-09-12T08:07:40Z",
   "generator": {
     "name": "project-surface",
     "version": "0.1.0"
@@ -120,7 +120,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -145,7 +145,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -170,7 +170,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -195,7 +195,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -220,7 +220,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -245,7 +245,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -270,7 +270,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -295,7 +295,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -310,7 +310,7 @@
       "cwd": ".",
       "kind": "test",
       "packageId": "root",
-      "description": "npm run build && node --test --test-reporter=spec \"test/*.test.js\" \"packages/**/test/*.test.js\"",
+      "description": "npm run build && node scripts/run-tests.mjs",
       "provenance": {
         "tier": "derived",
         "sources": [
@@ -323,7 +323,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -331,6 +331,31 @@
         "reason": "Never verified."
       },
       "confidence": 0.75
+    },
+    {
+      "id": "test:only",
+      "run": "npm run test:only",
+      "cwd": ".",
+      "kind": "test",
+      "packageId": "root",
+      "description": "node scripts/run-tests.mjs",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "scripts.test:only"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-12T08:07:40Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
     },
     {
       "id": "typecheck",
@@ -348,7 +373,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -390,7 +415,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -431,7 +456,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -468,7 +493,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -505,7 +530,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -542,7 +567,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -579,7 +604,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -616,7 +641,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -653,7 +678,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -690,7 +715,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -727,7 +752,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -771,7 +796,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -804,15 +829,15 @@
         "sources": [
           {
             "path": "packages/adapter-sdk/src/builders.ts",
-            "locator": "L38"
+            "locator": "L50"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "9fb27474b3915f6aec35c6d8c40ce097",
+        "ownersFingerprint": "633d90baffcf9197d50cada575b8b077",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -841,15 +866,52 @@
         "sources": [
           {
             "path": "packages/adapter-sdk/src/builders.ts",
-            "locator": "L52"
+            "locator": "L64"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "9fb27474b3915f6aec35c6d8c40ce097",
+        "ownersFingerprint": "633d90baffcf9197d50cada575b8b077",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "builders.is-safe-command-token",
+      "title": "isSafeCommandToken",
+      "description": "Exported function in packages/adapter-sdk/src/builders.ts.",
+      "kind": "export",
+      "packageId": "packages-adapter-sdk",
+      "owners": [
+        {
+          "path": "packages/adapter-sdk/src/builders.ts",
+          "locator": "export:isSafeCommandToken"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "packages/adapter-sdk/src/builders.ts",
+            "locator": "L26"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-12T08:07:40Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "633d90baffcf9197d50cada575b8b077",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -878,15 +940,15 @@
         "sources": [
           {
             "path": "packages/adapter-sdk/src/builders.ts",
-            "locator": "L22"
+            "locator": "L34"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "9fb27474b3915f6aec35c6d8c40ce097",
+        "ownersFingerprint": "633d90baffcf9197d50cada575b8b077",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -915,15 +977,15 @@
         "sources": [
           {
             "path": "packages/adapter-sdk/src/builders.ts",
-            "locator": "L18"
+            "locator": "L30"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "9fb27474b3915f6aec35c6d8c40ce097",
+        "ownersFingerprint": "633d90baffcf9197d50cada575b8b077",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -956,7 +1018,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -993,7 +1055,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1030,7 +1092,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1067,7 +1129,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1104,7 +1166,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1141,7 +1203,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1178,7 +1240,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1215,7 +1277,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1324,11 +1386,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "43395e46b34c4b138da58a6d20eca728",
+        "ownersFingerprint": "b2c42e763f093d9cb9248f77aa95ede2",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -1361,7 +1423,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1398,7 +1460,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1435,7 +1497,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1472,7 +1534,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1509,7 +1571,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1550,7 +1612,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1587,7 +1649,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1624,7 +1686,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1661,7 +1723,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1698,7 +1760,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1735,7 +1797,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1772,7 +1834,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1809,7 +1871,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1846,7 +1908,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1883,7 +1945,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -1916,15 +1978,15 @@
         "sources": [
           {
             "path": "packages/core/src/evidence/runner.ts",
-            "locator": "L29"
+            "locator": "L30"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "625fb67cf8ddad6783ebea0cc979d8e2",
+        "ownersFingerprint": "d131521dfebe62fea6cbdbbcdd0a0f60",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -1953,15 +2015,15 @@
         "sources": [
           {
             "path": "packages/core/src/evidence/runner.ts",
-            "locator": "L50"
+            "locator": "L51"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "625fb67cf8ddad6783ebea0cc979d8e2",
+        "ownersFingerprint": "d131521dfebe62fea6cbdbbcdd0a0f60",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -1990,15 +2052,15 @@
         "sources": [
           {
             "path": "packages/core/src/evidence/runner.ts",
-            "locator": "L76"
+            "locator": "L89"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "625fb67cf8ddad6783ebea0cc979d8e2",
+        "ownersFingerprint": "d131521dfebe62fea6cbdbbcdd0a0f60",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2027,15 +2089,15 @@
         "sources": [
           {
             "path": "packages/core/src/evidence/runner.ts",
-            "locator": "L128"
+            "locator": "L141"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "625fb67cf8ddad6783ebea0cc979d8e2",
+        "ownersFingerprint": "d131521dfebe62fea6cbdbbcdd0a0f60",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2064,15 +2126,15 @@
         "sources": [
           {
             "path": "packages/core/src/evidence/runner.ts",
-            "locator": "L40"
+            "locator": "L41"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "625fb67cf8ddad6783ebea0cc979d8e2",
+        "ownersFingerprint": "d131521dfebe62fea6cbdbbcdd0a0f60",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2105,11 +2167,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "5803ae0e6b44d09b5cca2eaf9e2e4fd5",
+        "ownersFingerprint": "d36fc66a398b883996ff3d8c45b4c4b4",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2138,15 +2200,15 @@
         "sources": [
           {
             "path": "packages/core/src/fs/walk.ts",
-            "locator": "L106"
+            "locator": "L131"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "5803ae0e6b44d09b5cca2eaf9e2e4fd5",
+        "ownersFingerprint": "d36fc66a398b883996ff3d8c45b4c4b4",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2175,15 +2237,15 @@
         "sources": [
           {
             "path": "packages/core/src/fs/walk.ts",
-            "locator": "L88"
+            "locator": "L111"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "5803ae0e6b44d09b5cca2eaf9e2e4fd5",
+        "ownersFingerprint": "d36fc66a398b883996ff3d8c45b4c4b4",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2212,15 +2274,52 @@
         "sources": [
           {
             "path": "packages/core/src/fs/walk.ts",
-            "locator": "L96"
+            "locator": "L121"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "5803ae0e6b44d09b5cca2eaf9e2e4fd5",
+        "ownersFingerprint": "d36fc66a398b883996ff3d8c45b4c4b4",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "fs.resolve-inside",
+      "title": "resolveInside",
+      "description": "Exported function in packages/core/src/fs/walk.ts.",
+      "kind": "export",
+      "packageId": "packages-core",
+      "owners": [
+        {
+          "path": "packages/core/src/fs/walk.ts",
+          "locator": "export:resolveInside"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "packages/core/src/fs/walk.ts",
+            "locator": "L97"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-12T08:07:40Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "d36fc66a398b883996ff3d8c45b4c4b4",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2253,11 +2352,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "5803ae0e6b44d09b5cca2eaf9e2e4fd5",
+        "ownersFingerprint": "d36fc66a398b883996ff3d8c45b4c4b4",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2290,11 +2389,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "5803ae0e6b44d09b5cca2eaf9e2e4fd5",
+        "ownersFingerprint": "d36fc66a398b883996ff3d8c45b4c4b4",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2327,11 +2426,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2360,15 +2459,15 @@
         "sources": [
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L79"
+            "locator": "L100"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2401,11 +2500,48 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "git.is-safe-ref",
+      "title": "isSafeRef",
+      "description": "Exported function in packages/core/src/git/git.ts.",
+      "kind": "export",
+      "packageId": "packages-core",
+      "owners": [
+        {
+          "path": "packages/core/src/git/git.ts",
+          "locator": "export:isSafeRef"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "packages/core/src/git/git.ts",
+            "locator": "L88"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-12T08:07:40Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2438,11 +2574,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2471,15 +2607,15 @@
         "sources": [
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L131"
+            "locator": "L153"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2512,11 +2648,48 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "git.show-file-at-ref",
+      "title": "showFileAtRef",
+      "description": "Exported function in packages/core/src/git/git.ts.",
+      "kind": "export",
+      "packageId": "packages-core",
+      "owners": [
+        {
+          "path": "packages/core/src/git/git.ts",
+          "locator": "export:showFileAtRef"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "packages/core/src/git/git.ts",
+            "locator": "L93"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-12T08:07:40Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2545,15 +2718,15 @@
         "sources": [
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L88"
+            "locator": "L110"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2582,15 +2755,15 @@
         "sources": [
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L148"
+            "locator": "L170"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f914e1cdaedc9dce3d126e7416708cd",
+        "ownersFingerprint": "096c10600dee693560c16b27755d5197",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -2648,7 +2821,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2696,7 +2869,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2744,7 +2917,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2797,7 +2970,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2840,7 +3013,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2883,7 +3056,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2926,7 +3099,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2969,7 +3142,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3012,7 +3185,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3060,7 +3233,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3103,7 +3276,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3151,7 +3324,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3188,7 +3361,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3225,7 +3398,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3262,7 +3435,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3299,7 +3472,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3336,11 +3509,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "7046617e1a193eb083ec75b9201bc72e",
+        "ownersFingerprint": "6f255ffcba276648c8e443144b903f67",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -3369,15 +3542,15 @@
         "sources": [
           {
             "path": "packages/adapters/typescript/src/manifest.ts",
-            "locator": "L111"
+            "locator": "L113"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "7046617e1a193eb083ec75b9201bc72e",
+        "ownersFingerprint": "6f255ffcba276648c8e443144b903f67",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -3410,11 +3583,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "7046617e1a193eb083ec75b9201bc72e",
+        "ownersFingerprint": "6f255ffcba276648c8e443144b903f67",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -3447,11 +3620,11 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "7046617e1a193eb083ec75b9201bc72e",
+        "ownersFingerprint": "6f255ffcba276648c8e443144b903f67",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -3493,7 +3666,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3539,7 +3712,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3585,7 +3758,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3631,7 +3804,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3677,7 +3850,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3723,7 +3896,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3769,7 +3942,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3815,7 +3988,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3861,7 +4034,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3907,7 +4080,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3953,7 +4126,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -3999,7 +4172,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4045,7 +4218,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4091,7 +4264,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4137,7 +4310,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4183,7 +4356,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4229,7 +4402,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4275,7 +4448,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4321,7 +4494,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4367,7 +4540,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4413,7 +4586,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4459,7 +4632,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4496,7 +4669,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4533,7 +4706,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4570,7 +4743,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4607,7 +4780,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4644,7 +4817,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4681,7 +4854,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4718,7 +4891,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4755,7 +4928,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4792,7 +4965,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4829,7 +5002,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4866,7 +5039,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4903,7 +5076,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4940,7 +5113,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -4977,7 +5150,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5014,7 +5187,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5051,7 +5224,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5088,7 +5261,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5125,7 +5298,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5162,7 +5335,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5199,7 +5372,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5236,7 +5409,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5273,7 +5446,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5310,7 +5483,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5358,7 +5531,7 @@
           }
         ],
         "adapter": "go",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5406,7 +5579,7 @@
           }
         ],
         "adapter": "go",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5459,7 +5632,7 @@
           }
         ],
         "adapter": "go",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5507,7 +5680,7 @@
           }
         ],
         "adapter": "go",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5545,15 +5718,15 @@
         "sources": [
           {
             "path": "packages/core/src/redact.ts",
-            "locator": "L60"
+            "locator": "L61"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "fef3c5f2c8c6340c4df4d98face5178b",
+        "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -5587,15 +5760,15 @@
         "sources": [
           {
             "path": "packages/core/src/redact.ts",
-            "locator": "L77"
+            "locator": "L78"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "fef3c5f2c8c6340c4df4d98face5178b",
+        "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -5629,15 +5802,15 @@
         "sources": [
           {
             "path": "packages/core/src/redact.ts",
-            "locator": "L110"
+            "locator": "L119"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "fef3c5f2c8c6340c4df4d98face5178b",
+        "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -5671,15 +5844,15 @@
         "sources": [
           {
             "path": "packages/core/src/redact.ts",
-            "locator": "L103"
+            "locator": "L112"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "fef3c5f2c8c6340c4df4d98face5178b",
+        "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -5713,15 +5886,15 @@
         "sources": [
           {
             "path": "packages/core/src/redact.ts",
-            "locator": "L65"
+            "locator": "L66"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "fef3c5f2c8c6340c4df4d98face5178b",
+        "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -5755,15 +5928,15 @@
         "sources": [
           {
             "path": "packages/core/src/redact.ts",
-            "locator": "L89"
+            "locator": "L98"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "fef3c5f2c8c6340c4df4d98face5178b",
+        "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -5796,7 +5969,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5846,7 +6019,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5896,7 +6069,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5946,7 +6119,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -5996,7 +6169,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6035,7 +6208,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6076,7 +6249,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6117,7 +6290,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6158,7 +6331,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6199,7 +6372,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6236,7 +6409,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6273,7 +6446,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6310,7 +6483,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6347,7 +6520,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6384,7 +6557,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6421,7 +6594,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6458,7 +6631,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6495,7 +6668,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6532,7 +6705,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6569,7 +6742,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6609,7 +6782,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6649,7 +6822,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6686,7 +6859,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6723,7 +6896,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "freshness": {
         "status": "unknown",
@@ -6749,7 +6922,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6767,7 +6940,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6785,7 +6958,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     }
@@ -6808,7 +6981,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6829,7 +7002,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6850,7 +7023,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6871,7 +7044,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6892,7 +7065,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6913,7 +7086,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6934,7 +7107,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6955,7 +7128,7 @@
           }
         ],
         "adapter": "go",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -6976,7 +7149,7 @@
           }
         ],
         "adapter": "go",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     }
@@ -6998,7 +7171,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7018,7 +7191,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     }
@@ -7037,7 +7210,7 @@
           }
         ],
         "adapter": "go",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7055,7 +7228,7 @@
           }
         ],
         "adapter": "python",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7073,7 +7246,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7091,7 +7264,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7109,7 +7282,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7127,7 +7300,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7145,7 +7318,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7163,7 +7336,25 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "evidence:packages/core/test/safety.test.js",
+      "kind": "test",
+      "path": "packages/core/test/safety.test.js",
+      "commandId": "fixtures-ts-api:test",
+      "status": "unknown",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "packages/core/test/safety.test.js"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7181,7 +7372,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7199,7 +7390,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7217,7 +7408,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     },
@@ -7235,7 +7426,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T07:51:05Z"
+        "observedAt": "2026-09-12T08:07:40Z"
       },
       "confidence": 0.7
     }
@@ -7244,7 +7435,7 @@
     {
       "code": "LOW_CONFIDENCE_MAJORITY",
       "severity": "warn",
-      "message": "151 of 157 capabilities are low confidence: most of this surface is inference, not evidence.",
+      "message": "155 of 161 capabilities are low confidence: most of this surface is inference, not evidence.",
       "subject": {
         "kind": "project",
         "id": "capabilities"
@@ -7261,6 +7452,19 @@
       },
       "paths": [
         "fixtures/py-api/tests/test_reserve.py"
+      ],
+      "remediation": "Import the implementation from the test, or declare the link explicitly."
+    },
+    {
+      "code": "ORPHAN_TEST",
+      "severity": "info",
+      "message": "Test packages/core/test/safety.test.js could not be linked to any capability.",
+      "subject": {
+        "kind": "evidence",
+        "id": "evidence:packages/core/test/safety.test.js"
+      },
+      "paths": [
+        "packages/core/test/safety.test.js"
       ],
       "remediation": "Import the implementation from the test, or declare the link explicitly."
     },
@@ -7394,6 +7598,16 @@
       "subject": {
         "kind": "capability",
         "id": "builders.extract-env-names"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"builders.is-safe-command-token\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "builders.is-safe-command-token"
       },
       "remediation": "Link a document in .project/surface.declare.yaml under contracts."
     },
@@ -7740,6 +7954,16 @@
     {
       "code": "UNDOCUMENTED_CAPABILITY",
       "severity": "info",
+      "message": "Capability \"fs.resolve-inside\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "fs.resolve-inside"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
       "message": "Capability \"fs.to-posix\" has no contract: no doc, schema, or API definition specifies it.",
       "subject": {
         "kind": "capability",
@@ -7790,6 +8014,16 @@
     {
       "code": "UNDOCUMENTED_CAPABILITY",
       "severity": "info",
+      "message": "Capability \"git.is-safe-ref\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "git.is-safe-ref"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
       "message": "Capability \"git.list-files\" has no contract: no doc, schema, or API definition specifies it.",
       "subject": {
         "kind": "capability",
@@ -7814,6 +8048,16 @@
       "subject": {
         "kind": "capability",
         "id": "git.run"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"git.show-file-at-ref\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "git.show-file-at-ref"
       },
       "remediation": "Link a document in .project/surface.declare.yaml under contracts."
     },
@@ -8530,6 +8774,16 @@
     {
       "code": "UNPROVEN_CAPABILITY",
       "severity": "info",
+      "message": "Capability \"builders.is-safe-command-token\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "builders.is-safe-command-token"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
       "message": "Capability \"builders.provenance\" has no test or build output proving it works.",
       "subject": {
         "kind": "capability",
@@ -8880,6 +9134,16 @@
     {
       "code": "UNPROVEN_CAPABILITY",
       "severity": "info",
+      "message": "Capability \"fs.resolve-inside\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "fs.resolve-inside"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
       "message": "Capability \"fs.to-posix\" has no test or build output proving it works.",
       "subject": {
         "kind": "capability",
@@ -8930,6 +9194,16 @@
     {
       "code": "UNPROVEN_CAPABILITY",
       "severity": "info",
+      "message": "Capability \"git.is-safe-ref\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "git.is-safe-ref"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
       "message": "Capability \"git.list-files\" has no test or build output proving it works.",
       "subject": {
         "kind": "capability",
@@ -8954,6 +9228,16 @@
       "subject": {
         "kind": "capability",
         "id": "git.run"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"git.show-file-at-ref\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "git.show-file-at-ref"
       },
       "remediation": "Add a test that imports the owner file, or declare existing evidence."
     },
@@ -9660,6 +9944,16 @@
     {
       "code": "UNVERIFIED_COMMAND",
       "severity": "info",
+      "message": "Command \"test:only\" (npm run test:only) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "test:only"
+      },
+      "remediation": "Run: surface verify --command test:only"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
       "message": "Command \"typecheck\" (npm run typecheck) has never been run, so it is not known to work.",
       "subject": {
         "kind": "command",
@@ -9670,8 +9964,210 @@
   ],
   "git": {
     "available": true,
-    "head": "HEAD",
+    "head": "8492e24ddb59d5ddb83eb5aa238dbbae71decca7",
+    "branch": "main",
     "dirty": true,
-    "recentChanges": []
+    "recentChanges": [
+      {
+        "path": ".editorconfig",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:54:59Z"
+      },
+      {
+        "path": ".gitattributes",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:54:59Z"
+      },
+      {
+        "path": ".github/dependabot.yml",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:03Z"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/adapter_request.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:03Z"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:03Z"
+      },
+      {
+        "path": ".github/pull_request_template.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:03Z"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:03Z"
+      },
+      {
+        "path": ".gitignore",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:54:59Z"
+      },
+      {
+        "path": ".npmrc",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:54:59Z"
+      },
+      {
+        "path": ".project/surface.json",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:03Z"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "docs/adapters.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "docs/cli.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "docs/concepts.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "docs/declarations.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "docs/mcp.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "docs/README.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "docs/trust-model.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "examples/mcp.json",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "examples/README.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "examples/surface.declare.yaml",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/go-svc/cmd/server/main.go",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/go-svc/docs/pricing.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/go-svc/expected.surface.json",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/go-svc/go.mod",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/go-svc/internal/pricing/quote_test.go",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/go-svc/internal/pricing/quote.go",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/go-svc/README.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/.env.example",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/docs/inventory.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/expected.surface.json",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/inventory/__init__.py",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/inventory/cli.py",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/inventory/reserve.py",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/inventory/router.py",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/pyproject.toml",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/README.md",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/py-api/tests/test_reserve.py",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/ts-api/.env.example",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      },
+      {
+        "path": "fixtures/ts-api/db/migrations/2026-08-18-add-checkout-status.sql",
+        "commits": 1,
+        "lastTouched": "2026-09-12T07:55:02Z"
+      }
+    ]
   }
 }

