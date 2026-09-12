@@ -1,0 +1,33 @@
+{
+  "name": "@project-surface/mcp-server",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server exposing a project surface to AI agents.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "project-surface-mcp": "./dist/bin.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@project-surface/core": "0.1.0",
+    "zod": "^4.4.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
