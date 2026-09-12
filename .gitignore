@@ -1,7 +1,7 @@
 # ---- Node / TypeScript ----
 node_modules/
 dist/
-build/
+/build/
 *.tsbuildinfo
 .npm/
 npm-debug.log*
