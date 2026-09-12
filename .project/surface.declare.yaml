@@ -107,10 +107,10 @@ capabilities:
     tags: [analysis]
 
   - id: analysis.diff
-    title: Semantic diff between two surface documents
+    title: Semantic diff between two surface documents, as text or a pull-request comment
     owners: [packages/core/src/analysis/diff.ts]
     contracts: [docs/cli.md]
-    evidence: [test/cli.test.js]
+    evidence: [test/cli.test.js, packages/core/test/diff-markdown.test.js]
     tags: [analysis]
 
   - id: analysis.why

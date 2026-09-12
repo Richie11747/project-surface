@@ -41,18 +41,19 @@ function cite(
 ): string {
   const tier = c.provenance.tier;
   const freshness = "freshness" in c ? c.freshness?.status : undefined;
-  const name = evidence?.path ?? "linked evidence";
+  const by = evidence?.path ? ` by ${evidence.path}` : "";
+  const name = evidence?.path ?? "the linked evidence";
   const proof = !evidence
     ? ""
     : evidence.status === "passed" && freshness === "fresh"
-      ? `, proven by ${name}`
+      ? `, proven${by}`
       : evidence.status === "passed" && freshness === "stale"
         ? `; ${name} passed earlier but the files changed since`
         : evidence.status === "failed"
           ? `; ${name} FAILED`
           : `; ${name} not yet run`;
   if (tier === "declared") return `declared${proof}`;
-  if (freshness === "fresh" && evidence?.status === "passed") return `verified by ${name}`;
+  if (freshness === "fresh" && evidence?.status === "passed") return `verified${by}`;
   return `${tier}${proof}`;
 }
 
@@ -91,7 +92,7 @@ export function renderAgentsBody(surface: Surface, options: AgentsOptions = {}):
     lines.push("");
     for (const c of proven) {
       const where = c.cwd === "." ? "" : ` (in \`${c.cwd}\`)`;
-      lines.push(`- \`${c.run}\`${where} - ${c.kind}; ${cite(c)}`);
+      lines.push(`- \`${c.run}\`${where} - ${c.kind}; ${cite(c, { status: "passed" })}`);
     }
     lines.push("");
   }
