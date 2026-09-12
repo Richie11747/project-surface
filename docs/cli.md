@@ -122,7 +122,7 @@ The fingerprint is what makes the file honest. Every later scan compares it with
 would render, and `surface doctor` reports `AGENTS_MD_STALE` (warn) when they differ - a hand-written
 CLAUDE.md goes stale silently; this one cannot.
 
-### `surface diff`
+### `surface diff [--since <ref>] [--format text|markdown] [--fail-on-change]`
 
 What changed about the project surface between the committed document and the working tree.
 
@@ -130,6 +130,7 @@ What changed about the project surface between the committed document and the wo
 |---|---|
 | `--since <ref>` | Git ref to compare against. Default `HEAD`. |
 | `--fail-on-change` | Exit `2` when anything changed. |
+| `--format markdown` | Render as a pull-request comment: one summary line, then added / removed / changed entries and health findings with severity; long lists collapsed. This is what the GitHub Action posts with `comment: true`. |
 
 ### `surface doctor`
 

@@ -21,6 +21,9 @@ All notable changes to this project are documented here. This project adheres to
   environment names - each line with its provenance, inferred guesses omitted by default. The block sits
   between fingerprinted markers; hand-written text outside them is preserved, and `surface doctor` reports
   `AGENTS_MD_STALE` when the surface changes underneath it. This repository's `CLAUDE.md` is generated this way.
+- `surface diff --format markdown` renders the semantic diff as a pull-request comment, and the GitHub Action
+  gains `comment: true` to post it - one comment per pull request, updated in place - plus a `run` input for
+  source checkouts.
 - `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
 - **`surface why <id>`** and the MCP tool **`surface_why`**: the derivation behind a confidence score -
   sources, evidence and its outcome, the promotion earned or withheld, the freshness anchor, and every

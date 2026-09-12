@@ -1,5 +1,5 @@
 name: project-surface
-description: Regenerate .project/surface.json and fail on drift, stale claims or broken commands.
+description: Regenerate .project/surface.json, fail on drift, and tell the pull request what changed about the project.
 author: project-surface contributors
 
 branding:
@@ -8,11 +8,18 @@ branding:
 
 inputs:
   strict:
-    description: Treat warnings (stale claims, missing .env.example entries) as failures.
+    description: Treat warnings (stale claims, missing .env.example entries, violated warn-level constraints) as failures.
     required: false
     default: "false"
   fail-on-change:
     description: Fail when the regenerated surface differs from the committed one.
+    required: false
+    default: "false"
+  comment:
+    description: >-
+      On pull requests, post (or update) one comment describing what changed about the surface since the base
+      branch: capabilities, commands, constraints, and health findings that appeared or resolved. Needs
+      `pull-requests: write` permission. Never posts on pushes.
     required: false
     default: "false"
   working-directory:
@@ -23,27 +30,79 @@ inputs:
     description: project-surface version to run. Defaults to latest.
     required: false
     default: "latest"
+  run:
+    description: >-
+      Command prefix used to invoke the CLI. Defaults to the published npm package. From a source checkout use
+      `node packages/cli/dist/index.js`.
+    required: false
+    default: ""
 
 runs:
   using: composite
   steps:
+    - name: Resolve the CLI
+      id: cli
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.run }}" ]; then
+          echo "cmd=${{ inputs.run }}" >> "$GITHUB_OUTPUT"
+        else
+          echo "cmd=npx -y project-surface@${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Generate surface
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: npx -y project-surface@${{ inputs.version }} init
+      run: ${{ steps.cli.outputs.cmd }} init
+
+    # The diff needs the surface as it was on the base branch. A shallow fetch
+    # of that one ref is enough; `git show` reads the blob without a checkout.
+    - name: Fetch the base branch
+      if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      run: git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+
+    - name: Describe the change
+      if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        ${{ steps.cli.outputs.cmd }} diff --since "origin/${{ github.base_ref }}" --format markdown > "$RUNNER_TEMP/surface-diff.md" \
+          || echo "_project-surface could not compute a diff: the base branch has no committed surface yet._" > "$RUNNER_TEMP/surface-diff.md"
+
+    # One comment per pull request, updated in place. The marker on the first
+    # line is how the action finds its own earlier comment.
+    - name: Comment on the pull request
+      if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PR: ${{ github.event.pull_request.number }}
+        REPO: ${{ github.repository }}
+      run: |
+        body="$RUNNER_TEMP/surface-diff.md"
+        existing=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+          --jq '.[] | select(.body | startswith("<!-- project-surface:diff -->")) | .id' | head -n1)
+        if [ -n "$existing" ]; then
+          gh api --method PATCH "repos/$REPO/issues/comments/$existing" -F body=@"$body" > /dev/null
+          echo "updated comment $existing"
+        else
+          gh api --method POST "repos/$REPO/issues/$PR/comments" -F body=@"$body" > /dev/null
+          echo "posted a new comment"
+        fi
 
     - name: Report changes to the surface
       if: inputs.fail-on-change == 'true'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: npx -y project-surface@${{ inputs.version }} diff --fail-on-change
+      run: ${{ steps.cli.outputs.cmd }} diff --fail-on-change
 
     - name: Doctor
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: |
         if [ "${{ inputs.strict }}" = "true" ]; then
-          npx -y project-surface@${{ inputs.version }} doctor --strict
+          ${{ steps.cli.outputs.cmd }} doctor --strict
         else
-          npx -y project-surface@${{ inputs.version }} doctor
+          ${{ steps.cli.outputs.cmd }} doctor
         fi

@@ -96,6 +96,8 @@ export {
 } from "./analysis/impact.js";
 export {
   diffSurfaces,
+  renderDiffMarkdown,
+  DIFF_COMMENT_MARKER,
   type ChangedEntry,
   type EntryDiff,
   type FieldChange,

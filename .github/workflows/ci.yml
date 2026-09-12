@@ -66,3 +66,28 @@ jobs:
 
       - name: Show the result
         run: node packages/cli/dist/index.js map
+
+  # On pull requests, the repository's own Action posts what changed about the
+  # surface - the same comment any consumer of the Action gets.
+  surface-comment:
+    name: pull request comment
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - uses: ./integrations/github-action
+        with:
+          run: node packages/cli/dist/index.js
+          comment: "true"

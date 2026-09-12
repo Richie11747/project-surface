@@ -11,6 +11,7 @@ import {
   buildSurface,
   diffSurfaces,
   readSurface,
+  renderDiffMarkdown,
   showFileAtRef,
   validateSurface,
   SURFACE_FILE,
@@ -28,8 +29,12 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
       ...GLOBAL_OPTIONS,
       since: { type: "string", default: "HEAD" },
       "fail-on-change": { type: "boolean", default: false },
+      format: { type: "string", default: "text" },
     },
   });
+  if (values.format !== "text" && values.format !== "markdown") {
+    throw new CliError(`Unknown --format "${String(values.format)}". Use text or markdown.`);
+  }
 
   const ref = typeof values.since === "string" ? values.since : "HEAD";
   const before = surfaceAtRef(options.root, ref);
@@ -51,6 +56,10 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
 
   if (options.json) {
     printJson({ ref, ...result });
+    return result.empty || values["fail-on-change"] !== true ? 0 : 2;
+  }
+  if (values.format === "markdown") {
+    print(renderDiffMarkdown(result, ref));
     return result.empty || values["fail-on-change"] !== true ? 0 : 2;
   }
 
