@@ -13,7 +13,7 @@
         "id": "typescript",
         "adapter": "@project-surface/adapter-typescript",
         "adapterVersion": "0.1.0",
-        "toolchainAvailable": true,
+        "toolchainAvailable": "<normalised>",
         "notes": []
       }
     ],

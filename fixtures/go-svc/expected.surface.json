@@ -13,9 +13,8 @@
         "id": "go",
         "adapter": "@project-surface/adapter-go",
         "adapterVersion": "0.1.0",
-        "toolchainAvailable": false,
+        "toolchainAvailable": "<normalised>",
         "notes": [
-          "The Go toolchain was not found on PATH. Declarations were read from source, but no Go claim can be verified on this machine.",
           "Go extraction is line-based rather than AST-based; claims are structural."
         ]
       }
@@ -429,16 +428,6 @@
         "id": "capabilities"
       },
       "remediation": "Run surface verify, or declare the important capabilities by hand."
-    },
-    {
-      "code": "TOOLCHAIN_UNAVAILABLE",
-      "severity": "info",
-      "message": "The go toolchain is not installed here, so go claims are structural only and cannot be verified.",
-      "subject": {
-        "kind": "project",
-        "id": "go"
-      },
-      "remediation": "Install the go toolchain to enable verification."
     },
     {
       "code": "UNVERIFIED_COMMAND",

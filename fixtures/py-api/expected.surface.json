@@ -13,7 +13,7 @@
         "id": "python",
         "adapter": "@project-surface/adapter-python",
         "adapterVersion": "0.1.0",
-        "toolchainAvailable": true,
+        "toolchainAvailable": "<normalised>",
         "notes": []
       }
     ],

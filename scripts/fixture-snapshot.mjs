@@ -42,6 +42,14 @@ export function normaliseSurface(surface) {
   for (const claim of [...(copy.capabilities ?? []), ...(copy.commands ?? [])]) {
     if (claim.freshness?.ownersFingerprint) claim.freshness.ownersFingerprint = NORMALISED;
   }
+  /* Whether a language toolchain is on PATH is a fact about the machine, not
+     the fixture: CI runners ship Go, a contributor's laptop may not. The
+     adapter must report it honestly, and the snapshot must not depend on it. */
+  for (const stack of copy.project?.stacks ?? []) {
+    stack.toolchainAvailable = NORMALISED;
+    stack.notes = (stack.notes ?? []).filter((n) => !/toolchain/i.test(n));
+  }
+  copy.health = (copy.health ?? []).filter((h) => h.code !== "TOOLCHAIN_UNAVAILABLE");
   return copy;
 }
 
