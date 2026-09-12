@@ -1,0 +1,17 @@
+{
+  "$comment": "Public repositories the tool is run against, pinned by tag so a result is reproducible. Chosen for stack coverage, not for flattering output. Add a line, run the workflow, review the table.",
+  "repositories": [
+    { "name": "honojs/hono", "url": "https://github.com/honojs/hono", "ref": "v4.6.14", "stack": "typescript" },
+    { "name": "fastify/fastify", "url": "https://github.com/fastify/fastify", "ref": "v5.2.1", "stack": "javascript" },
+    { "name": "expressjs/express", "url": "https://github.com/expressjs/express", "ref": "v5.0.1", "stack": "javascript" },
+    { "name": "colinhacks/zod", "url": "https://github.com/colinhacks/zod", "ref": "v3.24.1", "stack": "typescript" },
+    { "name": "sindresorhus/got", "url": "https://github.com/sindresorhus/got", "ref": "v14.4.5", "stack": "typescript" },
+    { "name": "fastapi/fastapi", "url": "https://github.com/fastapi/fastapi", "ref": "0.115.6", "stack": "python" },
+    { "name": "pallets/flask", "url": "https://github.com/pallets/flask", "ref": "3.1.0", "stack": "python" },
+    { "name": "encode/httpx", "url": "https://github.com/encode/httpx", "ref": "0.28.1", "stack": "python" },
+    { "name": "psf/requests", "url": "https://github.com/psf/requests", "ref": "v2.32.3", "stack": "python" },
+    { "name": "gin-gonic/gin", "url": "https://github.com/gin-gonic/gin", "ref": "v1.10.0", "stack": "go" },
+    { "name": "go-chi/chi", "url": "https://github.com/go-chi/chi", "ref": "v5.2.0", "stack": "go" },
+    { "name": "spf13/cobra", "url": "https://github.com/spf13/cobra", "ref": "v1.8.1", "stack": "go" }
+  ]
+}

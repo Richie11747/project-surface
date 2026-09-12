@@ -269,7 +269,7 @@ capabilities:
   # ---- Repository tooling --------------------------------------------------
   - id: repo.benchmark
     title: Golden-question benchmark - recorded with the model, scored offline
-    owners: [bench/lib.mjs, bench/record.mjs, bench/score.mjs, bench/questions.json]
+    owners: [bench/lib.mjs, bench/record.mjs, bench/score.mjs, bench/questions.json, bench/corpus-run.mjs, bench/corpus.json]
     contracts: [docs/benchmark.md]
     evidence: [test/bench.test.js]
     tags: [repo, benchmark]

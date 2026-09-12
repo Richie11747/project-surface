@@ -352,6 +352,10 @@ with model, commit, token usage and prompt hash, and the scorer runs offline in 
 [bench/RESULTS.md](bench/RESULTS.md); if that file says *not recorded*, no number is claimed. Shipping
 unmeasured numbers would violate the premise of the project.
 
+"Works on real repositories" is measured the same way: a weekly [corpus run](bench/corpus/RESULTS.md) scans
+twelve pinned public projects (hono, fastify, express, zod, got, fastapi, flask, httpx, requests, gin, chi,
+cobra) and commits the table - capabilities found, how much is inference, health findings, time, crashes.
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).

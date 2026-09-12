@@ -29,6 +29,8 @@ All notable changes to this project are documented here. This project adheres to
   calls the Claude API and commits answers with model, commit, usage and prompt hash; scoring is offline,
   deterministic, checked in CI, and reports prompt drift. `bench/RESULTS.md` says *not recorded* until
   someone runs it.
+- **Corpus run** (`bench/corpus-run.mjs`, weekly workflow): `surface init` over twelve pinned public
+  repositories across the three stacks, results committed to `bench/corpus/RESULTS.md`.
 - `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
 - **`surface why <id>`** and the MCP tool **`surface_why`**: the derivation behind a confidence score -
   sources, evidence and its outcome, the promotion earned or withheld, the freshness anchor, and every
