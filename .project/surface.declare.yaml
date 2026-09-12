@@ -120,6 +120,13 @@ capabilities:
     evidence: [test/cli.test.js, test/mcp.test.js]
     tags: [analysis, trust]
 
+  - id: analysis.agents
+    title: Agent instructions generated from evidence, with a staleness fingerprint
+    owners: [packages/core/src/analysis/agents.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [analysis]
+
   - id: analysis.constraint-checks
     title: Machine-checked constraints - forbid-import, forbid-file, require-test
     owners: [packages/core/src/analysis/constraints.ts]
@@ -173,6 +180,12 @@ capabilities:
   - id: cli.why
     title: surface why
     owners: [packages/cli/src/commands/why.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.agents
+    title: surface agents
+    owners: [packages/cli/src/commands/agents.ts]
     contracts: [docs/cli.md]
     evidence: [test/cli.test.js]
     tags: [cli]

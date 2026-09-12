@@ -27,6 +27,7 @@ const COMMANDS: Record<string, () => Promise<{ run: CommandRunner }>> = {
   init: () => import("./commands/init.js"),
   inspect: () => import("./commands/inspect.js"),
   why: () => import("./commands/why.js"),
+  agents: () => import("./commands/agents.js"),
   map: () => import("./commands/map.js"),
   verify: () => import("./commands/verify.js"),
   impact: () => import("./commands/impact.js"),

@@ -114,6 +114,19 @@ export {
 } from "./analysis/context.js";
 
 export {
+  agentsFingerprint,
+  detectAgentsDrift,
+  findAgentsBlock,
+  renderAgentsBlock,
+  renderAgentsBody,
+  upsertAgentsBlock,
+  AGENTS_BEGIN,
+  AGENTS_END,
+  AGENTS_FILES,
+  type AgentsMarker,
+  type AgentsOptions,
+} from "./analysis/agents.js";
+export {
   evaluateConstraintChecks,
   type CheckInput,
   type CheckResult,

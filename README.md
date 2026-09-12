@@ -128,6 +128,12 @@ Then ask, in a fresh session with no prior context:
 
 Claude answers from structured data - owners, contract, linked tests, active constraints, and a bounded impact map - instead of grepping and guessing.
 
+Or give it a file. `surface agents --write CLAUDE.md` renders the surface as agent instructions - the commands
+that were actually run, the rules and whether each is machine-checked, where things live and what proves it -
+with the provenance on every line and inferred guesses left out. The block carries a fingerprint, and
+`surface doctor` reports it as stale the moment the surface changes underneath it. A hand-written CLAUDE.md
+cannot do that. This repository's own [CLAUDE.md](CLAUDE.md) is generated this way and checked in CI.
+
 Nine tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_context`, `surface_diff`, and `surface_verify`.
 
 Eight of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the ninth, and
@@ -242,6 +248,7 @@ Three things are worth noticing.
 | `surface init` | Detect the stack and write `.project/surface.json` |
 | `surface inspect [capability]` | What the project does, and what proves it |
 | `surface why <id>` | How a confidence score was derived, step by step, recomputed from the document |
+| `surface agents [--write file]` | Agent instructions generated from evidence, with provenance per line and a staleness fingerprint |
 | `surface map` | Ownership table: owner, contract, evidence, confidence |
 | `surface verify` | Run project commands and record the result as evidence |
 | `surface impact <paths>` | What a change affects, and what to run |

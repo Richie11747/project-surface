@@ -16,6 +16,11 @@ All notable changes to this project are documented here. This project adheres to
   A check no adapter can evaluate is `unchecked` with a reason (`CONSTRAINT_UNCHECKED`), never silently
   passed. Adapters may report `imports` (TypeScript and Python do); the schema gains `constraintCheck`,
   `constraintOutcome` and `globPattern`, all optional and backward-compatible.
+- **`surface agents [--write AGENTS.md|CLAUDE.md]`**: agent instructions generated from the surface -
+  commands that were run, rules and their check status, risky paths, owners with contract and evidence,
+  environment names - each line with its provenance, inferred guesses omitted by default. The block sits
+  between fingerprinted markers; hand-written text outside them is preserved, and `surface doctor` reports
+  `AGENTS_MD_STALE` when the surface changes underneath it. This repository's `CLAUDE.md` is generated this way.
 - `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
 - **`surface why <id>`** and the MCP tool **`surface_why`**: the derivation behind a confidence score -
   sources, evidence and its outcome, the promotion earned or withheld, the freshness anchor, and every

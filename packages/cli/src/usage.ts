@@ -22,6 +22,7 @@ export const COMMAND_SUMMARIES: CommandSummary[] = [
   { name: "verify", usage: "surface verify [--command id] [--all]", summary: "Run project commands and record the result as evidence." },
   { name: "impact", usage: "surface impact <paths...> | --staged | --since <ref>", summary: "Predict what a change affects." },
   { name: "context", usage: "surface context <task> [--budget n]", summary: "Token-bounded context pack for a task." },
+  { name: "agents", usage: "surface agents [--write AGENTS.md] [--include-inferred]", summary: "Agent instructions generated from evidence, with provenance per line." },
   { name: "diff", usage: "surface diff [--since <ref>]", summary: "What changed about the project surface." },
   { name: "doctor", usage: "surface doctor [--strict]", summary: "Report drift, stale claims, and unproven behaviour." },
   { name: "report", usage: "surface report [--out path]", summary: "Render a self-contained HTML report." },

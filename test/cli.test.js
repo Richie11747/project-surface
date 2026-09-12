@@ -197,6 +197,52 @@ test("a declared constraint check is evaluated on every scan and reported with t
   }
 });
 
+test("agents renders evidence-backed instructions, preserves hand-written text, and goes stale honestly", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+
+    const printed = surface(root, "agents");
+    assert.equal(printed.code, 0, printed.stderr);
+    assert.match(printed.stdout, /<!-- project-surface:begin fingerprint=[0-9a-f]{16} -->/);
+    assert.match(printed.stdout, /## Rules/);
+    assert.match(printed.stdout, /currently violated in 1 place/);
+    assert.match(printed.stdout, /checkout\.create/);
+    assert.doesNotMatch(printed.stdout, /payments\.charge/, "inferred guesses are omitted by default");
+    assert.match(surface(root, "agents", "--include-inferred").stdout, /payments\.charge/);
+
+    const file = join(root, "AGENTS.md");
+    writeFileSync(file, ["# Hand-written intro", "", "Keep me.", ""].join("\n"));
+    const first = JSON.parse(surface(root, "agents", "--write", "AGENTS.md", "--json").stdout);
+    assert.deepEqual(first, { path: "AGENTS.md", changed: true, created: false });
+    const written = readFileSync(file, "utf8");
+    assert.ok(written.startsWith(["# Hand-written intro", "", "Keep me.", ""].join("\n")), written.slice(0, 80));
+    assert.ok(written.endsWith("project-surface:end -->\n"), written.slice(-60));
+
+    const second = JSON.parse(surface(root, "agents", "--write", "AGENTS.md", "--json").stdout);
+    assert.equal(second.changed, false, "a second write with an unchanged surface is a no-op");
+    assert.equal(surface(root, "doctor", "--json").stdout.includes("AGENTS_MD_STALE"), false);
+
+    /* Change the surface underneath the file: the block is now a stale claim. */
+    writeFileSync(join(root, ".env"), "DATABASE_URL=postgres://user:hunter2@db/app\n");
+    assert.equal(surface(root, "init").code, 0);
+    const report = JSON.parse(surface(root, "doctor", "--json").stdout);
+    const stale = report.findings.find((f) => f.code === "AGENTS_MD_STALE");
+    assert.ok(stale, "expected AGENTS_MD_STALE after the surface changed");
+    assert.deepEqual(stale.paths, ["AGENTS.md"]);
+
+    const third = JSON.parse(surface(root, "agents", "--write", "AGENTS.md", "--json").stdout);
+    assert.equal(third.changed, true);
+    assert.match(readFileSync(file, "utf8"), /^# Hand-written intro/);
+    assert.equal(surface(root, "init").code, 0);
+    assert.equal(JSON.parse(surface(root, "doctor", "--json").stdout).findings.some((f) => f.code === "AGENTS_MD_STALE"), false);
+
+    assert.equal(surface(root, "agents", "--write", "../outside.md").code, 1);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("verify refuses a command that is not in the document", () => {
   const root = freshCopy();
   try {
@@ -210,7 +256,7 @@ test("verify refuses a command that is not in the document", () => {
 });
 
 test("every command answers --help and unknown commands fail", () => {
-  for (const cmd of ["init", "inspect", "why", "map", "verify", "impact", "context", "diff", "doctor", "report", "mcp"]) {
+  for (const cmd of ["init", "inspect", "why", "map", "agents", "verify", "impact", "context", "diff", "doctor", "report", "mcp"]) {
     const help = surface(".", cmd, "--help");
     assert.equal(help.code, 0, `${cmd} --help exited ${help.code}`);
     assert.ok(help.stdout.length > 20, `${cmd} --help printed nothing`);

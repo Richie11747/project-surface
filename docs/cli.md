@@ -106,6 +106,22 @@ contracts and tests, each with a one-line reason for inclusion.
 | `--max-capabilities <n>` | |
 | `--content` | Include file contents, not only paths. |
 
+### `surface agents [--write <file>] [--include-inferred] [--max-capabilities n]`
+
+Agent instructions generated from the surface: the commands that were actually run, the rules and whether
+each is machine-checked and passing, the paths that need care, where each capability lives with its contract
+and the test that proves it, and the environment names. Every line carries its provenance; `inferred` guesses
+are omitted unless `--include-inferred` is given.
+
+Without `--write` the block is printed. With `--write AGENTS.md` (or `CLAUDE.md`, or any path inside the
+project) it is inserted between `<!-- project-surface:begin fingerprint=... -->` and
+`<!-- project-surface:end -->` markers; anything a person wrote outside the markers is preserved byte for byte,
+and a second run with an unchanged surface is a no-op.
+
+The fingerprint is what makes the file honest. Every later scan compares it with what the current surface
+would render, and `surface doctor` reports `AGENTS_MD_STALE` (warn) when they differ - a hand-written
+CLAUDE.md goes stale silently; this one cannot.
+
 ### `surface diff`
 
 What changed about the project surface between the committed document and the working tree.

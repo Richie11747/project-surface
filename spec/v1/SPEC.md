@@ -219,6 +219,7 @@ Codes emitted by the reference implementation:
 | `CONSTRAINT_VIOLATED` | *the constraint's* | A constraint's `check` found one or more violations; `paths` lists them. |
 | `STALE_CLAIM` | warn | A capability was verified earlier but its owner files changed since. |
 | `MISSING_ENV_EXAMPLE` | warn | A required variable is not listed in `.env.example`. |
+| `AGENTS_MD_STALE` | warn | A generated agent-instructions block (`AGENTS.md` / `CLAUDE.md`) no longer matches the surface. |
 | `NO_CAPABILITIES` | warn | A stack was detected but nothing was extracted from it. |
 | `LOW_CONFIDENCE_MAJORITY` | warn | Most claims are `inferred`; declarations would help. |
 | `FILE_SCAN_TRUNCATED` | warn | The file walk hit its limit; the document may be incomplete. |

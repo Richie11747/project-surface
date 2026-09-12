@@ -19,7 +19,8 @@ import { readGitInfo } from "../git/git.js";
 import { computeConfidence, promoteWithEvidence } from "../model/confidence.js";
 import { evaluateFreshness } from "../model/freshness.js";
 import { evaluateConstraintChecks } from "../analysis/constraints.js";
-import { detectHealth } from "../analysis/health.js";
+import { detectAgentsDrift } from "../analysis/agents.js";
+import { detectHealth, sortFindings } from "../analysis/health.js";
 import { assertValidSurface } from "../schema/validate.js";
 import { GENERATOR_NAME, GENERATOR_VERSION, SPEC_VERSION } from "../version.js";
 import { createAdapterContext } from "./context.js";
@@ -264,6 +265,11 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
     health,
     git,
   };
+
+  /* The generated agent instructions, if committed, are a claim about the
+     surface too, and go stale like any other. */
+  const agentsDrift = detectAgentsDrift(fileSet, ctx.readFile, surface);
+  if (agentsDrift) surface.health = sortFindings([...surface.health, agentsDrift]);
 
   assertValidSurface(surface);
   return { surface, warnings };
