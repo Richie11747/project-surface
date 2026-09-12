@@ -267,6 +267,13 @@ capabilities:
     tags: [mcp]
 
   # ---- Repository tooling --------------------------------------------------
+  - id: repo.benchmark
+    title: Golden-question benchmark - recorded with the model, scored offline
+    owners: [bench/lib.mjs, bench/record.mjs, bench/score.mjs, bench/questions.json]
+    contracts: [docs/benchmark.md]
+    evidence: [test/bench.test.js]
+    tags: [repo, benchmark]
+
   - id: repo.fixture-snapshots
     title: Golden fixture snapshots and their update script
     owners: [scripts/fixture-snapshot.mjs, scripts/update-fixtures.mjs, scripts/run-tests.mjs]

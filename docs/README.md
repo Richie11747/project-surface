@@ -8,4 +8,5 @@
 | [mcp.md](mcp.md) | You are giving the surface to an AI agent. |
 | [declarations.md](declarations.md) | Inference got something wrong and you want to fix it once. |
 | [adapters.md](adapters.md) | You want to add a language or framework. |
+| [benchmark.md](benchmark.md) | You want to know whether a surface actually helps, and how that is measured. |
 | [../spec/v1/SPEC.md](../spec/v1/SPEC.md) | You are writing a consumer or a generator and need the exact format. |

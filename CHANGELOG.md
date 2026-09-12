@@ -24,6 +24,11 @@ All notable changes to this project are documented here. This project adheres to
 - `surface diff --format markdown` renders the semantic diff as a pull-request comment, and the GitHub Action
   gains `comment: true` to post it - one comment per pull request, updated in place - plus a `run` input for
   source checkouts.
+- **Benchmark harness** (`bench/`): 50 golden questions over the fixtures with mechanically checkable
+  answers, asked under `raw` (all files) and `surface` (overview + context pack) conditions. Recording
+  calls the Claude API and commits answers with model, commit, usage and prompt hash; scoring is offline,
+  deterministic, checked in CI, and reports prompt drift. `bench/RESULTS.md` says *not recorded* until
+  someone runs it.
 - `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
 - **`surface why <id>`** and the MCP tool **`surface_why`**: the derivation behind a confidence score -
   sources, evidence and its outcome, the promotion earned or withheld, the freshness anchor, and every

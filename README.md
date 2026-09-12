@@ -346,7 +346,11 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 `0.1.0`. The schema is versioned as `project-surface/v1`.
 
-The comparative benchmark (50 golden questions, agent with and without a surface) is **not yet run**, and is deliberately not claimed. Shipping unmeasured numbers would violate the premise of the project. What ships instead is a fixture snapshot suite that runs in CI.
+The comparative benchmark - 50 golden questions with mechanically checkable answers, asked with and without
+a surface - is **built and reproducible** ([docs/benchmark.md](docs/benchmark.md)): recordings are committed
+with model, commit, token usage and prompt hash, and the scorer runs offline in CI. Its current state is in
+[bench/RESULTS.md](bench/RESULTS.md); if that file says *not recorded*, no number is claimed. Shipping
+unmeasured numbers would violate the premise of the project.
 
 ## License
 

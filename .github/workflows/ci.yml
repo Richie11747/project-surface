@@ -35,6 +35,10 @@ jobs:
 
       - run: npm test
 
+      # The benchmark scorer is offline; the committed results must match the recordings.
+      - name: Benchmark results are current
+        run: node bench/score.mjs --check
+
   surface:
     name: self-surface
     runs-on: ubuntu-latest
