@@ -22,6 +22,7 @@ const BIN = fileURLToPath(new URL("../packages/mcp-server/dist/bin.js", import.m
 const EXPECTED_TOOLS = [
   "surface_overview",
   "surface_find_capability",
+  "surface_why",
   "surface_constraints",
   "surface_health",
   "surface_impact",
@@ -94,6 +95,15 @@ test("read-only tools answer from the document", async () => {
 
     const health = textOf(await client.callTool({ name: "surface_health", arguments: { severity: "warn" } }));
     assert.match(health, /MISSING_ENV_EXAMPLE/);
+
+    const why = textOf(await client.callTool({ name: "surface_why", arguments: { id: "checkout.create" } }));
+    assert.match(why, /Read from: derived/);
+    assert.match(why, /Score:/);
+    assert.match(why, /matches the recorded/);
+    const whyJson = JSON.parse(textOf(await client.callTool({ name: "surface_why", arguments: { id: "checkout.create", format: "json" } })));
+    assert.equal(whyJson.consistent, true);
+    const missing = textOf(await client.callTool({ name: "surface_why", arguments: { id: "nope" } }));
+    assert.match(missing, /Nothing in the surface/);
 
     const constraints = textOf(await client.callTool({ name: "surface_constraints", arguments: {} }));
     assert.ok(constraints.length > 0);

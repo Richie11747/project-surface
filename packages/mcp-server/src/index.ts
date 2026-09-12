@@ -14,7 +14,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { GENERATOR_VERSION, SURFACE_FILE } from "@project-surface/core";
 import { SurfaceUnavailable, failure, loadSurface } from "./support.js";
 import type { ToolContext, ToolResult } from "./support.js";
-import { constraintsTool, findCapabilityTool, healthTool, overviewTool } from "./tools/read.js";
+import { constraintsTool, findCapabilityTool, healthTool, overviewTool, whyTool } from "./tools/read.js";
 import { contextTool, diffTool, impactTool } from "./tools/analyze.js";
 import { ALLOW_EXEC_ENV, verifyTool } from "./tools/verify.js";
 
@@ -30,6 +30,7 @@ interface ToolDefinition {
 export const TOOLS = [
   overviewTool,
   findCapabilityTool,
+  whyTool,
   constraintsTool,
   healthTool,
   impactTool,

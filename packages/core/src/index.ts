@@ -24,6 +24,7 @@ export {
   computeConfidence,
   confidenceLabel,
   effectiveTier,
+  explainConfidence,
   promoteWithEvidence,
   CORROBORATION_BONUS,
   STALE_PENALTY,
@@ -31,6 +32,8 @@ export {
   TIER_FLOOR,
   type ConfidenceInput,
   type ConfidenceLabel,
+  type ConfidenceStep,
+  type ConfidenceTrace,
 } from "./model/confidence.js";
 export {
   daysBetween,
@@ -109,6 +112,13 @@ export {
   type PackOptions,
   type ScoredCapability,
 } from "./analysis/context.js";
+
+export {
+  explainClaim,
+  type ClaimExplanation,
+  type ExplainedEvidence,
+  type ExplainedKind,
+} from "./analysis/why.js";
 
 // Declarations
 export { expandDeclaredOwners, loadDeclarations, type Declarations } from "./declarations/load.js";

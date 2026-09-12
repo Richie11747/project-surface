@@ -68,3 +68,60 @@ The anchor moves only when the claim is re-verified. Rescanning does not clear s
 
 `surface inspect` shows `high` (≥ 0.85), `medium` (≥ 0.60) or `low`. These are for eyes. Programs should
 read the number and the tier.
+
+## Reading a score back
+
+Every rule above is mechanical, so every score can be re-derived from the document and shown as an
+argument. `surface why <id>` (and the `surface_why` MCP tool) does exactly that. Here is `checkout.create`
+from the `ts-api` fixture, first after `surface verify`, then after its owner file was edited:
+
+```console
+$ surface why checkout.create
+
+  Read from
+    derived by the typescript adapter at 2026-09-12T19:30:34Z, 1 distinct file(s):
+      src/checkout/create.ts  L32
+      src/checkout/create.ts  L63
+
+  Proven by
+    passed  tests/checkout/create.test.ts  (linked by import-graph, command test, observed 2026-09-12T19:30:34Z)
+    derived -> verified: Linked evidence passed; passing evidence raises a claim by exactly one tier.
+
+  Freshness
+    fresh
+    verified 2026-09-12T19:30:34Z, stale after 14 days without re-verification
+    owner fingerprint 0595486bf763c3ea24c52b40c678bf87
+
+  Score
+     0.95  tier-floor       verified starts at 0.95 and cannot exceed 0.99.
+     0.95  corroboration    One source file; no corroboration bonus.
+    =====
+    0.95 high
+
+  Recomputed from the document and matches the recorded 0.95.
+```
+
+```console
+$ surface why checkout.create        # after editing src/checkout/create.ts and rescanning
+
+  Proven by
+    passed  tests/checkout/create.test.ts  (linked by import-graph, command test, observed 2026-09-12T19:30:34Z)
+    derived stays: Linked evidence passed, but the owner files changed since; the promotion is withheld until re-verified.
+
+  Freshness
+    stale  Owner files changed since verification.
+
+  Score
+     0.70  tier-floor       derived starts at 0.70 and cannot exceed 0.90.
+     0.70  corroboration    One source file; no corroboration bonus.
+     0.56  stale-penalty    Owner files changed since verification: multiplied by 0.8.
+    =====
+    0.56 low
+
+  Recomputed from the document and matches the recorded 0.56.
+```
+
+The last line is the point. The number is not an opinion the tool holds; it is a computation anyone can
+repeat from the committed document, and the tool checks its own work every time it prints one.
+Programmatically, `explainConfidence()` in `@project-surface/core` returns the same trace that
+`computeConfidence()` collapses to a number.

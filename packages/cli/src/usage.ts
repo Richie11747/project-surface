@@ -17,6 +17,7 @@ export interface CommandSummary {
 export const COMMAND_SUMMARIES: CommandSummary[] = [
   { name: "init", usage: "surface init", summary: "Detect the stack and write .project/surface.json." },
   { name: "inspect", usage: "surface inspect [capability]", summary: "Show what the project can do, and what proves it." },
+  { name: "why", usage: "surface why <id>", summary: "Show how a confidence score was derived, step by step." },
   { name: "map", usage: "surface map", summary: "Table of capability owners, contracts, and evidence." },
   { name: "verify", usage: "surface verify [--command id] [--all]", summary: "Run project commands and record the result as evidence." },
   { name: "impact", usage: "surface impact <paths...> | --staged | --since <ref>", summary: "Predict what a change affects." },

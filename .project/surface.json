@@ -1,6 +1,6 @@
 {
   "schema": "project-surface/v1",
-  "generatedAt": "2026-09-12T19:20:59Z",
+  "generatedAt": "2026-09-12T19:32:14Z",
   "generator": {
     "name": "project-surface",
     "version": "0.1.0"
@@ -86,7 +86,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "unknown",
@@ -111,7 +111,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "unknown",
@@ -136,7 +136,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "unknown",
@@ -161,7 +161,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "unknown",
@@ -186,7 +186,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "unknown",
@@ -211,18 +211,18 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "verification": {
         "status": "passed",
         "exitCode": 0,
-        "durationMs": 29416,
-        "observedAt": "2026-09-12T19:20:59Z",
-        "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]"
+        "durationMs": 32632,
+        "observedAt": "2026-09-12T19:32:14Z",
+        "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14
       },
       "confidence": 0.95
@@ -243,7 +243,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "unknown",
@@ -268,18 +268,18 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "verification": {
         "status": "passed",
         "exitCode": 0,
-        "durationMs": 913,
-        "observedAt": "2026-09-12T19:20:59Z",
-        "summary": "> project-surface-monorepo@0.1.0 typecheck\n> tsc --build --dry\n\n21:21:29 - Project './packages/core/tsconfig.json' is up to date\n\n21:21:29 - Project './packages/adapter-sdk/tsconfig.json' is up to date\n\n21:21:29 - Project './packages/adapters/typescript/tsconfig.json' is up to date\n\n21:21:29 - Project './packages/adapters/python/tsconfig.json' is up to date\n\n21:21:29 - Project './packages/adapters/go/tsconfig.json' is up to date\n\n21:21:29 - Project './packages/mcp-server/tsconfig.json' is up to date\n\n21:21:29 - Project './packages/cli/tsconfig.json' is up to date"
+        "durationMs": 1040,
+        "observedAt": "2026-09-12T19:32:14Z",
+        "summary": "> project-surface-monorepo@0.1.0 typecheck\n> tsc --build --dry\n\n21:32:47 - Project './packages/core/tsconfig.json' is up to date\n\n21:32:47 - Project './packages/adapter-sdk/tsconfig.json' is up to date\n\n21:32:47 - Project './packages/adapters/typescript/tsconfig.json' is up to date\n\n21:32:47 - Project './packages/adapters/python/tsconfig.json' is up to date\n\n21:32:47 - Project './packages/adapters/go/tsconfig.json' is up to date\n\n21:32:47 - Project './packages/mcp-server/tsconfig.json' is up to date\n\n21:32:47 - Project './packages/cli/tsconfig.json' is up to date"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14
       },
       "confidence": 0.95
@@ -342,7 +342,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "parse.go",
@@ -352,7 +352,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "b7d9b7834d83826303b533860a123c0e"
       },
@@ -410,7 +410,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "parse.is-python-test",
@@ -419,7 +419,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "63557ab61be24de7d160bdbed587c325"
       },
@@ -514,7 +514,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "builders.classify-command",
@@ -530,7 +530,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "e5b1016ee54b68b6a8a9f88339cc1099"
       },
@@ -653,7 +653,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "discover.build-capabilities",
@@ -676,7 +676,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "98b173efe73d61b5158648df005b966e"
       },
@@ -727,7 +727,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "analysis.estimate-tokens",
@@ -736,7 +736,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "a3eadd3f302b2d4aec6ecfc888ed6480"
       },
@@ -779,18 +779,55 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "analysis.diff-surfaces"
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "9b73384db5ca3d6952c3c9bbf8536f94"
       },
       "confidence": 1
+    },
+    {
+      "id": "analysis.explain-claim",
+      "title": "explainClaim",
+      "description": "Exported function in packages/core/src/analysis/why.ts.",
+      "kind": "export",
+      "packageId": "packages-core",
+      "owners": [
+        {
+          "path": "packages/core/src/analysis/why.ts",
+          "locator": "export:explainClaim"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "packages/core/src/analysis/why.ts",
+            "locator": "L211"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-12T19:32:14Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "da4fb472519f6b50c3af6517db882405",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
     },
     {
       "id": "analysis.health",
@@ -837,7 +874,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "analysis.detect-health",
@@ -846,7 +883,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "622a139e38cede2fd9e9f3afb5bbad71"
       },
@@ -889,14 +926,14 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "analysis.analyze-impact"
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "1a65d4b8324d75edbf999f8dd35e427b"
       },
@@ -970,7 +1007,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "declarations.expand-declared-owners",
@@ -984,7 +1021,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "7bb06bc06dc49f63f6edce8846ffd9b9"
       },
@@ -1095,7 +1132,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "fs.default-ignores",
@@ -1118,7 +1155,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "2906ad30b26ba0d4122c5f800730ccea"
       },
@@ -1199,7 +1236,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "adapter.empty-result",
@@ -1210,9 +1247,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "7e85f6fdb30024913c633ddd9f579484"
+        "ownersFingerprint": "a6bf63534149e944c9877d1386adc22d"
       },
       "confidence": 1
     },
@@ -1249,11 +1286,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "64c5ee75aeb029e0baf5191470fb3f68"
       },
@@ -1292,11 +1329,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "4767777c3670728b35092a4e1d56ace6"
       },
@@ -1335,11 +1372,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "deec453f56268a41f835959583563718"
       },
@@ -1378,11 +1415,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "2c1e69bb9bfff22d5d766dc53977ce46"
       },
@@ -1421,11 +1458,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "7d4c3b7b56a344c55b59e3c51bcbb696"
       },
@@ -1464,11 +1501,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "73ed8603def28bf992be5fbf0c6e930b"
       },
@@ -1507,11 +1544,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "1cfad320ec93f0ee24f803a6438b8935"
       },
@@ -1585,7 +1622,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "commands.badge",
@@ -1599,7 +1636,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "641773f0ae47161f290d1d4a8609d338"
       },
@@ -1665,7 +1702,7 @@
           },
           {
             "path": "packages/cli/src/index.ts",
-            "locator": "L39"
+            "locator": "L40"
           },
           {
             "path": "packages/cli/src/output.ts",
@@ -1717,15 +1754,15 @@
           },
           {
             "path": "packages/cli/src/usage.ts",
-            "locator": "L30"
+            "locator": "L31"
           },
           {
             "path": "packages/cli/src/usage.ts",
-            "locator": "L57"
+            "locator": "L58"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "adapters.adapter-by-id",
@@ -1749,9 +1786,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "3ddcb75b15d7a1c93e6208f773166e3e"
+        "ownersFingerprint": "2cb105f5147a849b2a50713444b65c52"
       },
       "confidence": 1
     },
@@ -1788,11 +1825,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "a88bbd18dec2075da44b1dd06724d10f"
       },
@@ -1844,6 +1881,10 @@
         {
           "path": "packages/cli/src/commands/verify.ts",
           "locator": "export:run"
+        },
+        {
+          "path": "packages/cli/src/commands/why.ts",
+          "locator": "export:run"
         }
       ],
       "contracts": [],
@@ -1894,14 +1935,18 @@
           {
             "path": "packages/cli/src/commands/verify.ts",
             "locator": "L23"
+          },
+          {
+            "path": "packages/cli/src/commands/why.ts",
+            "locator": "L17"
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "unknown",
-        "ownersFingerprint": "8f7f8d8e9e64d294f68936f2b526b907",
+        "ownersFingerprint": "f9f1c1a4b787a78449194d172be4b247",
         "staleAfterDays": 14,
         "reason": "Never verified."
       },
@@ -1961,7 +2006,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "evidence.command-not-allowed-error",
@@ -1972,7 +2017,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "d131521dfebe62fea6cbdbbcdd0a0f60"
       },
@@ -2011,11 +2056,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "bef72367e584f3b8b4002a9b0eeb276f"
       },
@@ -2054,13 +2099,13 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "470ba96ff36ba2c9fe6d9e24cfdc8261"
+        "ownersFingerprint": "6a4b985ba7f51c3ab8c639a3db1e5400"
       },
       "confidence": 1
     },
@@ -2103,11 +2148,11 @@
           },
           {
             "path": "packages/mcp-server/src/index.ts",
-            "locator": "L110"
+            "locator": "L111"
           },
           {
             "path": "packages/mcp-server/src/index.ts",
-            "locator": "L47"
+            "locator": "L48"
           },
           {
             "path": "packages/mcp-server/src/support.ts",
@@ -2139,7 +2184,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "src.create-mcp-server",
@@ -2154,9 +2199,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "4ce295d74f6f63ad4430fd2c48536d41"
+        "ownersFingerprint": "7989ace403438870a77a278797fb8a89"
       },
       "confidence": 1
     },
@@ -2197,11 +2242,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "86fb8817411ab9108da8ce265708f1d3"
       },
@@ -2270,11 +2315,11 @@
           },
           {
             "path": "scripts/fixture-snapshot.mjs",
-            "locator": "L48"
+            "locator": "L56"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "scripts.build-fixture-snapshot",
@@ -2284,9 +2329,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "f83df30f2c074d64cfb9a0a013116cee"
+        "ownersFingerprint": "ae9a99d372221a1dcc236a53d7813833"
       },
       "confidence": 1
     },
@@ -2347,7 +2392,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "redact.looks-secret-name",
@@ -2359,7 +2404,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c"
       },
@@ -2427,7 +2472,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "schema.assert-valid-surface",
@@ -2437,7 +2482,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "deb02cb85f523cb2228535cedeefaff2"
       },
@@ -2479,6 +2524,18 @@
           },
           {
             "path": "packages/core/src/model/confidence.ts",
+            "locator": "L100"
+          },
+          {
+            "path": "packages/core/src/model/confidence.ts",
+            "locator": "L156"
+          },
+          {
+            "path": "packages/core/src/model/confidence.ts",
+            "locator": "L163"
+          },
+          {
+            "path": "packages/core/src/model/confidence.ts",
             "locator": "L23"
           },
           {
@@ -2492,32 +2549,25 @@
           {
             "path": "packages/core/src/model/confidence.ts",
             "locator": "L72"
-          },
-          {
-            "path": "packages/core/src/model/confidence.ts",
-            "locator": "L77"
-          },
-          {
-            "path": "packages/core/src/model/confidence.ts",
-            "locator": "L95"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "model.compute-confidence",
         "model.confidence-label",
         "model.effective-tier",
+        "model.explain-confidence",
         "model.promote-with-evidence",
         "model.tier-ceiling",
         "model.tier-floor"
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "5814328e525eea8cdc69225cf4ada751"
+        "ownersFingerprint": "6d2fe57a453a3725b8285b5513773fa9"
       },
       "confidence": 1
     },
@@ -2574,7 +2624,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "model.days-between",
@@ -2585,7 +2635,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "71b4ecfb4d671fc977b781434d9b65b2"
       },
@@ -2668,7 +2718,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "aliases": [
         "model.camel-to-kebab",
@@ -2685,7 +2735,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-12T19:20:59Z",
+        "verifiedAt": "2026-09-12T19:32:14Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "2b4fa37760741c622680dfbfad8e34e5"
       },
@@ -2707,7 +2757,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 0.7
     },
@@ -2725,7 +2775,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 0.7
     },
@@ -2743,7 +2793,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     },
@@ -2761,7 +2811,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     },
@@ -2779,7 +2829,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     },
@@ -2797,7 +2847,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 0.7
     },
@@ -2816,7 +2866,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     },
@@ -2834,7 +2884,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     }
@@ -2857,7 +2907,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 0.7
     },
@@ -2878,7 +2928,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 0.7
     },
@@ -2896,7 +2946,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     }
@@ -2919,7 +2969,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     },
@@ -2939,7 +2989,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 0.7
     },
@@ -2961,7 +3011,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     },
@@ -2982,7 +3032,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
       "confidence": 1
     }
@@ -3002,10 +3052,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3022,10 +3072,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3042,10 +3092,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3062,10 +3112,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3082,10 +3132,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3102,10 +3152,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3122,10 +3172,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3142,10 +3192,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3162,10 +3212,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3182,10 +3232,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     },
     {
@@ -3202,14 +3252,24 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-12T19:20:59Z"
+        "observedAt": "2026-09-12T19:32:14Z"
       },
-      "observedAt": "2026-09-12T19:20:59Z",
-      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (4.0091ms)\n✔ a guess never outranks an observation, however corroborated (0.8981ms)\n✔ corroborating sources raise confidence within the tier band (0.5557ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.6416ms)\n✔ a declaration never decays: a human owns the statement (1.5509ms)\n✔ evidence promotes by exactly one tier (3.0449ms)\n✔ confidence stays inside the unit interval (0.8432ms)\n✔ labels track the numeric bands (0.5824ms)\n✔ glob: plain path names itself and its subtree (4.7502ms)\n✔ glob: star stops at slashes, doublestar does not (1.7278ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.9841ms)\n✔ glob: expansion against a file list is ordered like the input (3.3429ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (109.0489ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (28.2812ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (45.6127ms)\n✔ absorb: without any declaration nothing changes (0.664ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (1.9346ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.3436ms)\n✔ a changed owner file makes the claim stale (0.3101ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.2952ms)\n✔ verification expires on its own after the TTL (0.3097ms)\n✔ fingerprints ignore file order (1.8976ms)\n✔ fingerprints change when any owner changes (1.0213ms)\n✔ routes become readable area.action ids (14.7717ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.8099ms)\n✔ symbol ids do not stutter against their namespace (2.0039ms)\n✔ generic layout directories are not used as namespaces (0.6764ms)\n✔ camel and sna\n... [truncated 3769 chars]",
+      "observedAt": "2026-09-12T19:32:14Z",
+      "summary": "> project-surface-monorepo@0.1.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.1.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (3.0456ms)\n✔ a guess never outranks an observation, however corroborated (0.5867ms)\n✔ corroborating sources raise confidence within the tier band (0.3891ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.5309ms)\n✔ a declaration never decays: a human owns the statement (0.3592ms)\n✔ evidence promotes by exactly one tier (0.3839ms)\n✔ confidence stays inside the unit interval (0.5467ms)\n✔ labels track the numeric bands (0.2903ms)\n✔ glob: plain path names itself and its subtree (2.6813ms)\n✔ glob: star stops at slashes, doublestar does not (1.0506ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.6542ms)\n✔ glob: expansion against a file list is ordered like the input (2.2945ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (60.045ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (23.1603ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (25.9241ms)\n✔ absorb: without any declaration nothing changes (0.4605ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.3783ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.5545ms)\n✔ a changed owner file makes the claim stale (0.3715ms)\n✔ the stored fingerprint is the verification anchor, so staleness cannot self-heal (0.3298ms)\n✔ verification expires on its own after the TTL (0.4418ms)\n✔ fingerprints ignore file order (1.8631ms)\n✔ fingerprints change when any owner changes (0.6982ms)\n✔ routes become readable area.action ids (3.207ms)\n✔ version and api prefixes are dropped, parameters are not part of the resource (0.6189ms)\n✔ symbol ids do not stutter against their namespace (1.4069ms)\n✔ generic layout directories are not used as namespaces (0.3692ms)\n✔ camel and snake \n... [truncated 3853 chars]",
       "confidence": 0.95
     }
   ],
   "health": [
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"analysis.explain-claim\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "analysis.explain-claim"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
     {
       "code": "UNDOCUMENTED_CAPABILITY",
       "severity": "info",
@@ -3219,6 +3279,16 @@
         "id": "commands.run"
       },
       "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"analysis.explain-claim\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "analysis.explain-claim"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
     },
     {
       "code": "UNPROVEN_CAPABILITY",
@@ -3293,24 +3363,24 @@
   ],
   "git": {
     "available": true,
-    "head": "4200bdcc0bcc150754488978e00028d4b258fb5d",
+    "head": "5027cb80d30a552f1c2a3695f0988d8c706e682c",
     "branch": "main",
     "dirty": true,
     "recentChanges": [
       {
         "path": ".project/surface.json",
-        "commits": 5,
-        "lastTouched": "2026-09-12T17:30:43Z"
+        "commits": 6,
+        "lastTouched": "2026-09-12T19:22:04Z"
       },
       {
         "path": "README.md",
-        "commits": 5,
-        "lastTouched": "2026-09-12T17:55:45Z"
+        "commits": 6,
+        "lastTouched": "2026-09-12T19:22:04Z"
       },
       {
         "path": "CHANGELOG.md",
-        "commits": 3,
-        "lastTouched": "2026-09-12T17:55:45Z"
+        "commits": 4,
+        "lastTouched": "2026-09-12T19:22:04Z"
       },
       {
         "path": "packages/adapter-sdk/package.json",
@@ -3343,6 +3413,11 @@
         "lastTouched": "2026-09-12T17:55:45Z"
       },
       {
+        "path": "packages/core/src/index.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-12T19:22:04Z"
+      },
+      {
         "path": "packages/mcp-server/package.json",
         "commits": 3,
         "lastTouched": "2026-09-12T17:55:45Z"
@@ -3363,6 +3438,11 @@
         "lastTouched": "2026-09-12T17:55:45Z"
       },
       {
+        "path": ".github/workflows/ci.yml",
+        "commits": 2,
+        "lastTouched": "2026-09-12T19:22:04Z"
+      },
+      {
         "path": ".gitignore",
         "commits": 2,
         "lastTouched": "2026-09-12T09:32:39Z"
@@ -3376,6 +3456,31 @@
         "path": "CONTRIBUTING.md",
         "commits": 2,
         "lastTouched": "2026-09-12T17:30:43Z"
+      },
+      {
+        "path": "docs/cli.md",
+        "commits": 2,
+        "lastTouched": "2026-09-12T19:22:04Z"
+      },
+      {
+        "path": "docs/declarations.md",
+        "commits": 2,
+        "lastTouched": "2026-09-12T19:22:04Z"
+      },
+      {
+        "path": "fixtures/go-svc/expected.surface.json",
+        "commits": 2,
+        "lastTouched": "2026-09-12T19:24:11Z"
+      },
+      {
+        "path": "fixtures/py-api/expected.surface.json",
+        "commits": 2,
+        "lastTouched": "2026-09-12T19:24:11Z"
+      },
+      {
+        "path": "fixtures/ts-api/expected.surface.json",
+        "commits": 2,
+        "lastTouched": "2026-09-12T19:24:11Z"
       },
       {
         "path": "integrations/claude-code/.claude-plugin/plugin.json",
@@ -3458,44 +3563,9 @@
         "lastTouched": "2026-09-12T08:07:42Z"
       },
       {
-        "path": "packages/cli/src/commands/verify.ts",
+        "path": "packages/cli/src/commands/map.ts",
         "commits": 2,
-        "lastTouched": "2026-09-12T08:07:42Z"
-      },
-      {
-        "path": "packages/core/README.md",
-        "commits": 2,
-        "lastTouched": "2026-09-12T17:55:45Z"
-      },
-      {
-        "path": "packages/core/src/evidence/runner.ts",
-        "commits": 2,
-        "lastTouched": "2026-09-12T08:07:42Z"
-      },
-      {
-        "path": "packages/core/src/fs/walk.ts",
-        "commits": 2,
-        "lastTouched": "2026-09-12T08:07:42Z"
-      },
-      {
-        "path": "packages/core/src/git/git.ts",
-        "commits": 2,
-        "lastTouched": "2026-09-12T08:07:42Z"
-      },
-      {
-        "path": "packages/core/src/index.ts",
-        "commits": 2,
-        "lastTouched": "2026-09-12T08:07:42Z"
-      },
-      {
-        "path": "packages/core/src/redact.ts",
-        "commits": 2,
-        "lastTouched": "2026-09-12T08:07:42Z"
-      },
-      {
-        "path": "packages/core/test/redact.test.js",
-        "commits": 2,
-        "lastTouched": "2026-09-12T08:07:42Z"
+        "lastTouched": "2026-09-12T19:22:04Z"
       }
     ]
   }

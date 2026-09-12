@@ -11,6 +11,10 @@ All notable changes to this project are documented here. This project adheres to
   files all lie within a declared capability is absorbed into it (sources union, evidence and environment
   merged, id kept as an alias). `derived` claims are never absorbed.
 - `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
+- **`surface why <id>`** and the MCP tool **`surface_why`**: the derivation behind a confidence score -
+  sources, evidence and its outcome, the promotion earned or withheld, the freshness anchor, and every
+  arithmetic step. The score is recomputed from the document and compared with the recorded value.
+  `explainConfidence()` in core returns the same trace programmatically; `computeConfidence()` is unchanged.
 - The repository describes itself: `.project/surface.declare.yaml` declares 32 capabilities with contracts
   and evidence; CI runs `surface verify` and gates on `surface doctor --strict`.
 

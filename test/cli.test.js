@@ -109,6 +109,48 @@ test("verify runs a recorded command and promotes the capability it proves", () 
 
     const evidence = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8")).evidence;
     assert.ok(evidence.some((e) => e.status === "passed"), "evidence should record the observed pass");
+
+    /* `why` must reproduce the recorded number from the document alone, and
+       name the promotion the passing test earned. */
+    const why = surface(root, "why", "checkout.create", "--json");
+    assert.equal(why.code, 0, why.stderr);
+    const explanation = JSON.parse(why.stdout);
+    assert.equal(explanation.consistent, true, JSON.stringify(explanation.trace));
+    assert.equal(explanation.trace.score, claim.confidence);
+    assert.equal(explanation.promotion?.from, "derived");
+    assert.equal(explanation.promotion?.to, "verified");
+    assert.ok(explanation.evidence.some((e) => e.status === "passed"));
+    assert.ok(explanation.trace.steps.some((s) => s.rule === "tier-floor"));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("why explains every kind of claim and reproduces the recorded score", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    const doc = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8"));
+    const ids = [
+      ...doc.capabilities.map((c) => c.id),
+      ...doc.commands.map((c) => c.id),
+      ...doc.constraints.map((c) => c.id),
+      ...doc.risks.map((r) => r.id),
+      ...doc.environment.map((e) => e.name),
+    ];
+    assert.ok(ids.length > 5);
+    for (const id of ids) {
+      const why = surface(root, "why", id, "--json");
+      assert.equal(why.code, 0, `${id}: ${why.stderr}`);
+      const e = JSON.parse(why.stdout);
+      assert.equal(e.consistent, true, `${id}: recomputed ${e.trace.score}, recorded ${e.recorded}`);
+    }
+    const text = surface(root, "why", "checkout.create");
+    assert.match(text.stdout, /Read from/);
+    assert.match(text.stdout, /Score/);
+    assert.match(text.stdout, /matches the recorded/);
+
+    assert.equal(surface(root, "why", "no.such.thing").code, 1);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -127,7 +169,7 @@ test("verify refuses a command that is not in the document", () => {
 });
 
 test("every command answers --help and unknown commands fail", () => {
-  for (const cmd of ["init", "inspect", "map", "verify", "impact", "context", "diff", "doctor", "report", "mcp"]) {
+  for (const cmd of ["init", "inspect", "why", "map", "verify", "impact", "context", "diff", "doctor", "report", "mcp"]) {
     const help = surface(".", cmd, "--help");
     assert.equal(help.code, 0, `${cmd} --help exited ${help.code}`);
     assert.ok(help.stdout.length > 20, `${cmd} --help printed nothing`);

@@ -41,6 +41,31 @@ document is read first and verification results are carried forward, so a rescan
 Without an argument: a summary of the project. With a capability id: its owners, contract, evidence,
 environment, the command that checks it, and the trust line (`confidence label | tier | freshness`).
 
+### `surface why <id>`
+
+The derivation behind a number. For a capability, command, constraint, risk or environment variable: the
+files it was read from, the evidence that ran against it and what it said, the promotion that earned (or
+the one withheld because the owner files moved), the freshness anchor, and every arithmetic step from tier
+floor to final score. The score is recomputed from the document alone and compared with the recorded value;
+a mismatch is printed, not hidden. Accepts aliases and trailing id segments (`why create` finds
+`checkout.create`).
+
+```console
+$ surface why checkout.create
+
+  Proven by
+    passed  tests/checkout/create.test.ts  (linked by import-graph, command test, observed 2026-09-12T19:30:34Z)
+    derived -> verified: Linked evidence passed; passing evidence raises a claim by exactly one tier.
+
+  Score
+     0.95  tier-floor       verified starts at 0.95 and cannot exceed 0.99.
+     0.95  corroboration    One source file; no corroboration bonus.
+    =====
+    0.95 high
+
+  Recomputed from the document and matches the recorded 0.95.
+```
+
 ### `surface map`
 
 One row per capability: owner, contract, evidence, tier, confidence, freshness. Good for a first look at a

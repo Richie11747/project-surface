@@ -5,6 +5,7 @@
  */
 
 import { z } from "zod";
+import { explainClaim } from "@project-surface/core";
 import { describeCapability, json, loadSurface, text, trustNote } from "../support.js";
 import type { ToolContext, ToolResult } from "../support.js";
 
@@ -170,5 +171,53 @@ export const healthTool = {
         )
         .join("\n\n")
     );
+  },
+};
+
+export const whyTool = {
+  name: "surface_why",
+  title: "Why a claim has its confidence",
+  description:
+    "Explain how a confidence score was derived: which files the claim was read from, which tests ran against it " +
+    "and what they said, whether that earned a promotion, whether the owner files changed since, and the arithmetic. " +
+    "Use it before relying on a number, or when two claims disagree.",
+  inputSchema: {
+    id: z.string().describe("A capability id (or alias), command id, constraint id, risk id, or environment variable name."),
+    format: z.enum(["text", "json"]).optional(),
+  },
+  handler(args: { id: string; format?: "text" | "json" }, ctx: ToolContext): ToolResult {
+    const surface = loadSurface(ctx);
+    const e = explainClaim(surface, args.id);
+    if (!e) return text(`Nothing in the surface has the id "${args.id}". Call surface_find_capability to search.`);
+    if (args.format === "json") return json(e);
+
+    const lines = [
+      `${e.id} (${e.kind}) - ${e.title}`,
+      e.aliases.length > 0 ? `Also answers to: ${e.aliases.join(", ")}` : undefined,
+      "",
+      `Read from: ${e.provenance.tier} by the ${e.provenance.adapter} adapter at ${e.provenance.observedAt}, ${e.provenance.distinctSources} distinct file(s)`,
+      ...e.provenance.sources.map((s) => `  ${s.path}${s.locator ? ` (${s.locator})` : ""}`),
+      "",
+      "Proven by:",
+      ...(e.evidence.length === 0 ? ["  nothing - no evidence is linked"] : []),
+      ...e.evidence.map(
+        (ev) =>
+          `  ${ev.status}  ${ev.path ?? ev.id}` +
+          [ev.link ? ` linked by ${ev.link}` : "", ev.commandId ? ` via command ${ev.commandId}` : "", ev.observedAt ? ` observed ${ev.observedAt}` : ""].join("")
+      ),
+      e.promotion ? `  ${e.promotion.from} -> ${e.promotion.to}: ${e.promotion.reason}` : undefined,
+      "",
+      `Freshness: ${e.freshness ? `${e.freshness.status}${e.freshness.reason ? ` - ${e.freshness.reason}` : ""}` : "not tracked for this kind of claim"}`,
+      e.freshness?.verifiedAt ? `  verified ${e.freshness.verifiedAt}; stale after ${e.freshness.staleAfterDays} days` : undefined,
+      "",
+      "Score:",
+      ...e.trace.steps.map((s) => `  ${s.value.toFixed(2)}  ${s.rule}: ${s.detail}`),
+      `  = ${e.trace.score.toFixed(2)}`,
+      "",
+      e.consistent
+        ? `Recomputed from the document; matches the recorded ${e.recorded.toFixed(2)}.`
+        : `Recomputed ${e.trace.score.toFixed(2)} but the document records ${e.recorded.toFixed(2)} - regenerate with surface init.`,
+    ];
+    return text(lines.filter((l) => l !== undefined).join("\n"));
   },
 };

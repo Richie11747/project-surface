@@ -128,9 +128,9 @@ Then ask, in a fresh session with no prior context:
 
 Claude answers from structured data - owners, contract, linked tests, active constraints, and a bounded impact map - instead of grepping and guessing.
 
-Eight tools are exposed: `surface_overview`, `surface_find_capability`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_context`, `surface_diff`, and `surface_verify`.
+Nine tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_context`, `surface_diff`, and `surface_verify`.
 
-Seven of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the eighth, and
+Eight of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the ninth, and
 [docs/mcp.md](docs/mcp.md) for the full tool reference. A Claude Code plugin and a GitHub Action live in
 [integrations/](integrations/README.md).
 
@@ -218,6 +218,7 @@ Three things are worth noticing.
 |---|---|
 | `surface init` | Detect the stack and write `.project/surface.json` |
 | `surface inspect [capability]` | What the project does, and what proves it |
+| `surface why <id>` | How a confidence score was derived, step by step, recomputed from the document |
 | `surface map` | Ownership table: owner, contract, evidence, confidence |
 | `surface verify` | Run project commands and record the result as evidence |
 | `surface impact <paths>` | What a change affects, and what to run |

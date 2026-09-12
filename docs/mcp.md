@@ -30,6 +30,7 @@ reported as tool content with that instruction, not as a protocol error.
 |---|---|---|
 | `surface_overview` | `format?: "text" \| "json"` | Project name, stacks, packages, counts, health summary. |
 | `surface_find_capability` | `query`, `limit?` | Capabilities matching an id, route path or plain description - with owners, contracts, evidence and trust. |
+| `surface_why` | `id`, `format?` | How a claim's confidence was derived: sources, evidence and its outcome, promotion, freshness, and each arithmetic step. Recomputed from the document and checked against the recorded score. |
 | `surface_constraints` | `includeStale?` | Active constraints and their severity. |
 | `surface_health` | `severity?` | Health findings at or above a severity. |
 | `surface_impact` | `paths?`, `since?` | What a change affects and which commands to run. Omit both to use the staged set. |
