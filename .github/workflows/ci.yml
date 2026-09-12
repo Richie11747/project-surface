@@ -51,9 +51,18 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # project-surface describes itself, and must not be unhealthy.
+      # project-surface describes itself. The declarations in
+      # .project/surface.declare.yaml set the scope; verify turns the test
+      # suite into evidence; doctor --strict fails on any warning, so a claim
+      # this repository makes about itself cannot go stale unnoticed.
       - name: Generate this repository surface
         run: node packages/cli/dist/index.js init
 
+      - name: Prove it
+        run: node packages/cli/dist/index.js verify --command test --command typecheck --timeout 900
+
       - name: Report drift
-        run: node packages/cli/dist/index.js doctor
+        run: node packages/cli/dist/index.js doctor --strict
+
+      - name: Show the result
+        run: node packages/cli/dist/index.js map

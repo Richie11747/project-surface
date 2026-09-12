@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Declarations set scope and granularity.** `ignore:` removes globs from the scan before any adapter runs;
+  `owners:` accept globs, expanded to concrete files at scan time; an `inferred` capability whose owner
+  files all lie within a declared capability is absorbed into it (sources union, evidence and environment
+  merged, id kept as an alias). `derived` claims are never absorbed.
+- `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
+- The repository describes itself: `.project/surface.declare.yaml` declares 32 capabilities with contracts
+  and evidence; CI runs `surface verify` and gates on `surface doctor --strict`.
+
 ## [0.1.0] - 2026-09-12
 
 First release. Establishes the `project-surface/v1` schema.
@@ -20,4 +32,5 @@ First release. Establishes the `project-surface/v1` schema.
 - **Integrations** - a Claude Code plugin and a composite GitHub Action under `integrations/`.
 - `surface verify` rebuilds the document after recording results, so capability confidence and freshness update immediately instead of on the next `init`.
 
+[Unreleased]: https://github.com/Richie11747/project-surface/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/Richie11747/project-surface/releases/tag/v0.1.0

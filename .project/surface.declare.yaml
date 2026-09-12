@@ -1,0 +1,279 @@
+# project-surface, described by its maintainers.
+#
+# This file sets the scope and the granularity of the repository's own surface.
+# Inference sees one exported symbol at a time; a person sees "the trust model".
+# Every declaration below names concrete owner files (globs are expanded at
+# scan time), a contract that specifies it, and the test suite that proves it.
+# Run `surface verify --all` to turn those tests into evidence.
+
+project:
+  name: project-surface
+
+# The fixture projects are inputs to the test suite, not part of this project.
+ignore:
+  - fixtures/**
+
+capabilities:
+  # ---- The specification ---------------------------------------------------
+  - id: spec.schema
+    title: The project-surface/v1 schema and its validator
+    description: JSON Schema for the surface document, embedded into core and checked against spec/v1 in CI.
+    owners: [spec/v1/surface.schema.json, packages/core/src/schema/**, scripts/gen-schema-module.mjs]
+    contracts: [spec/v1/SPEC.md]
+    evidence: [test/spec-examples.test.js]
+    tags: [spec]
+
+  # ---- The trust model -----------------------------------------------------
+  - id: trust.confidence
+    title: Computed confidence with tier floors, corroboration and single-step promotion
+    owners: [packages/core/src/model/confidence.ts, packages/core/src/build/assemble.ts]
+    contracts: [docs/trust-model.md]
+    evidence: [packages/core/test/confidence.test.js]
+    tags: [trust]
+
+  - id: trust.freshness
+    title: Fingerprint-anchored freshness that does not self-heal
+    owners: [packages/core/src/model/freshness.ts]
+    contracts: [docs/trust-model.md]
+    evidence: [packages/core/test/freshness.test.js]
+    tags: [trust]
+
+  - id: trust.stable-ids
+    title: Deterministic identifiers that survive rescans and renames
+    owners: [packages/core/src/model/ids.ts]
+    contracts: [spec/v1/SPEC.md]
+    evidence: [packages/core/test/ids.test.js]
+    tags: [trust]
+
+  # ---- The pipeline --------------------------------------------------------
+  - id: build.pipeline
+    title: Detect, extract, merge, declare, score, emit
+    description: The single orchestration that turns adapter claims and human declarations into a validated document.
+    owners: [packages/core/src/build/**, packages/core/src/adapter.ts, packages/core/src/io.ts, packages/core/src/version.ts, packages/core/src/index.ts]
+    contracts: [docs/concepts.md]
+    evidence: [test/fixtures.test.js]
+    tags: [core]
+
+  - id: build.declarations
+    title: Human declarations that override inference, scope the scan and set granularity
+    owners: [packages/core/src/declarations/**, packages/core/src/fs/glob.ts]
+    contracts: [docs/declarations.md]
+    evidence: [packages/core/test/declarations.test.js]
+    tags: [core]
+
+  - id: build.file-discovery
+    title: Git-aware file discovery that never follows a symlink out of the project
+    owners: [packages/core/src/fs/walk.ts, packages/core/src/git/git.ts]
+    contracts: [docs/concepts.md]
+    evidence: [packages/core/test/safety.test.js]
+    tags: [core, safety]
+
+  # ---- Evidence and safety -------------------------------------------------
+  - id: evidence.runner
+    title: The only code path that executes a project command
+    description: Runs a command only if it already exists in the document, from a directory physically inside the project.
+    owners: [packages/core/src/evidence/runner.ts]
+    contracts: [docs/cli.md]
+    evidence: [packages/core/test/safety.test.js]
+    tags: [safety]
+
+  - id: safety.redaction
+    title: Secret redaction for every captured command output
+    owners: [packages/core/src/redact.ts]
+    contracts: [docs/trust-model.md]
+    evidence: [packages/core/test/redact.test.js]
+    tags: [safety]
+
+  # ---- Analyses ------------------------------------------------------------
+  - id: analysis.health
+    title: Drift, stale claims and unproven behaviour as health findings
+    owners: [packages/core/src/analysis/health.ts]
+    contracts: [spec/v1/SPEC.md]
+    evidence: [test/cli.test.js]
+    tags: [analysis]
+
+  - id: analysis.impact
+    title: Bounded impact map for a set of changed paths
+    owners: [packages/core/src/analysis/impact.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [analysis]
+
+  - id: analysis.context
+    title: Token-bounded context pack with a reason per file
+    owners: [packages/core/src/analysis/context.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [analysis]
+
+  - id: analysis.diff
+    title: Semantic diff between two surface documents
+    owners: [packages/core/src/analysis/diff.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [analysis]
+
+  # ---- Adapters ------------------------------------------------------------
+  - id: adapter.sdk
+    title: Adapter contract and the conformance suite
+    description: Every adapter must pass it - provenance on every claim, portable paths, honest evidence status, byte-identical determinism.
+    owners: [packages/adapter-sdk/src/**]
+    contracts: [docs/adapters.md]
+    evidence: [test/conformance.test.js]
+    tags: [adapters]
+
+  - id: adapter.typescript
+    title: TypeScript and JavaScript adapter with import-graph evidence linking
+    owners: [packages/adapters/typescript/src/**]
+    contracts: [docs/adapters.md]
+    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    tags: [adapters]
+
+  - id: adapter.python
+    title: Python adapter
+    owners: [packages/adapters/python/src/**]
+    contracts: [docs/adapters.md]
+    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    tags: [adapters]
+
+  - id: adapter.go
+    title: Go adapter, structural and honest about a missing toolchain
+    owners: [packages/adapters/go/src/**]
+    contracts: [docs/adapters.md]
+    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    tags: [adapters]
+
+  # ---- The CLI -------------------------------------------------------------
+  - id: cli.init
+    title: surface init
+    owners: [packages/cli/src/commands/init.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.inspect
+    title: surface inspect
+    owners: [packages/cli/src/commands/inspect.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.map
+    title: surface map
+    owners: [packages/cli/src/commands/map.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.verify
+    title: surface verify
+    owners: [packages/cli/src/commands/verify.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.impact
+    title: surface impact
+    owners: [packages/cli/src/commands/impact.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.context
+    title: surface context
+    owners: [packages/cli/src/commands/context.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.diff
+    title: surface diff
+    owners: [packages/cli/src/commands/diff.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.doctor
+    title: surface doctor
+    owners: [packages/cli/src/commands/doctor.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.report
+    title: surface report
+    owners: [packages/cli/src/commands/report.ts, packages/cli/src/commands/report-template.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.shell
+    title: Argument parsing, output and the command table
+    owners: [packages/cli/src/index.ts, packages/cli/src/context.ts, packages/cli/src/output.ts, packages/cli/src/usage.ts, packages/cli/src/adapters.ts, packages/cli/src/commands/mcp.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+
+  # ---- The MCP server ------------------------------------------------------
+  - id: mcp.read-tools
+    title: Read-only MCP tools - overview, find, constraints, health
+    owners: [packages/mcp-server/src/tools/read.ts]
+    contracts: [docs/mcp.md]
+    evidence: [test/mcp.test.js]
+    tags: [mcp]
+  - id: mcp.analyze-tools
+    title: Read-only MCP tools - impact, context, diff
+    owners: [packages/mcp-server/src/tools/analyze.ts]
+    contracts: [docs/mcp.md]
+    evidence: [test/mcp.test.js]
+    tags: [mcp]
+  - id: mcp.verify-tool
+    title: surface_verify, double-gated execution over MCP
+    description: Requires PROJECT_SURFACE_ALLOW_EXEC=1 and a command id that already exists in the document.
+    owners: [packages/mcp-server/src/tools/verify.ts]
+    contracts: [docs/mcp.md]
+    evidence: [test/mcp.test.js]
+    environment: [PROJECT_SURFACE_ALLOW_EXEC]
+    tags: [mcp, safety]
+  - id: mcp.server
+    title: The stdio MCP server
+    owners: [packages/mcp-server/src/index.ts, packages/mcp-server/src/bin.ts, packages/mcp-server/src/support.ts]
+    contracts: [docs/mcp.md]
+    evidence: [test/mcp.test.js]
+    tags: [mcp]
+
+  # ---- Repository tooling --------------------------------------------------
+  - id: repo.fixture-snapshots
+    title: Golden fixture snapshots and their update script
+    owners: [scripts/fixture-snapshot.mjs, scripts/update-fixtures.mjs, scripts/run-tests.mjs]
+    contracts: [CONTRIBUTING.md]
+    evidence: [test/fixtures.test.js]
+    tags: [repo]
+
+constraints:
+  - id: single-exec-path
+    rule: Only packages/core/src/evidence/runner.ts may execute a project command. Adapters propose commands; they never run them.
+    rationale: One spawn site is auditable. Two are not.
+    severity: error
+  - id: no-network
+    rule: Core makes no network calls and never writes to source files.
+    severity: error
+  - id: no-secret-values
+    rule: Environment variable names are surfaced; values are never read or stored.
+    severity: error
+  - id: golden-snapshots
+    rule: Golden snapshots under fixtures/ are regenerated with npm run fixtures:update and reviewed as a diff, never edited by hand.
+    severity: warn
+  - id: transcripts-are-real
+    rule: Every terminal transcript in README.md and docs/ is copied from a real run.
+    severity: warn
+
+risks:
+  - paths: [spec/v1/surface.schema.json]
+    type: generated
+    approval: required
+    reason: Every consumer validates against it. A change is a format change and must be reflected in SPEC.md and the embedded module.
+  - paths: [packages/core/src/evidence/runner.ts, packages/mcp-server/src/tools/verify.ts]
+    type: infra
+    approval: required
+    reason: The execution boundary. Changes here decide what an adversarial prompt can make the tool run.
+  - paths: [packages/core/src/redact.ts]
+    type: secret
+    approval: required
+    reason: The only filter between captured command output and the committed document.
+
+environment:
+  - name: PROJECT_SURFACE_ALLOW_EXEC
+    required: false
+    secret: false

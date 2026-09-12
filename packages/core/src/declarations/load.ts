@@ -11,6 +11,7 @@
  */
 
 import { parse } from "yaml";
+import { expandGlob, isGlob } from "../fs/glob.js";
 import { readFileSafe } from "../fs/walk.js";
 import { commandId, constraintId, riskId, slug } from "../model/ids.js";
 import { looksSecretName } from "../redact.js";
@@ -35,6 +36,11 @@ export interface Declarations {
   constraints: DraftConstraint[];
   risks: DraftRisk[];
   environment: DraftEnvironmentVariable[];
+  /**
+   * Globs for files the scan should not see at all - vendored examples, test
+   * fixtures that are projects in their own right. Applied before adapters run.
+   */
+  ignore: string[];
   /** Problems with the declaration file itself, surfaced as health findings. */
   errors: string[];
   present: boolean;
@@ -47,9 +53,14 @@ function empty(): Declarations {
     constraints: [],
     risks: [],
     environment: [],
+    ignore: [],
     errors: [],
     present: false,
   };
+}
+
+function isRelativePath(p: string): boolean {
+  return !p.startsWith("/") && !/^[A-Za-z]:/.test(p) && !p.split("/").includes("..");
 }
 
 function provenance(locator: string, now: Timestamp): Provenance {
@@ -103,6 +114,13 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
   if (isRecord(doc.project) && typeof doc.project.name === "string") {
     out.projectName = doc.project.name;
   }
+
+  asArray(doc.ignore).forEach((entry, i) => {
+    const at = `ignore[${i}]`;
+    if (typeof entry !== "string" || entry.trim() === "") return void out.errors.push(`${at} must be a path or glob.`);
+    if (!isRelativePath(entry)) return void out.errors.push(`${at} must be project-relative: ${entry}`);
+    out.ignore.push(entry);
+  });
 
   asArray(doc.capabilities).forEach((entry, i) => {
     const at = `capabilities[${i}]`;
@@ -184,6 +202,36 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
   });
 
   return out;
+}
+
+/**
+ * Resolve glob owners against the project file list, in place.
+ *
+ * A declaration may say `owners: [packages/core/src/model/**]` rather than
+ * listing every file. The glob is expanded here, once the walk has produced
+ * the file list, so that everything downstream - fingerprints, missing-owner
+ * checks, impact - only ever sees concrete paths. A glob that matches nothing
+ * is an error: a claim about no files is not a claim.
+ */
+export function expandDeclaredOwners(declarations: Declarations, files: readonly string[]): void {
+  declarations.capabilities.forEach((capability, i) => {
+    const expanded: SourceRef[] = [];
+    for (const owner of capability.owners) {
+      if (!isGlob(owner.path)) {
+        expanded.push(owner);
+        continue;
+      }
+      const matched = expandGlob(owner.path, files);
+      if (matched.length === 0) {
+        declarations.errors.push(`capabilities[${i}] owner glob "${owner.path}" matches no files.`);
+        continue;
+      }
+      expanded.push(...matched.map((path) => ({ path })));
+    }
+    capability.owners = expanded;
+  });
+  /* The error above already explains the removal; an ownerless claim must not reach the document. */
+  declarations.capabilities = declarations.capabilities.filter((c) => c.owners.length > 0);
 }
 
 const COMMAND_KINDS = new Set([

@@ -7,7 +7,7 @@
  */
 
 import { requireSurface, type GlobalOptions } from "../context.js";
-import { confidence, heading, print, printJson, style, table, tier } from "../output.js";
+import { confidence, freshness, heading, print, printJson, style, table, tier } from "../output.js";
 
 export async function run(_args: string[], options: GlobalOptions): Promise<number> {
   const surface = requireSurface(options);
@@ -21,6 +21,7 @@ export async function run(_args: string[], options: GlobalOptions): Promise<numb
     evidence: c.evidence.map((r) => evidenceById.get(r.id)?.path ?? r.id),
     tier: c.provenance.tier,
     confidence: c.confidence,
+    freshness: c.freshness?.status ?? "unknown",
   }));
 
   if (options.json) {
@@ -39,6 +40,7 @@ export async function run(_args: string[], options: GlobalOptions): Promise<numb
         style.bold("EVIDENCE"),
         style.bold("TIER"),
         style.bold("CONFIDENCE"),
+        style.bold("FRESHNESS"),
       ],
       ...rows.map((r) => [
         `  ${r.id}`,
@@ -47,15 +49,18 @@ export async function run(_args: string[], options: GlobalOptions): Promise<numb
         r.evidence[0] ?? style.dim("-"),
         tier(r.tier),
         confidence(r.confidence),
+        freshness(surface.capabilities.find((c) => c.id === r.id)?.freshness),
       ]),
     ])
   );
   print("");
   const unproven = rows.filter((r) => r.evidence.length === 0).length;
   const undocumented = rows.filter((r) => r.contracts.length === 0).length;
+  const stale = rows.filter((r) => r.freshness === "stale").length;
+  const fresh = rows.filter((r) => r.freshness === "fresh").length;
   print(
     style.dim(
-      `  ${rows.length} capabilities - ${unproven} without evidence, ${undocumented} without a contract`
+      `  ${rows.length} capabilities - ${fresh} fresh, ${stale} stale, ${unproven} without evidence, ${undocumented} without a contract`
     )
   );
   return 0;

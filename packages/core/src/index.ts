@@ -61,6 +61,7 @@ export { buildSurface, nowIso, type BuildOptions, type BuildResult } from "./bui
 export { createAdapterContext, type CreateContextOptions } from "./build/context.js";
 export { distinctSources, scoreClaim } from "./build/assemble.js";
 export {
+  absorbInferred,
   mergeCapabilities,
   mergeCommands,
   mergeConstraints,
@@ -110,9 +111,10 @@ export {
 } from "./analysis/context.js";
 
 // Declarations
-export { loadDeclarations, type Declarations } from "./declarations/load.js";
+export { expandDeclaredOwners, loadDeclarations, type Declarations } from "./declarations/load.js";
 
 // Filesystem and git
+export { expandGlob, globFilter, globToRegExp, isGlob, matchesAny, matchesGlob } from "./fs/glob.js";
 export {
   existsSafe,
   readFileSafe,

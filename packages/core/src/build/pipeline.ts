@@ -12,7 +12,8 @@
  */
 
 import type { Adapter, AdapterResult } from "../adapter.js";
-import { loadDeclarations } from "../declarations/load.js";
+import { expandDeclaredOwners, loadDeclarations } from "../declarations/load.js";
+import { globFilter } from "../fs/glob.js";
 import { walkProject, MAX_FILES } from "../fs/walk.js";
 import { readGitInfo } from "../git/git.js";
 import { computeConfidence, promoteWithEvidence } from "../model/confidence.js";
@@ -30,6 +31,7 @@ import {
   scoreClaim,
 } from "./assemble.js";
 import {
+  absorbInferred,
   mergeCapabilities,
   mergeCommands,
   mergeConstraints,
@@ -68,10 +70,19 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
 
   const git = readGitInfo(root);
   const walk = walkProject(root, options.maxFiles ?? MAX_FILES);
-  const fileSet = new Set(walk.files);
+
+  /* Declarations come first because they can narrow what the adapters see:
+     a vendored example or a fixture project is not part of this project's
+     surface, and the only party who can say so is the human. */
+  const declarations = loadDeclarations(root, now);
+  const ignored = globFilter(declarations.ignore);
+  const files = declarations.ignore.length > 0 ? walk.files.filter((f) => !ignored(f)) : walk.files;
+  expandDeclaredOwners(declarations, files);
+
+  const fileSet = new Set(files);
   const ctx = createAdapterContext({
     root,
-    files: walk.files,
+    files,
     git,
     now,
     ...(options.log ? { log: options.log } : {}),
@@ -87,16 +98,16 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
     }
   }
 
-  const declarations = loadDeclarations(root, now);
-
   const commands = mergeCommands([
     ...results.flatMap((r) => r.commands ?? []),
     ...declarations.commands,
   ]);
-  const capabilities = mergeCapabilities([
-    ...results.flatMap((r) => r.capabilities ?? []),
-    ...declarations.capabilities,
-  ]);
+  const capabilities = absorbInferred(
+    mergeCapabilities([
+      ...results.flatMap((r) => r.capabilities ?? []),
+      ...declarations.capabilities,
+    ])
+  );
   const constraints = mergeConstraints([
     ...results.flatMap((r) => r.constraints ?? []),
     ...declarations.constraints,

@@ -43,7 +43,8 @@ environment, the command that checks it, and the trust line (`confidence label |
 
 ### `surface map`
 
-One row per capability: owner, contract, evidence, confidence. Good for a first look at a foreign repo.
+One row per capability: owner, contract, evidence, tier, confidence, freshness. Good for a first look at a
+foreign repo, and for checking that what was verified is still verified.
 
 ### `surface verify`
 

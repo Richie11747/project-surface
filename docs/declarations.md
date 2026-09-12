@@ -12,11 +12,15 @@ Full example: [`examples/surface.declare.yaml`](../examples/surface.declare.yaml
 project:
   name: checkout-api            # overrides the detected name
 
+ignore:                         # files the scan must not see at all (globs)
+  - fixtures/**                 # example projects that are inputs, not this project
+  - vendor/legacy-client
+
 capabilities:
   - id: checkout.create         # optional; derived from the first owner when absent
     title: Creates a checkout session
     description: Validates the cart and opens a Stripe session.
-    owners: [src/checkout/create.ts]           # at least one, project-relative
+    owners: [src/checkout/**]                  # at least one; files or globs, project-relative
     contracts: [docs/contracts/checkout.md]
     evidence: [tests/checkout/create.test.ts]  # linked with link: declared
     environment: [DATABASE_URL, STRIPE_SECRET_KEY]
@@ -56,3 +60,30 @@ environment:
   (severity `error`), which makes `surface doctor` exit `2`.
 - Declaring a capability with the same id as an inferred one replaces it. Keep the old id in `aliases` if
   you rename, so diffs and consumers stay continuous.
+
+## Scope: `ignore`
+
+`ignore` lists globs for files the scan must not see. They are removed from the file list *before* any
+adapter runs, so an ignored `package.json` produces no package, no commands and no capabilities. Use it for
+example projects, test fixtures that are repositories in their own right, and vendored code. Patterns are
+project-relative; `**` crosses directories, `*` and `?` do not; a bare path names a file or a whole tree.
+`.gitignore` is still respected on top of this - `ignore` is for files you *do* commit but do not want
+described.
+
+## Granularity: glob owners and absorption
+
+Inference works at the granularity it can see - one exported symbol, one route. A declaration works at the
+granularity that matters. Two rules make that possible:
+
+1. **Owners may be globs.** `owners: [src/model/**]` is expanded against the file list at scan time, so
+   fingerprints, missing-owner checks and impact analysis all work on concrete files. A glob that matches
+   nothing is a `DECLARATION_INVALID` error, because a claim about no files is not a claim.
+2. **A declaration absorbs the guesses it covers.** An `inferred` capability whose owner files all lie
+   within a declared capability's owners is folded into it: its sources become corroboration, its evidence
+   links and environment names are merged, and its id is kept in `aliases` so nothing that learned the old
+   id breaks. Only `inferred` claims are absorbed. A `derived` claim - a route parsed from real code, a
+   command read from a manifest - stands on its own unless a declaration reuses its id.
+
+The self-surface of this repository ([`.project/surface.declare.yaml`](../.project/surface.declare.yaml))
+is the worked example: 156 exported symbols become 32 declared capabilities, each with a contract and a
+test suite, and one honest leftover that no declaration covers.

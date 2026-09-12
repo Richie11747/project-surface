@@ -126,6 +126,57 @@ export function mergeCapabilities(items: DraftCapability[]): DraftCapability[] {
   });
 }
 
+/**
+ * Fold inferred capabilities into the declared capability that owns their files.
+ *
+ * Inference works at the granularity it can see - one exported symbol, one
+ * route. A human declaration works at the granularity that matters: "the trust
+ * model" is one capability, not thirty exports. When a declaration's owners
+ * cover every owner file of an inferred claim, the guess is not a separate
+ * capability any more; it is corroboration. Its sources and evidence links
+ * move onto the declaration and its id is kept as an alias so consumers that
+ * learned the old id still resolve. Only `inferred` claims are folded:
+ * structured facts (`derived`, `verified`) stand on their own unless a
+ * declaration reuses their id, which `mergeCapabilities` already handles.
+ */
+export function absorbInferred(capabilities: DraftCapability[]): DraftCapability[] {
+  const declared = capabilities.filter((c) => c.provenance.tier === "declared");
+  if (declared.length === 0) return capabilities;
+
+  const coverage = declared.map((c) => ({ c, owners: new Set(c.owners.map((o) => o.path)) }));
+  const absorbedInto = new Map<string, DraftCapability[]>();
+  const kept: DraftCapability[] = [];
+
+  for (const capability of capabilities) {
+    if (capability.provenance.tier !== "inferred") {
+      kept.push(capability);
+      continue;
+    }
+    const host = coverage.find(({ owners }) => capability.owners.every((o) => owners.has(o.path)));
+    if (!host) {
+      kept.push(capability);
+      continue;
+    }
+    const list = absorbedInto.get(host.c.id) ?? [];
+    list.push(capability);
+    absorbedInto.set(host.c.id, list);
+  }
+
+  return kept
+    .map((capability) => {
+      const absorbed = absorbedInto.get(capability.id);
+      if (!absorbed) return capability;
+      return {
+        ...capability,
+        provenance: absorbed.reduce((p, a) => mergeProvenance(p, a.provenance), capability.provenance),
+        evidence: uniqueEvidence([...capability.evidence, ...absorbed.flatMap((a) => a.evidence)]),
+        environment: uniqueStrings([...capability.environment, ...absorbed.flatMap((a) => a.environment)]),
+        aliases: uniqueStrings([...(capability.aliases ?? []), ...absorbed.map((a) => a.id)]),
+      };
+    })
+    .sort((a, b) => a.id.localeCompare(b.id));
+}
+
 export function mergeConstraints(items: DraftConstraint[]): DraftConstraint[] {
   return mergeBy(items, (a, b) => ({
     ...(bWins(a.provenance, b.provenance) ? b : a),
