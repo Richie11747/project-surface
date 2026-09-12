@@ -18,8 +18,8 @@ Then, in a project that has run `surface init`, ask in a fresh session:
 
 ## As a plugin
 
-This directory is a Claude Code plugin. It registers the same MCP server and adds a `/surface` command
-that runs `doctor` and summarises the result.
+This directory is a Claude Code plugin. It registers the MCP server from this checkout (so `npm run build`
+first) and adds a `/surface` command that runs `doctor` and summarises the result.
 
 ```console
 claude plugin add /absolute/path/to/project-surface/integrations/claude-code

@@ -1,10 +1,12 @@
 ---
 description: Check the project surface for drift, stale claims and unproven behaviour, then summarise.
-allowed-tools: Bash(npx project-surface:*), Bash(npx -y project-surface:*), mcp__project-surface__*
+allowed-tools: Bash(npx project-surface:*), Bash(npx -y project-surface:*), Bash(node *project-surface*), mcp__project-surface__*
 ---
 
-Run `npx -y project-surface doctor --json` in the repository root. If it reports that no surface document
-exists, run `npx -y project-surface init` first and then run doctor again.
+If the `project-surface` MCP server is connected, call `surface_health` (severity `info`). Otherwise run
+`npx -y project-surface doctor --json` in the repository root - or, from a source checkout,
+`node <checkout>/packages/cli/dist/index.js doctor --json`. If it reports that no surface document exists,
+run `init` the same way first, then `doctor` again.
 
 Then summarise for the user:
 
