@@ -1,0 +1,67 @@
+# .project/surface.declare.yaml
+#
+# Human declarations. Loaded last, at tier `declared`, and they override anything
+# inference produced for the same id. Every path is project-relative.
+# See docs/declarations.md for the rules.
+
+project:
+  name: checkout-api
+
+capabilities:
+  - id: checkout.create
+    title: Creates a checkout session
+    description: Validates the cart, reserves inventory and opens a payment session.
+    owners:
+      - src/checkout/create.ts
+    contracts:
+      - docs/contracts/checkout.md
+    evidence:
+      - tests/checkout/create.test.ts
+    environment:
+      - DATABASE_URL
+      - STRIPE_SECRET_KEY
+    tags:
+      - http
+      - payments
+
+  - id: auth.verify-token
+    title: Verifies a bearer token
+    owners:
+      - src/auth/verifyToken.ts
+    contracts:
+      - docs/auth.md
+    environment:
+      - AUTH_SIGNING_SECRET
+
+commands:
+  - id: e2e
+    run: npm run test:e2e
+    kind: test
+    description: Playwright suite against a local server. Needs a running database.
+
+constraints:
+  - rule: Never call the payment provider from a request handler.
+    rationale: Handlers must stay idempotent; provider calls go through the job queue.
+    severity: error
+  - rule: Every new route needs a contract under docs/contracts/.
+    severity: warn
+
+risks:
+  - paths:
+      - db/migrations
+    type: migration
+    approval: required
+    reason: Schema changes are hard to roll back.
+  - paths:
+      - src/payments/provider.ts
+    type: external-service
+    approval: advisory
+    reason: Talks to a third party with real money behind it.
+
+environment:
+  - DATABASE_URL
+  - name: STRIPE_SECRET_KEY
+    required: true
+    secret: true
+  - name: LOG_LEVEL
+    required: false

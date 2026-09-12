@@ -1,0 +1,49 @@
+name: project-surface
+description: Regenerate .project/surface.json and fail on drift, stale claims or broken commands.
+author: project-surface contributors
+
+branding:
+  icon: layers
+  color: gray-dark
+
+inputs:
+  strict:
+    description: Treat warnings (stale claims, missing .env.example entries) as failures.
+    required: false
+    default: "false"
+  fail-on-change:
+    description: Fail when the regenerated surface differs from the committed one.
+    required: false
+    default: "false"
+  working-directory:
+    description: Project root, relative to the repository root.
+    required: false
+    default: "."
+  version:
+    description: project-surface version to run. Defaults to latest.
+    required: false
+    default: "latest"
+
+runs:
+  using: composite
+  steps:
+    - name: Generate surface
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: npx -y project-surface@${{ inputs.version }} init
+
+    - name: Report changes to the surface
+      if: inputs.fail-on-change == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: npx -y project-surface@${{ inputs.version }} diff --fail-on-change
+
+    - name: Doctor
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        if [ "${{ inputs.strict }}" = "true" ]; then
+          npx -y project-surface@${{ inputs.version }} doctor --strict
+        else
+          npx -y project-surface@${{ inputs.version }} doctor
+        fi

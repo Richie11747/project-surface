@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "project-surface": {
+      "command": "npx",
+      "args": ["-y", "project-surface", "mcp"],
+      "env": {
+        "PROJECT_SURFACE_ALLOW_EXEC": "0"
+      }
+    }
+  }
+}

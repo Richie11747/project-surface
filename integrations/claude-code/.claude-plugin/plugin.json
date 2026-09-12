@@ -1,0 +1,15 @@
+{
+  "name": "project-surface",
+  "version": "0.1.0",
+  "description": "Ask Claude what your project can do, where it lives, what proves it, and what a change will affect - from a verified, committed surface document.",
+  "author": {
+    "name": "project-surface contributors",
+    "url": "https://github.com/richardadamik/project-surface"
+  },
+  "homepage": "https://github.com/richardadamik/project-surface",
+  "repository": "https://github.com/richardadamik/project-surface",
+  "license": "Apache-2.0",
+  "keywords": ["mcp", "codebase", "context", "static-analysis"],
+  "mcpServers": "./.mcp.json",
+  "commands": "./commands/"
+}

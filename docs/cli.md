@@ -1,0 +1,118 @@
+# CLI reference
+
+Binary: `surface` (alias `project-surface`). From a source checkout: `node packages/cli/dist/index.js`.
+
+```
+surface <command> [options]
+```
+
+The command comes first, git-style. Global options are accepted anywhere after it.
+
+| Global option | Effect |
+|---|---|
+| `--root <dir>` | Project root. Defaults to the working directory. |
+| `--json` | Machine-readable output. Every command supports it. |
+| `--no-color` | Disable colour. Also disabled automatically when stdout is not a TTY or `--json` is set. |
+| `--version`, `--help` | |
+
+## Exit codes
+
+| Code | Meaning |
+|---|---|
+| `0` | Success. |
+| `1` | The tool failed: bad arguments, no surface document, unreadable project. |
+| `2` | A check failed. `doctor` with error-level findings (or any warning under `--strict`), `diff --fail-on-change` with changes, `verify` with a failing command. Gate CI on this. |
+
+## Commands
+
+### `surface init`
+
+Detect the stack and write `.project/surface.json`. Re-running is the normal way to refresh: the previous
+document is read first and verification results are carried forward, so a rescan does not lose what
+`verify` recorded.
+
+| Option | |
+|---|---|
+| `--force` | Ignore the previous document. |
+| `--max-files <n>` | Cap the file walk (default in `packages/core/src/fs/walk.ts`). Truncation is reported as `FILE_SCAN_TRUNCATED`. |
+
+### `surface inspect [capability]`
+
+Without an argument: a summary of the project. With a capability id: its owners, contract, evidence,
+environment, the command that checks it, and the trust line (`confidence label | tier | freshness`).
+
+### `surface map`
+
+One row per capability: owner, contract, evidence, confidence. Good for a first look at a foreign repo.
+
+### `surface verify`
+
+Run project commands and record the result as evidence. Only commands already present in the document can
+run - there is no way to pass a shell string.
+
+| Option | |
+|---|---|
+| `--command <id>` | Run this command. Repeatable. |
+| `--capability <id>` | Run the commands that exercise this capability. |
+| `--all` | Run every command. |
+| `--timeout <seconds>` | Per-command timeout. |
+
+Output is redacted for secret-shaped strings and truncated before it is stored.
+
+### `surface impact <paths...>`
+
+What a change affects: capabilities owning the paths, their evidence, active constraints, and which
+commands to run.
+
+| Option | |
+|---|---|
+| `--staged` | Use the git staged set instead of explicit paths. |
+| `--since <ref>` | Use everything changed since a git ref. |
+
+### `surface context "<task>"`
+
+A token-bounded context pack for a task: the capabilities most relevant to the wording, their owners,
+contracts and tests, each with a one-line reason for inclusion.
+
+| Option | |
+|---|---|
+| `--budget <tokens>` | Default in `packages/core/src/analysis/context.ts`. |
+| `--max-capabilities <n>` | |
+| `--content` | Include file contents, not only paths. |
+
+### `surface diff`
+
+What changed about the project surface between the committed document and the working tree.
+
+| Option | |
+|---|---|
+| `--since <ref>` | Git ref to compare against. Default `HEAD`. |
+| `--fail-on-change` | Exit `2` when anything changed. |
+
+### `surface doctor`
+
+Report drift, stale claims and unproven behaviour. Findings and codes are listed in
+[`spec/v1/SPEC.md` §11](../spec/v1/SPEC.md#11-healthfinding).
+
+| Option | |
+|---|---|
+| `--strict` | Treat warnings as failures (exit `2`). |
+| `--severity <error|warn|info>` | Minimum severity to print. |
+
+### `surface report [--out path]`
+
+A self-contained HTML report. Defaults to `.project/surface.html`, which is git-ignored by the template
+`.gitignore`.
+
+### `surface mcp`
+
+Serve the surface over MCP on stdio. See [mcp.md](mcp.md).
+
+## Typical CI step
+
+```yaml
+- run: npx project-surface init
+- run: npx project-surface doctor --strict
+```
+
+Or use the composite action in [`integrations/github-action`](../integrations/github-action/README.md).
