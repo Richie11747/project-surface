@@ -2,7 +2,7 @@
 
 ## Reporting
 
-Report vulnerabilities through a [private security advisory](https://github.com/richardadamik/project-surface/security/advisories/new) on this repository. Please do not open a public issue. You should hear back within a few days; fixes ship as a patch release with a changelog entry that credits the reporter, unless they prefer otherwise.
+Report vulnerabilities through a [private security advisory](https://github.com/Richie11747/project-surface/security/advisories/new) on this repository. Please do not open a public issue. You should hear back within a few days; fixes ship as a patch release with a changelog entry that credits the reporter, unless they prefer otherwise.
 
 ## Supported versions
 

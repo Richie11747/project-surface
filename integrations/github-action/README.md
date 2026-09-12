@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: richardadamik/project-surface/integrations/github-action@main
+      - uses: Richie11747/project-surface/integrations/github-action@main
         with:
           strict: "true"          # warnings fail the job
           fail-on-change: "true"  # the committed surface must be current

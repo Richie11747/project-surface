@@ -20,4 +20,4 @@ First release. Establishes the `project-surface/v1` schema.
 - **Integrations** - a Claude Code plugin and a composite GitHub Action under `integrations/`.
 - `surface verify` rebuilds the document after recording results, so capability confidence and freshness update immediately instead of on the next `init`.
 
-[0.1.0]: https://github.com/richardadamik/project-surface/releases/tag/v0.1.0
+[0.1.0]: https://github.com/Richie11747/project-surface/releases/tag/v0.1.0

@@ -30,4 +30,4 @@ Every command supports `--json`. Exit code `2` means a check failed, so CI can g
 Node 20.10 or newer. No native modules, no network calls, read-only by default.
 
 Full documentation, the trust model and the specification live in the
-[repository](https://github.com/richardadamik/project-surface#readme).
+[repository](https://github.com/Richie11747/project-surface#readme).

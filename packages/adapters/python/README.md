@@ -1,6 +1,6 @@
 # @project-surface/adapter-python
 
-Python adapter for [project-surface](https://github.com/richardadamik/project-surface).
+Python adapter for [project-surface](https://github.com/Richie11747/project-surface).
 
 | Extracts | From |
 |---|---|

@@ -5,11 +5,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/richardadamik/project-surface.git",
+    "url": "git+https://github.com/Richie11747/project-surface.git",
     "directory": "packages/adapters/python"
   },
-  "homepage": "https://github.com/richardadamik/project-surface#readme",
-  "bugs": "https://github.com/richardadamik/project-surface/issues",
+  "homepage": "https://github.com/Richie11747/project-surface#readme",
+  "bugs": "https://github.com/Richie11747/project-surface/issues",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

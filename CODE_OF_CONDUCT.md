@@ -25,7 +25,7 @@ Behaviour that is not acceptable:
 
 Maintainers are responsible for clarifying and enforcing these standards and may remove, edit or reject comments, commits, code, issues and other contributions that are not aligned with this Code of Conduct.
 
-Instances of abusive, harassing or otherwise unacceptable behaviour may be reported to the maintainers through a [private security advisory](https://github.com/richardadamik/project-surface/security/advisories/new) on this repository, or by contacting the maintainer directly. All complaints will be reviewed and investigated promptly and fairly, and the privacy of the reporter will be respected.
+Instances of abusive, harassing or otherwise unacceptable behaviour may be reported to the maintainers through a [private security advisory](https://github.com/Richie11747/project-surface/security/advisories/new) on this repository, or by contacting the maintainer directly. All complaints will be reviewed and investigated promptly and fairly, and the privacy of the reporter will be respected.
 
 ## Attribution
 

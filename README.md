@@ -1,6 +1,6 @@
 # project-surface
 
-[![CI](https://github.com/richardadamik/project-surface/actions/workflows/ci.yml/badge.svg)](https://github.com/richardadamik/project-surface/actions/workflows/ci.yml)
+[![CI](https://github.com/Richie11747/project-surface/actions/workflows/ci.yml/badge.svg)](https://github.com/Richie11747/project-surface/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 **The missing semantic layer for AI-readable software projects.**
@@ -30,7 +30,7 @@ A repository is not a folder of files. It is a graph of capabilities, contracts,
 `0.1.0` is not on npm yet. Until it is, run it from a checkout:
 
 ```console
-git clone https://github.com/richardadamik/project-surface
+git clone https://github.com/Richie11747/project-surface
 cd project-surface
 npm install && npm run build
 node packages/cli/dist/index.js --help       # or: npm run surface -- --help

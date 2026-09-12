@@ -1,6 +1,6 @@
 # @project-surface/adapter-typescript
 
-TypeScript and JavaScript adapter for [project-surface](https://github.com/richardadamik/project-surface).
+TypeScript and JavaScript adapter for [project-surface](https://github.com/Richie11747/project-surface).
 
 Uses the TypeScript compiler API, so claims come from a real parse tree rather than regular expressions.
 

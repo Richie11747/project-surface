@@ -1,6 +1,6 @@
 # @project-surface/adapter-sdk
 
-The contract every [project-surface](https://github.com/richardadamik/project-surface) adapter implements, plus the conformance suite that proves it.
+The contract every [project-surface](https://github.com/Richie11747/project-surface) adapter implements, plus the conformance suite that proves it.
 
 An adapter implements `detect` and `extract`, gets read-only file access through its context, and *proposes* claims - commands, capabilities, evidence, environment - each carrying a provenance tier and at least one source. It can never execute anything.
 

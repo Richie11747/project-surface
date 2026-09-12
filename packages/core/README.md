@@ -1,6 +1,6 @@
 # @project-surface/core
 
-Schema, trust model, extraction pipeline and analysis engine for [project-surface](https://github.com/richardadamik/project-surface).
+Schema, trust model, extraction pipeline and analysis engine for [project-surface](https://github.com/Richie11747/project-surface).
 
 Everything else in the monorepo depends on this package. It owns:
 

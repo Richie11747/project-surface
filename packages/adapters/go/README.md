@@ -1,6 +1,6 @@
 # @project-surface/adapter-go
 
-Go adapter for [project-surface](https://github.com/richardadamik/project-surface). **Static extraction only.**
+Go adapter for [project-surface](https://github.com/Richie11747/project-surface). **Static extraction only.**
 
 | Extracts | From |
 |---|---|
