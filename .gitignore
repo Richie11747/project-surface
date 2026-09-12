@@ -1,0 +1,56 @@
+# ---- Node / TypeScript ----
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.npm/
+npm-debug.log*
+.eslintcache
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# ---- Go ----
+vendor/
+*.test
+*.out
+
+# ---- project-surface artifacts ----
+# .project/surface.json IS committed on purpose: the artifact is the product.
+# Only derived / machine-local state is ignored.
+.project/cache/
+.project/surface.html
+.project/*.local.json
+
+# ---- Environments & secrets (never commit) ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+!**/testdata/**/*.key
+
+# ---- Coverage & test output ----
+coverage/
+.nyc_output/
+junit.xml
+
+# ---- Editors & OS ----
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Local agent tooling state ----
+.claude-flow/
+.claude/settings.local.json

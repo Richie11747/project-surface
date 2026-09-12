@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/adapter-sdk" },
+    { "path": "packages/adapters/typescript" },
+    { "path": "packages/adapters/python" },
+    { "path": "packages/adapters/go" },
+    { "path": "packages/cli" },
+    { "path": "packages/mcp-server" }
+  ]
+}

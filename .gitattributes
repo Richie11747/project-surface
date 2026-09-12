@@ -1,0 +1,11 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Generated / vendored files are collapsed in diffs and excluded from language stats.
+fixtures/**/expected.surface.json linguist-generated=true
+spec/v1/examples/*.json          linguist-generated=true

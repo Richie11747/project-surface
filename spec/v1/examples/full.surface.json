@@ -1,0 +1,322 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.1.0"
+  },
+  "project": {
+    "name": "checkout-api",
+    "root": ".",
+    "stacks": [
+      {
+        "id": "typescript",
+        "adapter": "@project-surface/adapter-typescript",
+        "adapterVersion": "0.1.0",
+        "toolchainAvailable": true,
+        "notes": []
+      }
+    ],
+    "packages": [
+      {
+        "id": "root",
+        "path": ".",
+        "name": "checkout-api",
+        "manager": "npm",
+        "private": true
+      }
+    ]
+  },
+  "commands": [
+    {
+      "id": "test",
+      "run": "npm run test",
+      "cwd": ".",
+      "kind": "test",
+      "packageId": "root",
+      "description": "node --test tests/",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "scripts.test"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "verification": {
+        "status": "passed",
+        "exitCode": 0,
+        "durationMs": 936,
+        "observedAt": "2026-01-01T00:00:00Z",
+        "summary": "tests 2 pass 2 fail 0"
+      },
+      "freshness": {
+        "status": "fresh",
+        "verifiedAt": "2026-01-01T00:00:00Z",
+        "staleAfterDays": 14
+      },
+      "confidence": 0.95
+    },
+    {
+      "id": "dev",
+      "run": "npm run dev",
+      "cwd": ".",
+      "kind": "dev",
+      "packageId": "root",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "scripts.dev"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "checkout.create",
+      "title": "POST /checkout",
+      "description": "HTTP endpoint registered in src/checkout/create.ts.",
+      "kind": "route",
+      "packageId": "root",
+      "route": {
+        "method": "POST",
+        "path": "/checkout"
+      },
+      "owners": [
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "L63"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/contracts/checkout.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/checkout/create.test.ts",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "DATABASE_URL"
+      ],
+      "tags": [
+        "http"
+      ],
+      "aliases": [
+        "checkout.post"
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L63"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "fresh",
+        "verifiedAt": "2026-01-01T00:00:00Z",
+        "ownersFingerprint": "0123456789abcdef0123456789abcdef",
+        "staleAfterDays": 14
+      },
+      "confidence": 0.95
+    },
+    {
+      "id": "auth.verify-token",
+      "title": "verifyToken",
+      "description": "Exported function in src/auth/verifyToken.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/auth/verifyToken.ts",
+          "locator": "export:verifyToken"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [
+        "AUTH_SIGNING_SECRET"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/auth/verifyToken.ts",
+            "locator": "L8"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "fedcba9876543210fedcba9876543210",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint:no-payment-provider-in-handlers",
+      "rule": "Never call the payment provider from a request handler.",
+      "rationale": "Handlers must stay idempotent; provider calls go through the job queue.",
+      "severity": "error",
+      "status": "active",
+      "provenance": {
+        "tier": "declared",
+        "sources": [
+          {
+            "path": ".project/surface.declare.yaml",
+            "locator": "constraints[0]"
+          }
+        ],
+        "adapter": "declarations",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 1
+    }
+  ],
+  "environment": [
+    {
+      "name": "DATABASE_URL",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "L12"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L12"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "AUTH_SIGNING_SECRET",
+      "required": true,
+      "secret": true,
+      "usedBy": [
+        {
+          "path": "src/auth/verifyToken.ts",
+          "locator": "L4"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/auth/verifyToken.ts",
+            "locator": "L4"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk:migration:db/migrations",
+      "type": "migration",
+      "paths": [
+        "db/migrations/2026-08-18-add-checkout-status.sql"
+      ],
+      "approval": "required",
+      "reason": "Schema migrations change persisted data and are hard to roll back.",
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "db/migrations/2026-08-18-add-checkout-status.sql"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.4
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence:tests/checkout/create.test.ts",
+      "kind": "test",
+      "path": "tests/checkout/create.test.ts",
+      "commandId": "test",
+      "status": "passed",
+      "observedAt": "2026-01-01T00:00:00Z",
+      "summary": "tests 2 pass 2 fail 0",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "tests/checkout/create.test.ts"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.95
+    }
+  ],
+  "health": [
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"auth.verify-token\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "auth.verify-token"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    }
+  ],
+  "git": {
+    "available": true,
+    "head": "0123456789abcdef0123456789abcdef01234567",
+    "branch": "main",
+    "dirty": false,
+    "recentChanges": [
+      {
+        "path": "src/checkout/create.ts",
+        "commits": 3,
+        "lastTouched": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

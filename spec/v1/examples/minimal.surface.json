@@ -1,0 +1,24 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.1.0"
+  },
+  "project": {
+    "name": "empty",
+    "root": ".",
+    "stacks": [],
+    "packages": []
+  },
+  "commands": [],
+  "capabilities": [],
+  "constraints": [],
+  "environment": [],
+  "risks": [],
+  "evidence": [],
+  "health": [],
+  "git": {
+    "available": false
+  }
+}
