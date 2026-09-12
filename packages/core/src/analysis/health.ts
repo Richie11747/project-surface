@@ -11,9 +11,11 @@
  */
 
 import { confidenceLabel } from "../model/confidence.js";
+import type { ConstraintViolation } from "./constraints.js";
 import type {
   Capability,
   Command,
+  Constraint,
   EnvironmentVariable,
   EvidenceEntry,
   HealthFinding,
@@ -39,6 +41,9 @@ export interface HealthInput {
    * Supplied by the pipeline, which is where file reads happen.
    */
   envExample?: { path: string; names: ReadonlySet<string> } | null;
+  /** Constraints after their checks ran, and what the checks found. */
+  constraints?: Constraint[];
+  constraintViolations?: ConstraintViolation[];
 }
 
 export function detectHealth(input: HealthInput): HealthFinding[] {
@@ -52,6 +57,38 @@ export function detectHealth(input: HealthInput): HealthFinding[] {
       subject: { kind: "project", id: "declarations" },
       remediation: "Fix .project/surface.declare.yaml and re-run surface init.",
     });
+  }
+
+  /* A violated check is reported at the severity the maintainer chose for the
+     rule. An unchecked one is worth a line too: the rule exists, and nothing
+     in this scan was able to evaluate it. */
+  for (const constraint of input.constraints ?? []) {
+    if (!constraint.checked) continue;
+    if (constraint.checked.status === "violated") {
+      const hits = (input.constraintViolations ?? []).filter((v) => v.constraintId === constraint.id);
+      findings.push({
+        code: "CONSTRAINT_VIOLATED",
+        severity: constraint.severity,
+        message:
+          `Constraint "${constraint.rule}" is violated in ${hits.length} place(s): ` +
+          hits.slice(0, 5).map((h) => `${h.path} (${h.detail})`).join(", ") +
+          (hits.length > 5 ? ", ..." : "") +
+          ".",
+        subject: { kind: "constraint", id: constraint.id },
+        paths: [...new Set(hits.map((h) => h.path))].sort(),
+        remediation: constraint.rationale
+          ? `${constraint.rationale} Fix the listed files, or change the check in .project/surface.declare.yaml.`
+          : "Fix the listed files, or change the check in .project/surface.declare.yaml.",
+      });
+    } else if (constraint.checked.status === "unchecked") {
+      findings.push({
+        code: "CONSTRAINT_UNCHECKED",
+        severity: "info",
+        message: `Constraint "${constraint.rule}" has a check that could not run. ${constraint.checked.reason ?? ""}`.trim(),
+        subject: { kind: "constraint", id: constraint.id },
+        remediation: "Use an adapter that reports imports for this stack, or express the rule as forbid-file / require-test.",
+      });
+    }
   }
 
   for (const capability of input.capabilities) {

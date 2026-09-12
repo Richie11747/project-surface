@@ -17,6 +17,7 @@ import type {
   DraftConstraint,
   DraftEnvironmentVariable,
   DraftEvidenceEntry,
+  ImportEdge,
   PackageInfo,
 } from "@project-surface/adapter-sdk";
 import {
@@ -203,6 +204,17 @@ export const pythonAdapter: Adapter = {
       }
     }
 
+    /* Import edges for `forbid-import` checks. A module that resolves to
+       project code carries `to`; a third-party module is reported by name. */
+    const imports: ImportEdge[] = [];
+    for (const [from, file] of [...parsed.entries(), ...tests.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+      for (const imp of file.imports) {
+        const specifier = `${".".repeat(imp.level)}${imp.module}`;
+        const to = pythonModuleToPaths(from, imp).find((c) => allFiles.has(c));
+        imports.push({ from, specifier, ...(to ? { to } : {}) });
+      }
+    }
+
     const packageId = packages[0]?.id ?? "root";
     const capabilities: DraftCapability[] = [];
     for (const path of [...parsed.keys()].sort()) {
@@ -293,7 +305,7 @@ export const pythonAdapter: Adapter = {
         }),
       }));
 
-    return { stack, packages, commands, constraints, capabilities, evidence, environment };
+    return { stack, packages, commands, constraints, capabilities, evidence, environment, imports };
   },
 };
 

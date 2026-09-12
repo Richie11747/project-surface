@@ -139,7 +139,29 @@ A rule the project must not violate. Constraints come from declarations (`declar
 configuration (`derived`, e.g. an `engines` field). Adapters SHOULD NOT invent constraints.
 
 Fields: `id`, `rule` (string), `rationale` (optional), `severity` (`error` `warn` `info`),
-`status` (`active` `stale`).
+`status` (`active` `stale`), and optionally `check` and `checked`.
+
+### 7.1 `check` - a machine-checkable form of the rule
+
+Prose tells a reader what not to do. A `check` lets the generator establish, on every scan, whether it was
+done anyway. `check.kind` is one of:
+
+| Kind | Fields | Violated when |
+|---|---|---|
+| `forbid-import` | `from[]`, `to[]` | A file matching `from` imports a project file matching `to`, or a bare module specifier matching `to` (`stripe`, `@stripe/*`). |
+| `forbid-file` | `paths[]` | Any project file matches `paths`. |
+| `require-test` | `paths[]` | A capability with an owner matching `paths` has no linked evidence. |
+
+Patterns are project-relative globs: `**` crosses directory boundaries, `*` and `?` do not, and a bare
+path names a file or a whole tree. The same restrictions apply as to `relPath`.
+
+### 7.2 `checked` - what the generator found
+
+When a constraint has a `check`, the generator MUST set `checked` on every scan:
+`{ status: "passed" | "violated" | "unchecked", violations: n, reason? }`. A `violated` outcome MUST also
+be reported as a `CONSTRAINT_VIOLATED` health finding (§14) at the constraint's severity, listing the
+offending paths. A check the generator cannot evaluate - `forbid-import` when no adapter in the scan reports
+an import graph - MUST be `unchecked` with a `reason`, never `passed`. Silence is not compliance.
 
 ## 8. `EnvironmentVariable`
 
@@ -194,6 +216,7 @@ Codes emitted by the reference implementation:
 |---|---|---|
 | `DECLARATION_INVALID` | error | `.project/surface.declare.yaml` could not be parsed or has an invalid entry. |
 | `BROKEN_COMMAND` | error | A command failed the last time it was run. |
+| `CONSTRAINT_VIOLATED` | *the constraint's* | A constraint's `check` found one or more violations; `paths` lists them. |
 | `STALE_CLAIM` | warn | A capability was verified earlier but its owner files changed since. |
 | `MISSING_ENV_EXAMPLE` | warn | A required variable is not listed in `.env.example`. |
 | `NO_CAPABILITIES` | warn | A stack was detected but nothing was extracted from it. |
@@ -204,6 +227,7 @@ Codes emitted by the reference implementation:
 | `UNVERIFIED_COMMAND` | info | The command has never been run. |
 | `ORPHAN_TEST` | info | A test file could not be linked to any capability. |
 | `TOOLCHAIN_UNAVAILABLE` | info | A stack's toolchain is absent on this machine. |
+| `CONSTRAINT_UNCHECKED` | info | A constraint has a `check` that no adapter in this scan could evaluate. |
 
 Other generators MAY add codes. Consumers MUST tolerate unknown codes.
 

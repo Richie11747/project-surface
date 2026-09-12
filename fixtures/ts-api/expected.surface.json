@@ -150,6 +150,54 @@
       "confidence": 0.4
     },
     {
+      "id": "checkout.complete",
+      "title": "completeCheckout",
+      "description": "Exported function in src/checkout/create.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "export:completeCheckout"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/contracts/checkout.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/checkout/create.test.ts",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "DATABASE_URL"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L62"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
       "id": "checkout.create",
       "title": "POST /checkout",
       "description": "HTTP endpoint registered in src/checkout/create.ts.",
@@ -162,7 +210,7 @@
         },
         {
           "path": "src/checkout/create.ts",
-          "locator": "L63"
+          "locator": "L74"
         }
       ],
       "contracts": [
@@ -193,11 +241,11 @@
         "sources": [
           {
             "path": "src/checkout/create.ts",
-            "locator": "L32"
+            "locator": "L33"
           },
           {
             "path": "src/checkout/create.ts",
-            "locator": "L63"
+            "locator": "L74"
           }
         ],
         "adapter": "typescript",
@@ -245,7 +293,7 @@
         "sources": [
           {
             "path": "src/checkout/create.ts",
-            "locator": "L30"
+            "locator": "L31"
           }
         ],
         "adapter": "typescript",
@@ -293,7 +341,7 @@
         "sources": [
           {
             "path": "src/checkout/create.ts",
-            "locator": "L59"
+            "locator": "L70"
           }
         ],
         "adapter": "typescript",
@@ -316,7 +364,7 @@
       "owners": [
         {
           "path": "src/checkout/create.ts",
-          "locator": "L72"
+          "locator": "L83"
         }
       ],
       "contracts": [
@@ -346,7 +394,7 @@
         "sources": [
           {
             "path": "src/checkout/create.ts",
-            "locator": "L72"
+            "locator": "L83"
           }
         ],
         "adapter": "typescript",
@@ -359,6 +407,45 @@
         "reason": "Never verified."
       },
       "confidence": 0.7
+    },
+    {
+      "id": "payments.charge",
+      "title": "charge",
+      "description": "Exported function in src/payments/provider.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/payments/provider.ts",
+          "locator": "export:charge"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [
+        "PAYMENT_PROVIDER_KEY"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/payments/provider.ts",
+            "locator": "L15"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
     },
     {
       "id": "router.dispatch",
@@ -473,6 +560,100 @@
         "observedAt": "2026-01-01T00:00:00Z"
       },
       "confidence": 0.7
+    },
+    {
+      "id": "constraint:handlers-need-tests",
+      "rule": "Every route handler has a test that imports it.",
+      "severity": "warn",
+      "status": "active",
+      "check": {
+        "kind": "require-test",
+        "paths": [
+          "src/checkout/**",
+          "src/auth/**"
+        ]
+      },
+      "provenance": {
+        "tier": "declared",
+        "sources": [
+          {
+            "path": ".project/surface.declare.yaml",
+            "locator": "constraints[2]"
+          }
+        ],
+        "adapter": "declarations",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "checked": {
+        "status": "passed",
+        "violations": 0
+      },
+      "confidence": 1
+    },
+    {
+      "id": "constraint:no-committed-env",
+      "rule": "Never commit a filled-in .env file.",
+      "severity": "error",
+      "status": "active",
+      "check": {
+        "kind": "forbid-file",
+        "paths": [
+          ".env",
+          "**/.env",
+          "**/.env.local"
+        ]
+      },
+      "provenance": {
+        "tier": "declared",
+        "sources": [
+          {
+            "path": ".project/surface.declare.yaml",
+            "locator": "constraints[1]"
+          }
+        ],
+        "adapter": "declarations",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "checked": {
+        "status": "passed",
+        "violations": 0
+      },
+      "confidence": 1
+    },
+    {
+      "id": "constraint:no-provider-in-handlers",
+      "rule": "Never call the payment provider from a request handler.",
+      "rationale": "Handlers must stay idempotent; provider calls go through the job queue.",
+      "severity": "warn",
+      "status": "active",
+      "check": {
+        "kind": "forbid-import",
+        "from": [
+          "src/checkout/**",
+          "src/auth/**"
+        ],
+        "to": [
+          "src/payments/**",
+          "stripe",
+          "@stripe/*"
+        ]
+      },
+      "provenance": {
+        "tier": "declared",
+        "sources": [
+          {
+            "path": ".project/surface.declare.yaml",
+            "locator": "constraints[0]"
+          }
+        ],
+        "adapter": "declarations",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "checked": {
+        "status": "violated",
+        "violations": 1
+      },
+      "confidence": 1
     }
   ],
   "environment": [
@@ -511,6 +692,27 @@
         "sources": [
           {
             "path": "src/checkout/create.ts"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "PAYMENT_PROVIDER_KEY",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "src/payments/provider.ts"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/payments/provider.ts"
           }
         ],
         "adapter": "typescript",
@@ -602,9 +804,22 @@
   ],
   "health": [
     {
+      "code": "CONSTRAINT_VIOLATED",
+      "severity": "warn",
+      "message": "Constraint \"Never call the payment provider from a request handler.\" is violated in 1 place(s): src/checkout/create.ts (imports src/payments/provider.ts).",
+      "subject": {
+        "kind": "constraint",
+        "id": "constraint:no-provider-in-handlers"
+      },
+      "paths": [
+        "src/checkout/create.ts"
+      ],
+      "remediation": "Handlers must stay idempotent; provider calls go through the job queue. Fix the listed files, or change the check in .project/surface.declare.yaml."
+    },
+    {
       "code": "LOW_CONFIDENCE_MAJORITY",
       "severity": "warn",
-      "message": "5 of 7 capabilities are low confidence: most of this surface is inference, not evidence.",
+      "message": "7 of 9 capabilities are low confidence: most of this surface is inference, not evidence.",
       "subject": {
         "kind": "project",
         "id": "capabilities"
@@ -623,6 +838,19 @@
         ".env.example"
       ],
       "remediation": "Add AUTH_SIGNING_SECRET= to .env.example."
+    },
+    {
+      "code": "MISSING_ENV_EXAMPLE",
+      "severity": "warn",
+      "message": "Required environment variable PAYMENT_PROVIDER_KEY is not listed in .env.example, so a new contributor will not know to set it.",
+      "subject": {
+        "kind": "environment",
+        "id": "PAYMENT_PROVIDER_KEY"
+      },
+      "paths": [
+        ".env.example"
+      ],
+      "remediation": "Add PAYMENT_PROVIDER_KEY= to .env.example."
     },
     {
       "code": "MISSING_ENV_EXAMPLE",
@@ -650,6 +878,16 @@
     {
       "code": "UNDOCUMENTED_CAPABILITY",
       "severity": "info",
+      "message": "Capability \"payments.charge\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "payments.charge"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
       "message": "Capability \"router.dispatch\" has no contract: no doc, schema, or API definition specifies it.",
       "subject": {
         "kind": "capability",
@@ -666,6 +904,16 @@
         "id": "server.start"
       },
       "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"payments.charge\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "payments.charge"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
     },
     {
       "code": "UNPROVEN_CAPABILITY",

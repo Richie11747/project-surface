@@ -37,6 +37,10 @@ constraints:
   - rule: Never call the payment provider from a request handler.
     rationale: Handlers must stay idempotent; provider calls go through the job queue.
     severity: error             # error | warn | info (default warn)
+    check:                      # optional - makes the rule machine-checked on every scan
+      kind: forbid-import       # forbid-import | forbid-file | require-test
+      from: [src/handlers/**]
+      to: [src/payments/**, stripe, "@stripe/*"]
 
 risks:
   - paths: [db/migrations]
@@ -60,6 +64,28 @@ environment:
   (severity `error`), which makes `surface doctor` exit `2`.
 - Declaring a capability with the same id as an inferred one replaces it. Keep the old id in `aliases` if
   you rename, so diffs and consumers stay continuous.
+
+## Checks: rules that are verified, not hoped for
+
+A constraint is prose until you give it a `check`. Then every `surface init` evaluates it and records the
+outcome on the constraint (`checked: { status, violations }`) and, when violated, as a `CONSTRAINT_VIOLATED`
+health finding at the severity you chose - so `surface doctor` exits `2` for an `error`-level rule and CI
+fails.
+
+| `kind` | You write | Violated when |
+|---|---|---|
+| `forbid-import` | `from: [globs]`, `to: [globs or module names]` | a file under `from` imports project code under `to`, or a package named in `to` (`stripe`, `@stripe/*`) |
+| `forbid-file` | `paths: [globs]` | any project file matches - `.env`, `**/*.pem`, `dist/**` |
+| `require-test` | `paths: [globs]` | a capability owning a file under `paths` has no linked evidence |
+
+Two honesty rules apply. A check that cannot run - `forbid-import` on a stack whose adapter reports no
+import graph (today: TypeScript and Python do, Go does not yet) - is recorded as `unchecked` with a reason
+and an info finding, never as `passed`. And an invalid `check` is a `DECLARATION_INVALID` error, because a
+maintainer who wrote one expects it to run.
+
+The `ts-api` fixture carries a deliberately violated rule so the behaviour is covered by the golden
+snapshot: `src/checkout/create.ts` imports `src/payments/provider.ts`, and `surface doctor` says so, with
+the file and the import.
 
 ## Scope: `ignore`
 
@@ -85,5 +111,5 @@ granularity that matters. Two rules make that possible:
    command read from a manifest - stands on its own unless a declaration reuses its id.
 
 The self-surface of this repository ([`.project/surface.declare.yaml`](../.project/surface.declare.yaml))
-is the worked example: 156 exported symbols become 32 declared capabilities, each with a contract and a
+is the worked example: 152 exported symbols become 35 declared capabilities, each with a contract and a
 test suite, and one honest leftover that no declaration covers.

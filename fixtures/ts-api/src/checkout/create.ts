@@ -1,5 +1,6 @@
 /** Checkout session creation. Specified by docs/contracts/checkout.md. */
 
+import { charge } from "../payments/provider.ts";
 import { router } from "../router.ts";
 
 export interface CheckoutItem {
@@ -53,6 +54,16 @@ export function createCheckout(input: CheckoutInput): CheckoutSession {
     status: "open",
   };
   sessions.set(session.id, session);
+  return session;
+}
+
+/* Deliberately wrong, so the fixture has a real constraint violation: the
+   contract says provider calls go through the job queue, not the handler. */
+export function completeCheckout(id: string): CheckoutSession | undefined {
+  const session = sessions.get(id);
+  if (!session) return undefined;
+  charge(session.total, session.currency);
+  session.status = "complete";
   return session;
 }
 

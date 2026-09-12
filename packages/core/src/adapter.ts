@@ -23,6 +23,7 @@ import type {
   DraftEvidenceEntry,
   DraftRisk,
   GitInfo,
+  ImportEdge,
   PackageInfo,
   StackInfo,
   Timestamp,
@@ -58,6 +59,13 @@ export interface AdapterResult {
   environment?: DraftEnvironmentVariable[];
   risks?: DraftRisk[];
   evidence?: DraftEvidenceEntry[];
+  /**
+   * Import edges between project files (and to bare module specifiers). Not
+   * stored in the document; core uses them to evaluate `forbid-import`
+   * constraint checks. An adapter that cannot see imports omits this, and
+   * such checks are reported as `unchecked` rather than silently passed.
+   */
+  imports?: ImportEdge[];
 }
 
 export interface Adapter {

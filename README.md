@@ -50,12 +50,12 @@ Wrote .project/surface.json
   stacks       typescript
   packages     1
   commands     3
-  capabilities 7
-  constraints  2
+  capabilities 9
+  constraints  5
   evidence     2
   risks        1
 
-  health 0 error, 3 warning, 8 info  - run surface doctor
+  health 0 error, 5 warning, 10 info  - run surface doctor
 ```
 
 Now ask it about one behaviour:
@@ -69,7 +69,7 @@ checkout.create
 
   Implemented by
     src/checkout/create.ts export:createCheckout
-    src/checkout/create.ts L63
+    src/checkout/create.ts L74
 
   Contract
     docs/contracts/checkout.md
@@ -170,7 +170,26 @@ capabilities:
 constraints:
   - rule: Never call the payment provider from a request handler.
     severity: error
+    check:
+      kind: forbid-import
+      from: [src/checkout/**]
+      to: [src/payments/**, stripe, "@stripe/*"]
 ```
+
+That last block is the difference between a rule and a hope. A `CLAUDE.md` says *do not*; an agent may
+comply. A constraint with a `check` is evaluated on every scan, and when it is broken the document says so,
+with the file and the import, at the severity you chose - so `surface doctor` exits `2` and CI fails:
+
+```console
+$ surface doctor
+
+  warn             CONSTRAINT_VIOLATED [constraint:no-provider-in-handlers]
+      Constraint "Never call the payment provider from a request handler." is violated in 1 place(s): src/checkout/create.ts (imports src/payments/provider.ts).
+      Handlers must stay idempotent; provider calls go through the job queue. Fix the listed files, or change the check in .project/surface.declare.yaml.
+```
+
+Three kinds exist today - `forbid-import`, `forbid-file`, `require-test` - and a check that no adapter can
+evaluate is reported as `unchecked`, never as passed. See [docs/declarations.md](docs/declarations.md).
 
 ---
 
@@ -183,32 +202,36 @@ this project makes about itself cannot go stale without the build going red.
 ```console
 $ surface map
 
-  CAPABILITY              OWNER                                         CONTRACT              EVIDENCE                                 TIER      CONFIDENCE   FRESHNESS
-  adapter.sdk             packages/adapter-sdk/src/builders.ts          docs/adapters.md      test/conformance.test.js                 declared  1.00 high    fresh
-  analysis.health         packages/core/src/analysis/health.ts          spec/v1/SPEC.md       test/cli.test.js                         declared  1.00 high    fresh
-  cli.verify              packages/cli/src/commands/verify.ts           docs/cli.md           test/cli.test.js                         declared  1.00 high    fresh
-  commands.run            packages/cli/src/commands/context.ts          -                     -                                        inferred  0.65 medium  unknown
-  evidence.runner         packages/core/src/evidence/runner.ts          docs/cli.md           packages/core/test/safety.test.js        declared  1.00 high    fresh
-  mcp.verify-tool         packages/mcp-server/src/tools/verify.ts       docs/mcp.md           test/mcp.test.js                         declared  1.00 high    fresh
-  safety.redaction        packages/core/src/redact.ts                   docs/trust-model.md   packages/core/test/redact.test.js        declared  1.00 high    fresh
-  trust.freshness         packages/core/src/model/freshness.ts          docs/trust-model.md   packages/core/test/freshness.test.js     declared  1.00 high    fresh
+  CAPABILITY                  OWNER                                         CONTRACT              EVIDENCE                                 TIER      CONFIDENCE   FRESHNESS
+  adapter.sdk                 packages/adapter-sdk/src/builders.ts          docs/adapters.md      test/conformance.test.js                 declared  1.00 high    fresh
+  analysis.health             packages/core/src/analysis/health.ts          spec/v1/SPEC.md       test/cli.test.js                         declared  1.00 high    fresh
+  cli.verify                  packages/cli/src/commands/verify.ts           docs/cli.md           test/cli.test.js                         declared  1.00 high    fresh
+  commands.run                packages/cli/src/commands/context.ts          -                     -                                        inferred  0.65 medium  unverified
+  evidence.runner             packages/core/src/evidence/runner.ts          docs/cli.md           packages/core/test/safety.test.js        declared  1.00 high    fresh
+  mcp.verify-tool             packages/mcp-server/src/tools/verify.ts       docs/mcp.md           test/mcp.test.js                         declared  1.00 high    fresh
+  safety.redaction            packages/core/src/redact.ts                   docs/trust-model.md   packages/core/test/redact.test.js        declared  1.00 high    fresh
+  trust.freshness             packages/core/src/model/freshness.ts          docs/trust-model.md   packages/core/test/freshness.test.js     declared  1.00 high    fresh
   ...
 
-  33 capabilities - 32 fresh, 0 stale, 1 without evidence, 1 without a contract
+  36 capabilities - 35 fresh, 0 stale, 1 without evidence, 1 without a contract
 ```
 
 Three things are worth noticing.
 
-- **Declared sets the granularity, evidence does the proving.** Inference saw 156 exported symbols. A maintainer
-  declared 32 capabilities - one per thing a person would actually name - each with a contract and the test
-  suite that proves it ([`.project/surface.declare.yaml`](.project/surface.declare.yaml)). The 156 guesses
-  were not discarded: each was folded into the declaration that owns its file, as corroboration and as an
-  alias.
+- **Declared sets the granularity, evidence does the proving.** Inference saw 152 exported symbols. A maintainer
+  declared 35 capabilities - one per thing a person would actually name - each with a contract and the test
+  suite that proves it ([`.project/surface.declare.yaml`](.project/surface.declare.yaml)). The guesses were
+  not discarded: 151 of them were folded into the declaration that owns their file, as corroboration and as
+  an alias.
 - **`fresh` is earned, not asserted.** It means the linked tests were executed and passed, and the owner files
   have the same fingerprint now as they had then. Edit `redact.ts` and `safety.redaction` reads `stale` until
   `surface verify` runs again.
 - **The leftover is honest.** `commands.run` is the `run` export every CLI command file shares. No declaration
-  covers all ten files, so it stays `inferred` - visibly, at 0.65, with no contract - rather than being hidden.
+  covers all eleven files, so it stays `inferred` - visibly, at 0.65, with no contract - rather than being hidden.
+- **The rules are checked, not recited.** Four of the repository's constraints carry a `check`, evaluated on
+  every scan: no package other than `evidence/runner.ts` and `git/git.ts` imports `node:child_process`; core and
+  the adapters import nothing that speaks HTTP; no `.env` or private key is committed; every capability in core
+  has linked evidence. The last one caught a module without a test on the day it was added.
 
 ---
 

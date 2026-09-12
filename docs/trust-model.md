@@ -80,8 +80,8 @@ $ surface why checkout.create
 
   Read from
     derived by the typescript adapter at 2026-09-12T19:30:34Z, 1 distinct file(s):
-      src/checkout/create.ts  L32
-      src/checkout/create.ts  L63
+      src/checkout/create.ts  L33
+      src/checkout/create.ts  L74
 
   Proven by
     passed  tests/checkout/create.test.ts  (linked by import-graph, command test, observed 2026-09-12T19:30:34Z)

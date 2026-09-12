@@ -17,6 +17,8 @@ import { commandId, constraintId, riskId, slug } from "../model/ids.js";
 import { looksSecretName } from "../redact.js";
 import { DECLARATIONS_FILE } from "../version.js";
 import type {
+  ConstraintCheck,
+  ConstraintCheckKind,
   DraftCapability,
   DraftCommand,
   DraftConstraint,
@@ -161,12 +163,15 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
     const at = `constraints[${i}]`;
     if (!isRecord(entry)) return void out.errors.push(`${at} must be a mapping.`);
     if (typeof entry.rule !== "string") return void out.errors.push(`${at} needs a rule string.`);
+    const check = entry.check === undefined ? undefined : parseCheck(entry.check, at, out.errors);
+    if (entry.check !== undefined && check === undefined) return;
     out.constraints.push({
       id: constraintId(typeof entry.id === "string" ? entry.id : entry.rule.slice(0, 60)),
       rule: entry.rule,
       ...(typeof entry.rationale === "string" ? { rationale: entry.rationale } : {}),
       severity: entry.severity === "error" || entry.severity === "info" ? entry.severity : "warn",
       status: "active",
+      ...(check ? { check } : {}),
       provenance: provenance(at, now),
     });
   });
@@ -232,6 +237,42 @@ export function expandDeclaredOwners(declarations: Declarations, files: readonly
   });
   /* The error above already explains the removal; an ownerless claim must not reach the document. */
   declarations.capabilities = declarations.capabilities.filter((c) => c.owners.length > 0);
+}
+
+const CHECK_KINDS = new Set(["forbid-import", "forbid-file", "require-test"]);
+
+/** Globs for a check. Every entry must be project-relative, like every other path here. */
+function globList(value: unknown, at: string, field: string, errors: string[]): string[] | null {
+  const list = asStringArray(value).filter((v) => v.trim() !== "");
+  if (list.length === 0) {
+    errors.push(`${at}.check.${field} needs at least one path or glob.`);
+    return null;
+  }
+  const bad = list.find((v) => !isRelativePath(v));
+  if (bad !== undefined) {
+    errors.push(`${at}.check.${field} must be project-relative: ${bad}`);
+    return null;
+  }
+  return list;
+}
+
+/**
+ * A malformed check is an error, not a silently-unchecked rule: a maintainer
+ * who wrote one expects it to run.
+ */
+function parseCheck(value: unknown, at: string, errors: string[]): ConstraintCheck | undefined {
+  if (!isRecord(value) || typeof value.kind !== "string" || !CHECK_KINDS.has(value.kind)) {
+    errors.push(`${at}.check.kind must be one of ${[...CHECK_KINDS].join(", ")}.`);
+    return undefined;
+  }
+  const kind = value.kind as ConstraintCheckKind;
+  if (kind === "forbid-import") {
+    const from = globList(value.from, at, "from", errors);
+    const to = globList(value.to, at, "to", errors);
+    return from && to ? { kind, from, to } : undefined;
+  }
+  const paths = globList(value.paths, at, "paths", errors);
+  return paths ? { kind, paths } : undefined;
 }
 
 const COMMAND_KINDS = new Set([

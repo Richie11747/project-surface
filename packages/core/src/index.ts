@@ -114,6 +114,12 @@ export {
 } from "./analysis/context.js";
 
 export {
+  evaluateConstraintChecks,
+  type CheckInput,
+  type CheckResult,
+  type ConstraintViolation,
+} from "./analysis/constraints.js";
+export {
   explainClaim,
   type ClaimExplanation,
   type ExplainedEvidence,

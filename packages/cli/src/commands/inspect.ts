@@ -72,7 +72,12 @@ function overview(surface: Surface): Record<string, unknown> {
       tier: c.provenance.tier,
       owners: c.owners.map((o) => o.path),
     })),
-    constraints: surface.constraints.map((c) => ({ id: c.id, rule: c.rule, severity: c.severity })),
+    constraints: surface.constraints.map((c) => ({
+      id: c.id,
+      rule: c.rule,
+      severity: c.severity,
+      ...(c.check ? { check: c.check.kind, checked: c.checked?.status ?? "unchecked" } : {}),
+    })),
     environment: surface.environment.map((e) => ({ name: e.name, required: e.required, secret: e.secret })),
     risks: surface.risks,
     health: surface.health.length,
@@ -122,7 +127,16 @@ function printOverview(surface: Surface): void {
 
   if (surface.constraints.length > 0) {
     print(heading("Constraints"));
-    for (const c of surface.constraints) print(bullet(`${c.rule} ${style.dim(`(${c.provenance.sources[0]?.path ?? ""})`)}`));
+    for (const c of surface.constraints) {
+      const checked = !c.check
+        ? style.dim("prose")
+        : c.checked?.status === "violated"
+          ? style.red(`violated x${c.checked.violations}`)
+          : c.checked?.status === "passed"
+            ? style.green("checked")
+            : style.yellow("unchecked");
+      print(bullet(`${c.rule} ${style.dim(`(${c.provenance.sources[0]?.path ?? ""})`)}  ${checked}`));
+    }
     print("");
   }
 

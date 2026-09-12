@@ -38,7 +38,7 @@ test("init writes a valid document and inspect reads it back", () => {
     const init = surface(root, "init");
     assert.equal(init.code, 0, init.stderr);
     assert.ok(existsSync(join(root, ".project", "surface.json")));
-    assert.match(init.stdout, /capabilities\s+7/);
+    assert.match(init.stdout, /capabilities\s+9/);
 
     const inspect = surface(root, "inspect", "checkout.create", "--json");
     assert.equal(inspect.code, 0, inspect.stderr);
@@ -151,6 +151,47 @@ test("why explains every kind of claim and reproduces the recorded score", () =>
     assert.match(text.stdout, /matches the recorded/);
 
     assert.equal(surface(root, "why", "no.such.thing").code, 1);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("a declared constraint check is evaluated on every scan and reported with the offending file", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    const doc = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8"));
+
+    const violated = doc.constraints.find((c) => c.id === "constraint:no-provider-in-handlers");
+    assert.equal(violated.checked.status, "violated");
+    assert.equal(violated.checked.violations, 1);
+    for (const id of ["constraint:no-committed-env", "constraint:handlers-need-tests"]) {
+      assert.equal(doc.constraints.find((c) => c.id === id).checked.status, "passed", id);
+    }
+
+    const report = JSON.parse(surface(root, "doctor", "--json").stdout);
+    const finding = report.findings.find((f) => f.code === "CONSTRAINT_VIOLATED");
+    assert.ok(finding, "expected a CONSTRAINT_VIOLATED finding");
+    assert.equal(finding.severity, "warn");
+    assert.deepEqual(finding.paths, ["src/checkout/create.ts"]);
+    assert.match(finding.message, /imports src\/payments\/provider\.ts/);
+
+    /* Fix the violation and the finding goes away on the next scan - and a
+       new forbidden file is caught the same way, at the severity declared. */
+    const handler = join(root, "src", "checkout", "create.ts");
+    const stripped = readFileSync(handler, "utf8")
+      .replace(/import \{ charge \} from "\.\.\/payments\/provider\.ts";\r?\n/, "")
+      .replace("charge(session.total, session.currency);", "/* queued */");
+    writeFileSync(handler, stripped);
+    writeFileSync(join(root, ".env"), "DATABASE_URL=postgres://user:hunter2@db/app\n");
+    assert.equal(surface(root, "init").code, 0);
+    const after = JSON.parse(surface(root, "doctor", "--json").stdout);
+    const codes = after.findings.filter((f) => f.code === "CONSTRAINT_VIOLATED");
+    assert.equal(codes.length, 1, JSON.stringify(codes));
+    assert.equal(codes[0].subject.id, "constraint:no-committed-env");
+    assert.equal(codes[0].severity, "error");
+    assert.deepEqual(codes[0].paths, [".env"]);
+    assert.equal(surface(root, "doctor").code, 2, "an error-level violation must fail doctor without --strict");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

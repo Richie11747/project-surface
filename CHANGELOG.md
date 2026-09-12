@@ -10,12 +10,18 @@ All notable changes to this project are documented here. This project adheres to
   `owners:` accept globs, expanded to concrete files at scan time; an `inferred` capability whose owner
   files all lie within a declared capability is absorbed into it (sources union, evidence and environment
   merged, id kept as an alias). `derived` claims are never absorbed.
+- **Machine-checked constraints.** A declared constraint may carry a `check` (`forbid-import`, `forbid-file`,
+  `require-test`). It is evaluated on every scan; the outcome is recorded on the constraint (`checked`) and a
+  violation is a `CONSTRAINT_VIOLATED` health finding at the constraint's severity with the offending paths.
+  A check no adapter can evaluate is `unchecked` with a reason (`CONSTRAINT_UNCHECKED`), never silently
+  passed. Adapters may report `imports` (TypeScript and Python do); the schema gains `constraintCheck`,
+  `constraintOutcome` and `globPattern`, all optional and backward-compatible.
 - `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
 - **`surface why <id>`** and the MCP tool **`surface_why`**: the derivation behind a confidence score -
   sources, evidence and its outcome, the promotion earned or withheld, the freshness anchor, and every
   arithmetic step. The score is recomputed from the document and compared with the recorded value.
   `explainConfidence()` in core returns the same trace programmatically; `computeConfidence()` is unchanged.
-- The repository describes itself: `.project/surface.declare.yaml` declares 32 capabilities with contracts
+- The repository describes itself: `.project/surface.declare.yaml` declares 35 capabilities with contracts
   and evidence; CI runs `surface verify` and gates on `surface doctor --strict`.
 
 ## [0.1.0] - 2026-09-12

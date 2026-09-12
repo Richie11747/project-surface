@@ -113,6 +113,20 @@ capabilities:
     evidence: [test/cli.test.js]
     tags: [analysis]
 
+  - id: analysis.why
+    title: The derivation behind a confidence score, recomputed from the document
+    owners: [packages/core/src/analysis/why.ts]
+    contracts: [docs/trust-model.md]
+    evidence: [test/cli.test.js, test/mcp.test.js]
+    tags: [analysis, trust]
+
+  - id: analysis.constraint-checks
+    title: Machine-checked constraints - forbid-import, forbid-file, require-test
+    owners: [packages/core/src/analysis/constraints.ts]
+    contracts: [docs/declarations.md]
+    evidence: [packages/core/test/constraints.test.js, test/cli.test.js]
+    tags: [analysis]
+
   # ---- Adapters ------------------------------------------------------------
   - id: adapter.sdk
     title: Adapter contract and the conformance suite
@@ -153,6 +167,12 @@ capabilities:
   - id: cli.inspect
     title: surface inspect
     owners: [packages/cli/src/commands/inspect.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.why
+    title: surface why
+    owners: [packages/cli/src/commands/why.ts]
     contracts: [docs/cli.md]
     evidence: [test/cli.test.js]
     tags: [cli]
@@ -243,15 +263,50 @@ capabilities:
 
 constraints:
   - id: single-exec-path
-    rule: Only packages/core/src/evidence/runner.ts may execute a project command. Adapters propose commands; they never run them.
-    rationale: One spawn site is auditable. Two are not.
+    rule: Only packages/core/src/evidence/runner.ts and packages/core/src/git/git.ts may spawn a process. Adapters propose commands; they never run them.
+    rationale: One spawn site for project commands and one for read-only git queries is auditable. A third is not.
     severity: error
+    check:
+      kind: forbid-import
+      from:
+        - packages/adapter-sdk/**
+        - packages/adapters/**
+        - packages/cli/**
+        - packages/mcp-server/**
+        - packages/core/src/analysis/**
+        - packages/core/src/build/**
+        - packages/core/src/declarations/**
+        - packages/core/src/fs/**
+        - packages/core/src/model/**
+        - packages/core/src/schema/**
+        - packages/core/src/adapter.ts
+        - packages/core/src/index.ts
+        - packages/core/src/io.ts
+        - packages/core/src/redact.ts
+        - packages/core/src/version.ts
+      to: [node:child_process, child_process, execa, cross-spawn, shelljs]
   - id: no-network
     rule: Core makes no network calls and never writes to source files.
     severity: error
+    check:
+      kind: forbid-import
+      from: [packages/core/**, packages/adapter-sdk/**, packages/adapters/**]
+      to: [node:http, node:https, node:net, node:dns, http, https, net, dns, undici, axios, node-fetch, got]
   - id: no-secret-values
     rule: Environment variable names are surfaced; values are never read or stored.
     severity: error
+  - id: no-committed-secrets
+    rule: No .env file or private key is committed.
+    severity: error
+    check:
+      kind: forbid-file
+      paths: [".env", "**/.env", "**/.env.local", "**/*.pem", "**/*.key"]
+  - id: core-is-tested
+    rule: Every capability in core has linked evidence.
+    severity: warn
+    check:
+      kind: require-test
+      paths: [packages/core/src/**]
   - id: golden-snapshots
     rule: Golden snapshots under fixtures/ are regenerated with npm run fixtures:update and reviewed as a diff, never edited by hand.
     severity: warn

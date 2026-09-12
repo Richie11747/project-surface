@@ -7,14 +7,14 @@
  */
 
 import { emptyResult } from "@project-surface/adapter-sdk";
-import type { Adapter, AdapterContext, AdapterResult } from "@project-surface/adapter-sdk";
+import type { Adapter, AdapterContext, AdapterResult, ImportEdge } from "@project-surface/adapter-sdk";
 import {
   buildCapabilities,
   buildEnvironment,
   buildEvidence,
   buildRisks,
 } from "./discover.js";
-import { isSourceFile, isTestFile, linkTests } from "./evidence-link.js";
+import { isSourceFile, isTestFile, linkTests, resolveImport } from "./evidence-link.js";
 import type { TestFile } from "./evidence-link.js";
 import {
   ADAPTER_ID,
@@ -116,7 +116,22 @@ export const typescriptAdapter: Adapter = {
       sourcePaths.add(path);
     }
 
-    const links = linkTests(tests, sourcePaths, new Set(ctx.files));
+    const allFiles = new Set(ctx.files);
+    const links = linkTests(tests, sourcePaths, allFiles);
+
+    /* Every import in every parsed file, resolved where it points at project
+       code. Core uses these for `forbid-import` checks; they are not stored. */
+    const imports: ImportEdge[] = [];
+    const withImports: Array<[string, string[]]> = [
+      ...[...parsed.entries()].map(([path, file]): [string, string[]] => [path, file.imports]),
+      ...tests.map((t): [string, string[]] => [t.path, t.imports]),
+    ];
+    for (const [from, specifiers] of withImports.sort((a, b) => a[0].localeCompare(b[0]))) {
+      for (const specifier of specifiers) {
+        const to = resolveImport(from, specifier, allFiles);
+        imports.push({ from, specifier, ...(to ? { to } : {}) });
+      }
+    }
     const commands = commandsFrom(ctx, packages, manager);
     const testCommands = commands
       .filter((c) => c.kind === "test")
@@ -131,6 +146,7 @@ export const typescriptAdapter: Adapter = {
       evidence: buildEvidence({ ctx, testPaths, packages: packageInfos, testCommands }),
       environment: buildEnvironment(ctx, parsed),
       risks: buildRisks(ctx),
+      imports,
     };
   },
 };

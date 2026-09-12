@@ -18,6 +18,7 @@ import { walkProject, MAX_FILES } from "../fs/walk.js";
 import { readGitInfo } from "../git/git.js";
 import { computeConfidence, promoteWithEvidence } from "../model/confidence.js";
 import { evaluateFreshness } from "../model/freshness.js";
+import { evaluateConstraintChecks } from "../analysis/constraints.js";
 import { detectHealth } from "../analysis/health.js";
 import { assertValidSurface } from "../schema/validate.js";
 import { GENERATOR_NAME, GENERATOR_VERSION, SPEC_VERSION } from "../version.js";
@@ -213,7 +214,17 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
     };
   });
 
-  const finalConstraints = constraints.map(scoreClaim);
+  /* Checks run once the capabilities are final, because `require-test` reads
+     their evidence links. Imports are a build-time fact and are not stored. */
+  const importsAvailable = results.some((r) => r.imports !== undefined);
+  const checked = evaluateConstraintChecks({
+    constraints,
+    capabilities: finalCapabilities,
+    files: fileSet,
+    imports: results.flatMap((r) => r.imports ?? []),
+    importsAvailable,
+  });
+  const finalConstraints = checked.constraints.map(scoreClaim);
   const finalRisks = risks.map(scoreClaim);
   const finalEnvironment = environment.map(scoreClaim);
 
@@ -230,6 +241,8 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
     declarationErrors: declarations.errors,
     fileScanTruncated: walk.truncated,
     envExample: readEnvExample(fileSet, ctx.readFile),
+    constraints: finalConstraints,
+    constraintViolations: checked.violations,
   });
 
   const surface: Surface = {

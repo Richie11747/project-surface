@@ -165,12 +165,47 @@ export interface Capability extends Claim {
 
 export type Severity = "error" | "warn" | "info";
 
+export type ConstraintCheckKind = "forbid-import" | "forbid-file" | "require-test";
+
+/**
+ * A machine-checkable form of a rule. Prose tells an agent what not to do;
+ * a check lets the generator notice when it was done anyway.
+ */
+export interface ConstraintCheck {
+  kind: ConstraintCheckKind;
+  /** `forbid-import`: globs for the importing files. */
+  from?: string[];
+  /** `forbid-import`: globs for project files, or bare module specifiers, that must not be imported. */
+  to?: string[];
+  /** `forbid-file`: globs no file may match. `require-test`: globs whose owners must have evidence. */
+  paths?: string[];
+}
+
+export interface ConstraintOutcome {
+  status: "passed" | "violated" | "unchecked";
+  violations: number;
+  /** Why the check was `unchecked`: no adapter supplied the facts it needs. */
+  reason?: string;
+}
+
 export interface Constraint extends Claim {
   id: string;
   rule: string;
   rationale?: string;
   severity: Severity;
   status: "active" | "stale";
+  check?: ConstraintCheck;
+  checked?: ConstraintOutcome;
+}
+
+/** One import edge, reported by an adapter so core can evaluate `forbid-import` checks. */
+export interface ImportEdge {
+  /** The importing file. */
+  from: RelPath;
+  /** The specifier as written: `./create.js`, `stripe`, `app.models`. */
+  specifier: string;
+  /** The project file it resolves to, when it is project code. */
+  to?: RelPath;
 }
 
 export interface EnvironmentVariable extends Claim {

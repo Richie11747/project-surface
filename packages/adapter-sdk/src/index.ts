@@ -18,6 +18,7 @@ export type {
   DraftEvidenceEntry,
   DraftRisk,
   EvidenceLink,
+  ImportEdge,
   PackageInfo,
   Provenance,
   ProvenanceTier,

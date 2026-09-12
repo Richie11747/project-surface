@@ -191,8 +191,36 @@
         "status": { "enum": ["active","stale"] },
         "provenance": { "$ref": "#/$defs/provenance" },
         "confidence": { "$ref": "#/$defs/confidence" },
-        "freshness": { "$ref": "#/$defs/freshness" }
+        "freshness": { "$ref": "#/$defs/freshness" },
+        "check": { "$ref": "#/$defs/constraintCheck" },
+        "checked": { "$ref": "#/$defs/constraintOutcome" }
       }
+    },
+    "constraintCheck": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind"],
+      "description": "A machine-checkable form of the rule. Evaluated on every scan; a failure is a CONSTRAINT_VIOLATED health finding at the constraint's severity.",
+      "properties": {
+        "kind": { "enum": ["forbid-import","forbid-file","require-test"] },
+        "from": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/globPattern" } },
+        "to": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/globPattern" } },
+        "paths": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/globPattern" } }
+      }
+    },
+    "constraintOutcome": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status","violations"],
+      "description": "What the generator found when it evaluated check.",
+      "properties": {
+        "status": { "enum": ["passed","violated","unchecked"] },
+        "violations": { "type": "integer", "minimum": 0 },
+        "reason": { "type": "string" }
+      }
+    },
+    "globPattern": {
+      "type": "string", "minLength": 1,
+      "not": { "anyOf": [ { "pattern": "^/" }, { "pattern": "^[A-Za-z]:" }, { "pattern": "\\\\" }, { "pattern": "(^|/)[.][.](/|$)" }, { "pattern": "^~" } ] },
+      "description": "A project-relative path or glob (** crosses directories, * and ? do not), or for `to` a bare module specifier such as stripe or @stripe/*. Same restrictions as relPath."
     },
     "environmentVariable": {
       "type": "object", "additionalProperties": false,

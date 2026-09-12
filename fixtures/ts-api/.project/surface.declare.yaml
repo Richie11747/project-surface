@@ -1,0 +1,27 @@
+# Maintainer declarations for the fixture. The first constraint is violated on
+# purpose (src/checkout/create.ts imports the provider), so that the golden
+# snapshot and the CLI tests exercise a real CONSTRAINT_VIOLATED finding.
+
+constraints:
+  - id: no-provider-in-handlers
+    rule: Never call the payment provider from a request handler.
+    rationale: Handlers must stay idempotent; provider calls go through the job queue.
+    severity: warn
+    check:
+      kind: forbid-import
+      from: [src/checkout/**, src/auth/**]
+      to: [src/payments/**, stripe, "@stripe/*"]
+
+  - id: no-committed-env
+    rule: Never commit a filled-in .env file.
+    severity: error
+    check:
+      kind: forbid-file
+      paths: [".env", "**/.env", "**/.env.local"]
+
+  - id: handlers-need-tests
+    rule: Every route handler has a test that imports it.
+    severity: warn
+    check:
+      kind: require-test
+      paths: [src/checkout/**, src/auth/**]

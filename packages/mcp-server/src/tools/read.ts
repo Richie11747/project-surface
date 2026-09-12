@@ -120,8 +120,9 @@ export const constraintsTool = {
   name: "surface_constraints",
   title: "Project constraints",
   description:
-    "The rules this project expects you to follow, with the file each rule came from and how current it is. " +
-    "Check this before changing build, dependency, or tooling configuration.",
+    "The rules this project expects you to follow, with the file each rule came from, whether the rule is " +
+    "machine-checked, and whether the last scan found it violated. Check this before changing build, " +
+    "dependency, or tooling configuration.",
   inputSchema: { includeStale: z.boolean().optional() },
   handler(args: { includeStale?: boolean }, ctx: ToolContext): ToolResult {
     const surface = loadSurface(ctx);
@@ -137,7 +138,12 @@ export const constraintsTool = {
             `[${c.severity}] ${c.rule}\n` +
             `  source     ${c.provenance.sources.map((s) => `${s.path}${s.locator ? `#${s.locator}` : ""}`).join(", ")}\n` +
             `  provenance ${c.provenance.tier}, confidence ${c.confidence.toFixed(2)}` +
-            (c.rationale ? `\n  why        ${c.rationale}` : "")
+            (c.rationale ? `\n  why        ${c.rationale}` : "") +
+            (c.check
+              ? `\n  checked    ${c.check.kind}: ${c.checked?.status ?? "unchecked"}` +
+                (c.checked?.status === "violated" ? ` in ${c.checked.violations} place(s) - see surface_health` : "") +
+                (c.checked?.reason ? ` (${c.checked.reason})` : "")
+              : `\n  checked    no - prose only; nothing verifies compliance`)
         ),
         "",
         trustNote(),
