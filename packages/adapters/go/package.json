@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "description": "Go adapter for project-surface. Static extraction only.",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richardadamik/project-surface.git",
+    "directory": "packages/adapters/go"
+  },
+  "homepage": "https://github.com/richardadamik/project-surface#readme",
+  "bugs": "https://github.com/richardadamik/project-surface/issues",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

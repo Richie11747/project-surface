@@ -4,6 +4,13 @@
   "description": "Ask any AI agent what your project can do, where it lives, what proves it, and what a change will affect.",
   "keywords": ["ai", "agents", "mcp", "claude", "codebase", "developer-tools", "static-analysis"],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richardadamik/project-surface.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/richardadamik/project-surface#readme",
+  "bugs": "https://github.com/richardadamik/project-surface/issues",
   "type": "module",
   "bin": {
     "surface": "./dist/index.js",
