@@ -1,5 +1,7 @@
 # Contributing
 
+Thanks for helping. This project has a [Code of Conduct](CODE_OF_CONDUCT.md); by participating you agree to it. Security issues go through a [private advisory](SECURITY.md), not an issue.
+
 ## Setup
 
 ```console

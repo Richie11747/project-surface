@@ -2,13 +2,21 @@
 
 ## Reporting
 
-Report vulnerabilities through GitHub private security advisories on this repository. Please do not open a public issue.
+Report vulnerabilities through a [private security advisory](https://github.com/richardadamik/project-surface/security/advisories/new) on this repository. Please do not open a public issue. You should hear back within a few days; fixes ship as a patch release with a changelog entry that credits the reporter, unless they prefer otherwise.
+
+## Supported versions
+
+| Version | Supported |
+|---|---|
+| 0.1.x | Yes |
 
 ## Design boundaries
 
 These are the properties the project intends to hold. A break in any of them is a security bug.
 
-**Execution is confined to one module.** `packages/core/src/evidence/runner.ts` is the only code that spawns a process. It will only run a command that already exists in the surface document, obtained through `resolveAllowedCommand`. There is no code path that executes an arbitrary string. Adapters have no exec capability at all.
+**Project commands run from one module only.** `packages/core/src/evidence/runner.ts` is the only code that executes a project command. It will only run a command that already exists in the surface document, obtained through `resolveAllowedCommand`, from a working directory physically inside the project. There is no code path that executes an arbitrary string. Adapters have no exec capability at all. The only other spawn site is `packages/core/src/git/git.ts`, which invokes a fixed `git` binary with an argument array (no shell) for read-only queries and refuses refs that look like options.
+
+**Symlinks are never followed.** The file reader refuses any path whose real location leaves the project root, so a committed link to a file outside the repository is not read.
 
 **MCP execution is gated twice.** `surface_verify` requires `PROJECT_SURFACE_ALLOW_EXEC=1` *and* a command id already present in the document. It accepts an id, never a shell string. The worst outcome from an adversarial prompt is running a command the project itself declares.
 

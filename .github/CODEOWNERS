@@ -1,0 +1,5 @@
+# Default owner for everything in the repository.
+* @richardadamik
+
+# The spec is normative; changes to it need extra care.
+/spec/ @richardadamik
