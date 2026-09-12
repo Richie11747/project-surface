@@ -1,0 +1,612 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.1.0"
+  },
+  "project": {
+    "name": "inventory-api",
+    "root": ".",
+    "stacks": [
+      {
+        "id": "python",
+        "adapter": "@project-surface/adapter-python",
+        "adapterVersion": "0.1.0",
+        "toolchainAvailable": true,
+        "notes": []
+      }
+    ],
+    "packages": [
+      {
+        "id": "root",
+        "path": ".",
+        "name": "inventory-api",
+        "manager": "pip"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "id": "inventory",
+      "run": "inventory",
+      "cwd": ".",
+      "kind": "other",
+      "description": "Console entry point for inventory.cli:main.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "pyproject.toml",
+            "locator": "project.scripts.inventory"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "test",
+      "run": "python -m pytest",
+      "cwd": ".",
+      "kind": "test",
+      "description": "Run the Python test suite.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "pyproject.toml"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "inventory.insufficient-stock",
+      "title": "InsufficientStock",
+      "description": "Public class in inventory/reserve.py.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/reserve.py",
+          "locator": "class:InsufficientStock"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/test_reserve.py",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "INVENTORY_DB_PATH"
+      ],
+      "tags": [
+        "class"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "inventory/reserve.py",
+            "locator": "L12"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "inventory.main",
+      "title": "main",
+      "description": "Public function in inventory/cli.py.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/cli.py",
+          "locator": "function:main"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [],
+      "environment": [
+        "INVENTORY_ADMIN_TOKEN"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "inventory/cli.py",
+            "locator": "L8"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "inventory.release",
+      "title": "release",
+      "description": "Public function in inventory/reserve.py.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/reserve.py",
+          "locator": "function:release"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/test_reserve.py",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "INVENTORY_DB_PATH"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "inventory/reserve.py",
+            "locator": "L47"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "inventory.reserve",
+      "title": "reserve",
+      "description": "Public function in inventory/reserve.py.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/reserve.py",
+          "locator": "function:reserve"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/test_reserve.py",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "INVENTORY_DB_PATH"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "inventory/reserve.py",
+            "locator": "L23"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "inventory.reserve-endpoint",
+      "title": "reserve_endpoint",
+      "description": "Public function in inventory/reserve.py.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/reserve.py",
+          "locator": "function:reserve_endpoint"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/test_reserve.py",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "INVENTORY_DB_PATH"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "inventory/reserve.py",
+            "locator": "L58"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "inventory.reserve.create",
+      "title": "POST /inventory/reserve",
+      "description": "HTTP endpoint declared in inventory/reserve.py.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/reserve.py",
+          "locator": "L57"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/test_reserve.py",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "INVENTORY_DB_PATH"
+      ],
+      "tags": [
+        "http",
+        "post"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/inventory/reserve"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "inventory/reserve.py",
+            "locator": "L57"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "inventory.stock-endpoint",
+      "title": "stock_endpoint",
+      "description": "Public function in inventory/reserve.py.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/reserve.py",
+          "locator": "function:stock_endpoint"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/test_reserve.py",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "INVENTORY_DB_PATH"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "inventory/reserve.py",
+            "locator": "L63"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "inventory.stock.list",
+      "title": "GET /inventory/stock",
+      "description": "HTTP endpoint declared in inventory/reserve.py.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/reserve.py",
+          "locator": "L62"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/test_reserve.py",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "INVENTORY_DB_PATH"
+      ],
+      "tags": [
+        "http",
+        "get"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/inventory/stock"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "inventory/reserve.py",
+            "locator": "L62"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint:requires-python",
+      "rule": "Requires Python >=3.11.",
+      "severity": "warn",
+      "status": "active",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "pyproject.toml",
+            "locator": "project.requires-python"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "environment": [
+    {
+      "name": "INVENTORY_ADMIN_TOKEN",
+      "required": true,
+      "secret": true,
+      "usedBy": [
+        {
+          "path": "inventory/cli.py"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "inventory/cli.py"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "INVENTORY_DB_PATH",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "inventory/reserve.py"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "inventory/reserve.py"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "risks": [],
+  "evidence": [
+    {
+      "id": "evidence:tests/test_reserve.py",
+      "kind": "test",
+      "path": "tests/test_reserve.py",
+      "status": "unknown",
+      "commandId": "test",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "tests/test_reserve.py"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "health": [
+    {
+      "code": "LOW_CONFIDENCE_MAJORITY",
+      "severity": "warn",
+      "message": "6 of 8 capabilities are low confidence: most of this surface is inference, not evidence.",
+      "subject": {
+        "kind": "project",
+        "id": "capabilities"
+      },
+      "remediation": "Run surface verify, or declare the important capabilities by hand."
+    },
+    {
+      "code": "MISSING_ENV_EXAMPLE",
+      "severity": "warn",
+      "message": "Required environment variable INVENTORY_ADMIN_TOKEN is not listed in .env.example, so a new contributor will not know to set it.",
+      "subject": {
+        "kind": "environment",
+        "id": "INVENTORY_ADMIN_TOKEN"
+      },
+      "paths": [
+        ".env.example"
+      ],
+      "remediation": "Add INVENTORY_ADMIN_TOKEN= to .env.example."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"inventory.main\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "inventory.main"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"inventory\" (inventory) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "inventory"
+      },
+      "remediation": "Run: surface verify --command inventory"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"test\" (python -m pytest) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "test"
+      },
+      "remediation": "Run: surface verify --command test"
+    }
+  ],
+  "git": {
+    "available": false
+  }
+}

@@ -1,0 +1,724 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.1.0"
+  },
+  "project": {
+    "name": "checkout-api",
+    "root": ".",
+    "stacks": [
+      {
+        "id": "typescript",
+        "adapter": "@project-surface/adapter-typescript",
+        "adapterVersion": "0.1.0",
+        "toolchainAvailable": true,
+        "notes": []
+      }
+    ],
+    "packages": [
+      {
+        "id": "root",
+        "path": ".",
+        "name": "checkout-api",
+        "manager": "npm",
+        "private": true
+      }
+    ]
+  },
+  "commands": [
+    {
+      "id": "dev",
+      "run": "npm run dev",
+      "cwd": ".",
+      "kind": "dev",
+      "packageId": "root",
+      "description": "node src/server.ts",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "scripts.dev"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "test",
+      "run": "npm run test",
+      "cwd": ".",
+      "kind": "test",
+      "packageId": "root",
+      "description": "node --test \"tests/**/*.test.ts\"",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "scripts.test"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "typecheck",
+      "run": "npm run typecheck",
+      "cwd": ".",
+      "kind": "typecheck",
+      "packageId": "root",
+      "description": "tsc --noEmit",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "scripts.typecheck"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "auth.verify-token",
+      "title": "verifyToken",
+      "description": "Exported function in src/auth/verifyToken.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/auth/verifyToken.ts",
+          "locator": "export:verifyToken"
+        }
+      ],
+      "contracts": [],
+      "evidence": [
+        {
+          "id": "evidence:tests/auth/verifytoken.test.ts",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "AUTH_SIGNING_SECRET"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/auth/verifyToken.ts",
+            "locator": "L8"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "checkout.create",
+      "title": "POST /checkout",
+      "description": "HTTP endpoint registered in src/checkout/create.ts.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "export:createCheckout"
+        },
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "L63"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/contracts/checkout.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/checkout/create.test.ts",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "DATABASE_URL"
+      ],
+      "tags": [
+        "function",
+        "http",
+        "post"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/checkout"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L32"
+          },
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L63"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "checkout.error",
+      "title": "CheckoutError",
+      "description": "Exported class in src/checkout/create.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "export:CheckoutError"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/contracts/checkout.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/checkout/create.test.ts",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "DATABASE_URL"
+      ],
+      "tags": [
+        "class"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L30"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "checkout.find",
+      "title": "findCheckout",
+      "description": "Exported function in src/checkout/create.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "export:findCheckout"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/contracts/checkout.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/checkout/create.test.ts",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "DATABASE_URL"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L59"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "checkout.get",
+      "title": "GET /checkout/:id",
+      "description": "HTTP endpoint registered in src/checkout/create.ts.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/checkout/create.ts",
+          "locator": "L72"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/contracts/checkout.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/checkout/create.test.ts",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [
+        "DATABASE_URL"
+      ],
+      "tags": [
+        "http",
+        "get"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/checkout/:id"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts",
+            "locator": "L72"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "router.dispatch",
+      "title": "dispatch",
+      "description": "Exported function in src/router.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/router.ts",
+          "locator": "export:dispatch"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/router.ts",
+            "locator": "L32"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "server.start",
+      "title": "start",
+      "description": "Exported function in src/server.ts.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/server.ts",
+          "locator": "export:start"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [
+        "PORT"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/server.ts",
+            "locator": "L8"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint:engines-node",
+      "rule": "Requires Node >=22.6.0.",
+      "severity": "warn",
+      "status": "active",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "engines.node"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "constraint:esm-only",
+      "rule": "This package is ESM. Use import syntax and include file extensions in relative imports.",
+      "severity": "warn",
+      "status": "active",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "package.json",
+            "locator": "type"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "environment": [
+    {
+      "name": "AUTH_SIGNING_SECRET",
+      "required": true,
+      "secret": true,
+      "usedBy": [
+        {
+          "path": "src/auth/verifyToken.ts"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/auth/verifyToken.ts"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "DATABASE_URL",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "src/checkout/create.ts"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/checkout/create.ts"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "PORT",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "src/server.ts"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/server.ts"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk:migration:db/migrations/2026-08-18-add-checkout-status.sql",
+      "type": "migration",
+      "paths": [
+        "db/migrations/2026-08-18-add-checkout-status.sql"
+      ],
+      "approval": "required",
+      "reason": "Database migrations are difficult to reverse once applied to a live database.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "db/migrations/2026-08-18-add-checkout-status.sql"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence:tests/auth/verifytoken.test.ts",
+      "kind": "test",
+      "path": "tests/auth/verifyToken.test.ts",
+      "commandId": "test",
+      "status": "unknown",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "tests/auth/verifyToken.test.ts"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "evidence:tests/checkout/create.test.ts",
+      "kind": "test",
+      "path": "tests/checkout/create.test.ts",
+      "commandId": "test",
+      "status": "unknown",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "tests/checkout/create.test.ts"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "health": [
+    {
+      "code": "LOW_CONFIDENCE_MAJORITY",
+      "severity": "warn",
+      "message": "5 of 7 capabilities are low confidence: most of this surface is inference, not evidence.",
+      "subject": {
+        "kind": "project",
+        "id": "capabilities"
+      },
+      "remediation": "Run surface verify, or declare the important capabilities by hand."
+    },
+    {
+      "code": "MISSING_ENV_EXAMPLE",
+      "severity": "warn",
+      "message": "Required environment variable AUTH_SIGNING_SECRET is not listed in .env.example, so a new contributor will not know to set it.",
+      "subject": {
+        "kind": "environment",
+        "id": "AUTH_SIGNING_SECRET"
+      },
+      "paths": [
+        ".env.example"
+      ],
+      "remediation": "Add AUTH_SIGNING_SECRET= to .env.example."
+    },
+    {
+      "code": "MISSING_ENV_EXAMPLE",
+      "severity": "warn",
+      "message": "Required environment variable PORT is not listed in .env.example, so a new contributor will not know to set it.",
+      "subject": {
+        "kind": "environment",
+        "id": "PORT"
+      },
+      "paths": [
+        ".env.example"
+      ],
+      "remediation": "Add PORT= to .env.example."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"auth.verify-token\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "auth.verify-token"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"router.dispatch\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "router.dispatch"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"server.start\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "server.start"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"router.dispatch\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "router.dispatch"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"server.start\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "server.start"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"dev\" (npm run dev) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "dev"
+      },
+      "remediation": "Run: surface verify --command dev"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"test\" (npm run test) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "test"
+      },
+      "remediation": "Run: surface verify --command test"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"typecheck\" (npm run typecheck) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "typecheck"
+      },
+      "remediation": "Run: surface verify --command typecheck"
+    }
+  ],
+  "git": {
+    "available": false
+  }
+}

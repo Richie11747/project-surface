@@ -1,0 +1,487 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.1.0"
+  },
+  "project": {
+    "name": "github.com/example/pricing-svc",
+    "root": ".",
+    "stacks": [
+      {
+        "id": "go",
+        "adapter": "@project-surface/adapter-go",
+        "adapterVersion": "0.1.0",
+        "toolchainAvailable": false,
+        "notes": [
+          "The Go toolchain was not found on PATH. Declarations were read from source, but no Go claim can be verified on this machine.",
+          "Go extraction is line-based rather than AST-based; claims are structural."
+        ]
+      }
+    ],
+    "packages": [
+      {
+        "id": "cmd-server",
+        "path": "cmd/server",
+        "name": "github.com/example/pricing-svc/cmd/server",
+        "manager": "go"
+      },
+      {
+        "id": "internal-pricing",
+        "path": "internal/pricing",
+        "name": "github.com/example/pricing-svc/internal/pricing",
+        "manager": "go"
+      },
+      {
+        "id": "root",
+        "path": ".",
+        "name": "github.com/example/pricing-svc",
+        "manager": "go"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "id": "build",
+      "run": "go build ./...",
+      "cwd": ".",
+      "kind": "build",
+      "description": "Compile every package in the module.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "go.mod"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "run-server",
+      "run": "go run ./cmd/server",
+      "cwd": ".",
+      "kind": "start",
+      "description": "Run the server binary.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "cmd/server/main.go"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "test",
+      "run": "go test ./...",
+      "cwd": ".",
+      "kind": "test",
+      "description": "Run every test in the module.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "go.mod"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "vet",
+      "run": "go vet ./...",
+      "cwd": ".",
+      "kind": "lint",
+      "description": "Report suspicious constructs.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "go.mod"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "pricing.calculate",
+      "title": "Calculate",
+      "description": "Exported function in internal/pricing/quote.go.",
+      "kind": "export",
+      "packageId": "internal-pricing",
+      "owners": [
+        {
+          "path": "internal/pricing/quote.go",
+          "locator": "function:Calculate"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/pricing.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:internal/pricing/quote_test.go",
+          "link": "path-proximity"
+        }
+      ],
+      "environment": [
+        "PRICING_API_TOKEN"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "internal/pricing/quote.go",
+            "locator": "L31"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "pricing.quote",
+      "title": "Quote",
+      "description": "Exported type in internal/pricing/quote.go.",
+      "kind": "export",
+      "packageId": "internal-pricing",
+      "owners": [
+        {
+          "path": "internal/pricing/quote.go",
+          "locator": "type:Quote"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/pricing.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:internal/pricing/quote_test.go",
+          "link": "path-proximity"
+        }
+      ],
+      "environment": [
+        "PRICING_API_TOKEN"
+      ],
+      "tags": [
+        "type"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "internal/pricing/quote.go",
+            "locator": "L22"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "pricing.quote.list",
+      "title": "GET /pricing/quote",
+      "description": "HTTP route registered in internal/pricing/quote.go.",
+      "kind": "route",
+      "packageId": "internal-pricing",
+      "owners": [
+        {
+          "path": "internal/pricing/quote.go",
+          "locator": "L51"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/pricing.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:internal/pricing/quote_test.go",
+          "link": "path-proximity"
+        }
+      ],
+      "environment": [
+        "PRICING_API_TOKEN"
+      ],
+      "tags": [
+        "http",
+        "get"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/pricing/quote"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "internal/pricing/quote.go",
+            "locator": "L51"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "pricing.register",
+      "title": "Register",
+      "description": "Exported function in internal/pricing/quote.go.",
+      "kind": "export",
+      "packageId": "internal-pricing",
+      "owners": [
+        {
+          "path": "internal/pricing/quote.go",
+          "locator": "function:Register"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/pricing.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:internal/pricing/quote_test.go",
+          "link": "path-proximity"
+        }
+      ],
+      "environment": [
+        "PRICING_API_TOKEN"
+      ],
+      "tags": [
+        "function"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "internal/pricing/quote.go",
+            "locator": "L50"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint:go-version",
+      "rule": "Requires Go 1.22 or newer.",
+      "severity": "warn",
+      "status": "active",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "go.mod",
+            "locator": "go"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "environment": [
+    {
+      "name": "PRICING_API_TOKEN",
+      "required": true,
+      "secret": true,
+      "usedBy": [
+        {
+          "path": "internal/pricing/quote.go"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "internal/pricing/quote.go"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "PRICING_LISTEN_ADDR",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "cmd/server/main.go"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "cmd/server/main.go"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "risks": [],
+  "evidence": [
+    {
+      "id": "evidence:internal/pricing/quote_test.go",
+      "kind": "test",
+      "path": "internal/pricing/quote_test.go",
+      "status": "unknown",
+      "commandId": "test",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "internal/pricing/quote_test.go"
+          }
+        ],
+        "adapter": "go",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "health": [
+    {
+      "code": "LOW_CONFIDENCE_MAJORITY",
+      "severity": "warn",
+      "message": "3 of 4 capabilities are low confidence: most of this surface is inference, not evidence.",
+      "subject": {
+        "kind": "project",
+        "id": "capabilities"
+      },
+      "remediation": "Run surface verify, or declare the important capabilities by hand."
+    },
+    {
+      "code": "TOOLCHAIN_UNAVAILABLE",
+      "severity": "info",
+      "message": "The go toolchain is not installed here, so go claims are structural only and cannot be verified.",
+      "subject": {
+        "kind": "project",
+        "id": "go"
+      },
+      "remediation": "Install the go toolchain to enable verification."
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"build\" (go build ./...) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "build"
+      },
+      "remediation": "Run: surface verify --command build"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"run-server\" (go run ./cmd/server) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "run-server"
+      },
+      "remediation": "Run: surface verify --command run-server"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"test\" (go test ./...) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "test"
+      },
+      "remediation": "Run: surface verify --command test"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"vet\" (go vet ./...) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "vet"
+      },
+      "remediation": "Run: surface verify --command vet"
+    }
+  ],
+  "git": {
+    "available": false
+  }
+}

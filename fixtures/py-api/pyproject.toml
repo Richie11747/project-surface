@@ -1,0 +1,15 @@
+[project]
+name = "inventory-api"
+version = "0.1.0"
+description = "Tiny zero-dependency Python service used as a project-surface fixture."
+requires-python = ">=3.11"
+
+[project.scripts]
+inventory = "inventory.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
