@@ -15,6 +15,8 @@ import { runConformance } from "@project-surface/adapter-sdk";
 import { typescriptAdapter } from "@project-surface/adapter-typescript";
 import { pythonAdapter } from "@project-surface/adapter-python";
 import { goAdapter } from "@project-surface/adapter-go";
+import { rustAdapter } from "@project-surface/adapter-rust";
+import { genericAdapter } from "@project-surface/adapter-generic";
 import { FIXTURES_DIR } from "../scripts/fixture-snapshot.mjs";
 
 const BIN = fileURLToPath(new URL("../packages/adapter-sdk/dist/bin.js", import.meta.url));
@@ -29,6 +31,8 @@ const CASES = [
   [typescriptAdapter, "ts-api"],
   [pythonAdapter, "py-api"],
   [goAdapter, "go-svc"],
+  [rustAdapter, "rust-svc"],
+  [genericAdapter, "plain-make"],
 ];
 
 for (const [adapter, fixture] of CASES) {

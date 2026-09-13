@@ -90,15 +90,21 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
     ...(options.log ? { log: options.log } : {}),
   });
 
+  /* Language adapters first; a fallback adapter runs afterwards - always when
+     nothing else recognised the project, otherwise only if it detects
+     something of its own (a Makefile beside a Go module, say). */
   const results: AdapterResult[] = [];
-  for (const adapter of options.adapters) {
+  const run = async (adapter: Adapter, force: boolean): Promise<void> => {
     try {
-      if (!(await adapter.detect(ctx))) continue;
+      if (!force && !(await adapter.detect(ctx))) return;
       results.push(await adapter.extract(ctx));
     } catch (e) {
       warnings.push(`Adapter "${adapter.id}" failed and was skipped: ${(e as Error).message}`);
     }
-  }
+  };
+  for (const adapter of options.adapters) if (!adapter.fallback) await run(adapter, false);
+  const nothingRecognised = results.length === 0;
+  for (const adapter of options.adapters) if (adapter.fallback) await run(adapter, nothingRecognised);
 
   const commands = mergeCommands([
     ...results.flatMap((r) => r.commands ?? []),

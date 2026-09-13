@@ -75,6 +75,13 @@ export interface Adapter {
   /** Cheap check: does this ecosystem appear in the project at all? */
   detect(ctx: AdapterContext): boolean | Promise<boolean>;
   extract(ctx: AdapterContext): AdapterResult | Promise<AdapterResult>;
+  /**
+   * A fallback adapter also runs, `detect` or not, when no other adapter
+   * recognised the project - so a scan never ends with an empty document and
+   * no explanation. When another adapter did run, a fallback contributes only
+   * if its own `detect` says so.
+   */
+  readonly fallback?: boolean;
 }
 
 /** An empty result, so adapters can bail out without constructing boilerplate. */

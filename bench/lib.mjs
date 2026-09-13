@@ -20,6 +20,8 @@ import { CONFORMANCE_NOW } from "@project-surface/adapter-sdk";
 import { typescriptAdapter } from "@project-surface/adapter-typescript";
 import { pythonAdapter } from "@project-surface/adapter-python";
 import { goAdapter } from "@project-surface/adapter-go";
+import { rustAdapter } from "@project-surface/adapter-rust";
+import { genericAdapter } from "@project-surface/adapter-generic";
 
 export const BENCH_DIR = fileURLToPath(new URL("./", import.meta.url));
 export const FIXTURES_DIR = fileURLToPath(new URL("../fixtures/", import.meta.url));
@@ -53,7 +55,7 @@ export async function fixtureSurface(fixture) {
   const root = join(FIXTURES_DIR, fixture);
   const { surface } = await buildSurface({
     root,
-    adapters: [typescriptAdapter, pythonAdapter, goAdapter],
+    adapters: [typescriptAdapter, pythonAdapter, goAdapter, rustAdapter, genericAdapter],
     previous: null,
     now: CONFORMANCE_NOW,
   });

@@ -97,7 +97,7 @@ const GENERIC_SEGMENTS = new Set([
 export function moduleNamespace(modulePath: string): string {
   const parts = modulePath.split("/").filter((p) => p.length > 0);
   const file = parts[parts.length - 1] ?? modulePath;
-  const base = file.replace(/[.](ts|tsx|mts|cts|js|jsx|mjs|cjs|py|go)$/i, "");
+  const base = file.replace(/[.](ts|tsx|mts|cts|js|jsx|mjs|cjs|py|go|rs)$/i, "");
   const dir = parts.length >= 2 ? parts[parts.length - 2] : undefined;
 
   if (dir && !GENERIC_SEGMENTS.has(dir.toLowerCase())) return slug(dir);

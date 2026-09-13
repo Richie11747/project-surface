@@ -11,6 +11,18 @@ First release on npm: `npx project-surface init` works as written. The schema is
 
 ### Added
 
+- **Rust adapter** (`@project-surface/adapter-rust`): `Cargo.toml` (workspace members, binaries,
+  `rust-version`), public items, axum / actix-web / rocket routes, env usage, `cargo test|build|check|run`.
+  Integration tests under `tests/` are linked to the files their `use` lines name (`import-graph`); inline
+  `#[cfg(test)]` modules are linked to their own file as `path-proximity`. Structural, and marks the stack
+  unavailable without `cargo`. Fixture `fixtures/rust-svc`.
+- **Generic fallback adapter** (`@project-surface/adapter-generic`): `Makefile`, `justfile` and `Taskfile`
+  targets become commands, `.env.example` names become environment. It runs beside a language adapter when a
+  build file exists, and *always* when no adapter recognised the project - so a scan never returns an empty
+  document without saying why. It claims no capabilities. Fixture `fixtures/plain-make`.
+- `Adapter.fallback` (optional) in the adapter contract; the pipeline runs fallback adapters after the
+  language adapters, forced when nothing else matched.
+- The corpus gains two Rust repositories (axum, ripgrep).
 - **Declarations set scope and granularity.** `ignore:` removes globs from the scan before any adapter runs;
   `owners:` accept globs, expanded to concrete files at scan time; an `inferred` capability whose owner
   files all lie within a declared capability is absorbed into it (sources union, evidence and environment
@@ -34,8 +46,8 @@ First release on npm: `npx project-surface init` works as written. The schema is
   calls the Claude API and commits answers with model, commit, usage and prompt hash; scoring is offline,
   deterministic, checked in CI, and reports prompt drift. `bench/RESULTS.md` says *not recorded* until
   someone runs it.
-- **Corpus run** (`bench/corpus-run.mjs`, weekly workflow): `surface init` over twelve pinned public
-  repositories across the three stacks, results committed to `bench/corpus/RESULTS.md`.
+- **Corpus run** (`bench/corpus-run.mjs`, weekly workflow): `surface init` over fourteen pinned public
+  repositories across four stacks, results committed to `bench/corpus/RESULTS.md`.
 - `surface map` shows a `FRESHNESS` column and counts fresh/stale rows.
 - **`surface why <id>`** and the MCP tool **`surface_why`**: the derivation behind a confidence score -
   sources, evidence and its outcome, the promotion earned or withheld, the freshness anchor, and every

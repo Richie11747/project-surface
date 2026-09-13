@@ -1,0 +1,257 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.2.0"
+  },
+  "project": {
+    "name": "plain-make",
+    "root": ".",
+    "stacks": [
+      {
+        "id": "generic",
+        "adapter": "@project-surface/adapter-generic",
+        "adapterVersion": "0.2.0",
+        "toolchainAvailable": "<normalised>",
+        "notes": [
+          "Only build-tool targets and environment names were read; no capability is claimed from them."
+        ]
+      }
+    ],
+    "packages": [
+      {
+        "id": "root",
+        "path": "."
+      }
+    ]
+  },
+  "commands": [
+    {
+      "id": "make-build",
+      "run": "make build",
+      "cwd": ".",
+      "kind": "build",
+      "description": "build target in Makefile.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Makefile",
+            "locator": "build"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "make-clean",
+      "run": "make clean",
+      "cwd": ".",
+      "kind": "other",
+      "description": "clean target in Makefile.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Makefile",
+            "locator": "clean"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "make-lint",
+      "run": "make lint",
+      "cwd": ".",
+      "kind": "lint",
+      "description": "lint target in Makefile.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Makefile",
+            "locator": "lint"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "make-test",
+      "run": "make test",
+      "cwd": ".",
+      "kind": "test",
+      "description": "test target in Makefile.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Makefile",
+            "locator": "test"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "capabilities": [],
+  "constraints": [],
+  "environment": [
+    {
+      "name": "API_TOKEN",
+      "required": false,
+      "secret": true,
+      "usedBy": [
+        {
+          "path": ".env.example",
+          "locator": "API_TOKEN"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": ".env.example",
+            "locator": "API_TOKEN"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "DATABASE_URL",
+      "required": false,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": ".env.example",
+          "locator": "DATABASE_URL"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": ".env.example",
+            "locator": "DATABASE_URL"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "name": "PORT",
+      "required": false,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": ".env.example",
+          "locator": "PORT"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": ".env.example",
+            "locator": "PORT"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "risks": [],
+  "evidence": [],
+  "health": [
+    {
+      "code": "NO_CAPABILITIES",
+      "severity": "warn",
+      "message": "No capabilities were discovered. The surface describes commands only.",
+      "subject": {
+        "kind": "project",
+        "id": "capabilities"
+      },
+      "remediation": "Declare capabilities in .project/surface.declare.yaml, or install a matching adapter."
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"make-build\" (make build) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "make-build"
+      },
+      "remediation": "Run: surface verify --command make-build"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"make-clean\" (make clean) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "make-clean"
+      },
+      "remediation": "Run: surface verify --command make-clean"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"make-lint\" (make lint) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "make-lint"
+      },
+      "remediation": "Run: surface verify --command make-lint"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"make-test\" (make test) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "make-test"
+      },
+      "remediation": "Run: surface verify --command make-test"
+    }
+  ],
+  "git": {
+    "available": false
+  }
+}

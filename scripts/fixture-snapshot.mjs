@@ -15,10 +15,12 @@ import { CONFORMANCE_NOW } from "@project-surface/adapter-sdk";
 import { typescriptAdapter } from "@project-surface/adapter-typescript";
 import { pythonAdapter } from "@project-surface/adapter-python";
 import { goAdapter } from "@project-surface/adapter-go";
+import { rustAdapter } from "@project-surface/adapter-rust";
+import { genericAdapter } from "@project-surface/adapter-generic";
 
 export const FIXTURES_DIR = fileURLToPath(new URL("../fixtures/", import.meta.url));
 export const EXPECTED_FILE = "expected.surface.json";
-export const ADAPTERS = [typescriptAdapter, pythonAdapter, goAdapter];
+export const ADAPTERS = [typescriptAdapter, pythonAdapter, goAdapter, rustAdapter, genericAdapter];
 
 /** Placeholder for values that differ by design between environments. */
 const NORMALISED = "<normalised>";

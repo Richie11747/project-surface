@@ -6,6 +6,8 @@
     { "path": "packages/adapters/typescript" },
     { "path": "packages/adapters/python" },
     { "path": "packages/adapters/go" },
+    { "path": "packages/adapters/rust" },
+    { "path": "packages/adapters/generic" },
     { "path": "packages/cli" },
     { "path": "packages/mcp-server" }
   ]

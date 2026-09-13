@@ -269,6 +269,8 @@ under `doctor --strict` - so CI can gate on it. Full reference: [docs/cli.md](do
 | TypeScript / JavaScript | Full. Compiler-API parse: package manifests, scripts, workspaces, exports, routes (Express, Fastify, Hono, Next.js App Router), env usage, and **import-graph test linking**. |
 | Python | Full. `pyproject.toml`, entry points, pytest config, public symbols, FastAPI/Flask route decorators, env usage, import-based test linking. |
 | Go | Structural. `go.mod`, packages, exported declarations, router registrations, env usage. Line-based rather than AST-based, and it marks the stack unavailable when the Go toolchain is absent. |
+| Rust | Structural. `Cargo.toml` (workspace members, binaries, `rust-version`), public items, axum / actix-web / rocket routes, env usage. Integration tests are linked through their `use` lines (`import-graph`); inline `#[cfg(test)]` modules through their own file. Marks the stack unavailable without `cargo`. |
+| Anything else | Manifest-only. `Makefile`, `justfile` and `Taskfile` targets become commands; `.env.example` names become environment. **No capability is guessed** - an unrecognised project gets `NO_CAPABILITIES` and a pointer to declarations, never an empty document. |
 
 Evidence linking is where this differs from a filename heuristic. If a test **imports** the implementation, that is a fact recorded in the source and is reported as `import-graph`. If two files merely have similar names, that is a guess and is reported as `path-proximity`.
 
@@ -328,10 +330,10 @@ spec/v1/          The normative format: SPEC.md, surface.schema.json, validated 
 packages/
   core/           Schema, trust model, pipeline, analyses; the only module that runs a command
   adapter-sdk/    Adapter contract and the conformance suite
-  adapters/       typescript/, python/, go/
+  adapters/       typescript/, python/, go/, rust/, generic/ (the fallback)
   cli/            The `surface` command (published as `project-surface`)
   mcp-server/     The MCP server behind `surface mcp`
-fixtures/         Three small real projects with golden snapshots
+fixtures/         Five small real projects with golden snapshots
 test/             Integration suites: CLI, MCP over stdio, conformance, fixtures, spec examples
 docs/             Concepts, trust model, CLI, MCP, declarations, adapters
 integrations/     Claude Code plugin and GitHub Action
@@ -364,8 +366,8 @@ with model, commit, token usage and prompt hash, and the scorer runs offline in 
 unmeasured numbers would violate the premise of the project.
 
 "Works on real repositories" is measured the same way: a weekly [corpus run](bench/corpus/RESULTS.md) scans
-twelve pinned public projects (hono, fastify, express, zod, got, fastapi, flask, httpx, requests, gin, chi,
-cobra) and commits the table - capabilities found, how much is inference, health findings, time, crashes.
+fourteen pinned public projects (hono, fastify, express, zod, got, fastapi, flask, httpx, requests, gin, chi,
+cobra, axum, ripgrep) and commits the table - capabilities found, how much is inference, health findings, time, crashes.
 
 ## License
 

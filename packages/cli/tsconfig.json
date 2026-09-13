@@ -24,6 +24,12 @@
       "path": "../adapters/go"
     },
     {
+      "path": "../adapters/rust"
+    },
+    {
+      "path": "../adapters/generic"
+    },
+    {
       "path": "../mcp-server"
     }
   ]

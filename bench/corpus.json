@@ -12,6 +12,8 @@
     { "name": "psf/requests", "url": "https://github.com/psf/requests", "ref": "v2.32.3", "stack": "python" },
     { "name": "gin-gonic/gin", "url": "https://github.com/gin-gonic/gin", "ref": "v1.10.0", "stack": "go" },
     { "name": "go-chi/chi", "url": "https://github.com/go-chi/chi", "ref": "v5.2.0", "stack": "go" },
-    { "name": "spf13/cobra", "url": "https://github.com/spf13/cobra", "ref": "v1.8.1", "stack": "go" }
+    { "name": "spf13/cobra", "url": "https://github.com/spf13/cobra", "ref": "v1.8.1", "stack": "go" },
+    { "name": "tokio-rs/axum", "url": "https://github.com/tokio-rs/axum", "ref": "axum-v0.7.9", "stack": "rust" },
+    { "name": "BurntSushi/ripgrep", "url": "https://github.com/BurntSushi/ripgrep", "ref": "14.1.1", "stack": "rust" }
   ]
 }

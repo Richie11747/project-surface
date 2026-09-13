@@ -9,8 +9,10 @@
     "score": "node score.mjs"
   },
   "dependencies": {
+    "@project-surface/adapter-generic": "0.2.0",
     "@project-surface/adapter-go": "0.2.0",
     "@project-surface/adapter-python": "0.2.0",
+    "@project-surface/adapter-rust": "0.2.0",
     "@project-surface/adapter-sdk": "0.2.0",
     "@project-surface/adapter-typescript": "0.2.0",
     "@project-surface/core": "0.2.0",

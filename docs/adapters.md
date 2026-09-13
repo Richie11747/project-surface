@@ -65,6 +65,11 @@ Link tests to capabilities by reading the import graph when you can (`link: "imp
 If the language toolchain is absent on the machine, set `stack.toolchainAvailable = false` and add a note.
 The Go adapter (`packages/adapters/go/src/index.ts`) is the reference for this.
 
+An adapter may set `fallback: true`. A fallback runs after the language adapters - always when none of
+them recognised the project, otherwise only if its own `detect` fires - so a scan never returns an empty
+document without saying why. `packages/adapters/generic` is the built-in one; it reads build-tool targets
+and `.env.example` and deliberately claims no capabilities.
+
 ## Conformance
 
 ```ts

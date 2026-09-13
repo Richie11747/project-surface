@@ -164,6 +164,20 @@ capabilities:
     evidence: [test/conformance.test.js, test/fixtures.test.js]
     tags: [adapters]
 
+  - id: adapter.rust
+    title: Rust adapter, structural, with use-statement test linking
+    owners: [packages/adapters/rust/src/**]
+    contracts: [docs/adapters.md]
+    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    tags: [adapters]
+
+  - id: adapter.generic
+    title: Fallback adapter - build-tool targets and .env.example, never a guessed capability
+    owners: [packages/adapters/generic/src/**]
+    contracts: [docs/adapters.md]
+    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    tags: [adapters]
+
   # ---- The CLI -------------------------------------------------------------
   - id: cli.init
     title: surface init
