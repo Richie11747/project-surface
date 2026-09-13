@@ -29,12 +29,18 @@ jobs:
         with:
           install-only: true
 
+      # The action ships a nightly static ffmpeg with which vhs 0.12 prints
+      # "Creating x.gif..." and writes nothing (exit 0). The distribution's
+      # ffmpeg is put in front of it, and a one-line control tape proves the
+      # pipeline works before the real recording spends a minute.
       - name: Recording toolchain
         run: |
+          sudo apt-get update -q >/dev/null
+          sudo apt-get install -y -q ffmpeg >/dev/null
+          sudo cp /usr/bin/ffmpeg "$(dirname "$(command -v ffmpeg)")/ffmpeg" || true
           vhs --version
           ttyd --version
           ffmpeg -version | head -1
-          # A control: the smallest possible tape must produce a file here.
           printf 'Output control.gif\nType "echo hello"\nEnter\nSleep 1s\n' > /tmp/control.tape
           (cd /tmp && vhs control.tape 2>&1; echo "vhs exit=$?"; ls -l /tmp/control.gif)
 
