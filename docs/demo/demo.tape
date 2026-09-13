@@ -16,6 +16,12 @@ Set Padding 20
 Set TypingSpeed 35ms
 Set Theme "Catppuccin Mocha"
 
+# In CI the workflow exports DEMO_DIR (a fresh copy of fixtures/ts-api); locally run the tape from inside such a copy.
+Hide
+Type "cd "${DEMO_DIR:-.}" && clear"
+Enter
+Show
+
 Type "surface init"
 Enter
 Sleep 2.5s

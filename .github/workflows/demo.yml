@@ -5,6 +5,12 @@ name: Demo
 # is therefore an artefact of the current code, not a screenshot from months
 # ago - the same rule the README applies to every transcript. Run it from the
 # Actions tab after a change that alters the demo output.
+#
+# Status: on ubuntu-latest, vhs 0.12 (installed by charmbracelet/vhs-action)
+# has exited 0 after "Creating x.gif..." without writing a file, even for a
+# one-line control tape and with either the bundled nightly ffmpeg or the
+# distribution's 6.1. The control step below fails fast when that is the case
+# so the real recording is not spent; see the tracking issue in the repository.
 on:
   workflow_dispatch:
 
@@ -25,46 +31,36 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          install-only: true
-
-      # The action ships a nightly static ffmpeg with which vhs 0.12 prints
-      # "Creating x.gif..." and writes nothing (exit 0). The distribution's
-      # ffmpeg is put in front of it, and a one-line control tape proves the
-      # pipeline works before the real recording spends a minute.
-      - name: Recording toolchain
-        run: |
-          sudo apt-get update -q >/dev/null
-          sudo apt-get install -y -q ffmpeg >/dev/null
-          sudo cp /usr/bin/ffmpeg "$(dirname "$(command -v ffmpeg)")/ffmpeg" || true
-          vhs --version
-          ttyd --version
-          ffmpeg -version | head -1
-          printf 'Output control.gif\nType "echo hello"\nEnter\nSleep 1s\n' > /tmp/control.tape
-          (cd /tmp && vhs control.tape 2>&1; echo "vhs exit=$?"; ls -l /tmp/control.gif)
-
       - name: Put surface on PATH
         run: |
           printf '#!/bin/sh\nexec node "%s/packages/cli/dist/index.js" "$@"\n' "$GITHUB_WORKSPACE" | sudo tee /usr/local/bin/surface > /dev/null
           sudo chmod +x /usr/local/bin/surface
           surface --version
 
-      - name: Record on a fresh copy of the fixture
+      - name: A fresh copy of the fixture
         run: |
           demo=$(mktemp -d)
           cp -r fixtures/ts-api/. "$demo"
           rm -f "$demo/expected.surface.json"
           (cd "$demo" && git init -q && git add -A && git -c user.name=demo -c user.email=demo@example.com commit -qm "fixture")
-          # The output path is given explicitly and absolutely; the tape's own
-          # `Output` line serves local runs.
-          cp docs/demo/demo.tape "$demo/demo.tape"
-          (cd "$demo" && vhs demo.tape -o "$GITHUB_WORKSPACE/docs/demo/demo.gif" 2>&1; echo "vhs exit=$?")
-          ls -la "$demo" docs/demo
-          ls -l docs/demo/demo.gif
+          echo "DEMO_DIR=$demo" >> "$GITHUB_ENV"
+
+      - name: Control tape
+        uses: charmbracelet/vhs-action@v2
+        with:
+          path: docs/demo/control.tape
+
+      - name: The control must have produced a file
+        run: ls -l docs/demo/control.gif && rm -f docs/demo/control.gif
+
+      - name: Record the demo
+        uses: charmbracelet/vhs-action@v2
+        with:
+          path: docs/demo/demo.tape
 
       - name: Commit the recording
         run: |
+          ls -l docs/demo/demo.gif
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/demo/demo.gif

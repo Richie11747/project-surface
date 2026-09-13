@@ -1,4 +1,6 @@
-# Promo kit — project-surface (+ Sparke, pending)
+# Promo kit — project-surface
+
+*This file covers project-surface only. Sparke is a separate product with its own kit: `SPARKE-LAUNCH-KIT.md` in the SYBEI folder.*
 
 Companion to `POSTS-DRAFT.md`. Both files are drafts, not part of the project — delete when done.
 
@@ -28,13 +30,6 @@ Pick one. GitHub truncates around 350 characters; all three fit well under.
 `llm` `ai-agents` `typescript` `cli` `repository-analysis` `claude-code` `agents` `codegen`
 
 Also set: website → the schema URL or docs page, and check "Releases" + "Packages" are shown in the sidebar.
-
-## Sparke — PENDING
-
-I could not read it. `sparkeflow` is an empty leftover (a stray `COMMIT_EDITMSG`, no working tree) and
-`sparkeworkflow` has no git remote and no top-level README — it looks like a May workspace, not the repo.
-Grant access to `~/sparke` or `Desktop/Projekty/sparke-workspace` (or name the right folder) and this
-section fills in: description, topics, and the posts in Part 5.
 
 ---
 
@@ -311,13 +306,3 @@ github.com/Richie11747/project-surface
 Rule: never drop this in a thread you didn't already want to reply to.
 
 ---
-
-# Part 4 — Sparke — PENDING
-
-Blocked on folder access. Once I can read the README this section gets:
-
-- GitHub "About" description + topics
-- A promo-leaning launch post (r/SideProject)
-- A version for whichever AI/agent sub fits it
-- A Show HN or X thread, depending on what it actually is
-- Its own row in the Part 2 sequencing plan
