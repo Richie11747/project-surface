@@ -26,7 +26,7 @@ const ENV = [
 /** Route registrations across axum, actix-web and rocket. */
 const AXUM_ROUTE = /\.route\(\s*"([^"]+)"\s*,([^;]*)/g;
 const AXUM_METHOD = /\b(get|post|put|patch|delete|head|options)\s*\(/g;
-const ATTRIBUTE_ROUTE = /#\[\s*(get|post|put|patch|delete|head|options)\s*\(\s*"([^"]+)"/g;
+const ATTRIBUTE_ROUTE = /#\[\s*(?:[A-Za-z_][A-Za-z0-9_]*::)?(get|post|put|patch|delete|head|options)\s*\(\s*"([^"]+)"/g;
 const ACTIX_RESOURCE = /web::resource\(\s*"([^"]+)"\s*\)([^;]*)/g;
 const ACTIX_METHOD = /web::(get|post|put|patch|delete|head)\s*\(\s*\)/g;
 
