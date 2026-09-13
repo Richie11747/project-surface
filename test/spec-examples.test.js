@@ -9,10 +9,20 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validateSurface } from "@project-surface/core";
+import { SURFACE_SCHEMA, validateSurface } from "@project-surface/core";
 
 const EXAMPLES = fileURLToPath(new URL("../spec/v1/examples/", import.meta.url));
 const files = readdirSync(EXAMPLES).filter((f) => f.endsWith(".json")).sort();
+
+/* The $id is the format's stable identifier: it is what SPEC.md, VERSIONING.md
+   and the Pages workflow all promise, so a change here is a change to all of
+   them. The path carries the version. */
+test("the schema $id is the published, versioned URL", () => {
+  assert.equal(
+    SURFACE_SCHEMA.$id,
+    "https://richie11747.github.io/project-surface/spec/v1/surface.schema.json"
+  );
+});
 
 test("the spec ships at least a minimal and a full example", () => {
   assert.ok(files.includes("minimal.surface.json"), files.join(", "));

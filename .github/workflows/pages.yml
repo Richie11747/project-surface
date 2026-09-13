@@ -1,0 +1,58 @@
+name: Pages
+
+# Publishes spec/ so that the schema's $id resolves:
+#   https://richie11747.github.io/project-surface/spec/v1/surface.schema.json
+# A format whose identifier is a dead link is not a standard. Only spec/ is
+# served; the Pages source for the repository is "GitHub Actions".
+on:
+  push:
+    branches: [main]
+    paths:
+      - "spec/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage the site
+        run: |
+          mkdir -p site
+          cp -r spec site/spec
+          cat > site/index.html <<'EOF'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>project-surface specification</title>
+          <h1>project-surface</h1>
+          <p>The machine-readable format behind <a href="https://github.com/Richie11747/project-surface">project-surface</a>.</p>
+          <ul>
+            <li><a href="spec/v1/surface.schema.json">spec/v1/surface.schema.json</a> - the normative JSON Schema (<code>$id</code>)</li>
+            <li><a href="https://github.com/Richie11747/project-surface/blob/main/spec/v1/SPEC.md">spec/v1/SPEC.md</a> - the prose</li>
+            <li><a href="https://github.com/Richie11747/project-surface/blob/main/spec/v1/CONFORMANCE.md">spec/v1/CONFORMANCE.md</a> - what conforming means</li>
+            <li><a href="https://github.com/Richie11747/project-surface/blob/main/spec/VERSIONING.md">spec/VERSIONING.md</a> - what may change and what may not</li>
+          </ul>
+          EOF
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -87,6 +87,18 @@ The suite checks that the adapter:
 Number 9 is the one contributors break most often - usually with `Date.now()`, a `Set` built from
 unsorted input, or a random id. Sort before you emit.
 
+The same suite runs as a command, so an adapter outside this repository can be checked without cloning it:
+
+```
+npx -p @project-surface/adapter-sdk surface-conform ./dist/index.js ./fixtures/elixir-app
+```
+
+From a source checkout, `node packages/adapter-sdk/dist/bin.js <adapter-module.js> <fixture-dir>`. Each
+check is printed as `pass` or `FAIL` with its detail; exit `0` conforms, `2` at least one check failed,
+`1` the module could not be loaded or exports nothing with `id`, `detect` and `extract`. What conformance
+means for every role - document, generator, consumer, adapter - is in
+[`spec/v1/CONFORMANCE.md`](../spec/v1/CONFORMANCE.md).
+
 ## Shipping it
 
 1. Put it in `packages/adapters/<language>/`, depending only on `@project-surface/adapter-sdk`.

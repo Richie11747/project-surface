@@ -19,7 +19,7 @@ capabilities:
     title: The project-surface/v1 schema and its validator
     description: JSON Schema for the surface document, embedded into core and checked against spec/v1 in CI.
     owners: [spec/v1/surface.schema.json, packages/core/src/schema/**, scripts/gen-schema-module.mjs]
-    contracts: [spec/v1/SPEC.md]
+    contracts: [spec/v1/SPEC.md, spec/v1/CONFORMANCE.md, spec/VERSIONING.md]
     evidence: [test/spec-examples.test.js]
     tags: [spec]
 
@@ -137,7 +137,7 @@ capabilities:
   # ---- Adapters ------------------------------------------------------------
   - id: adapter.sdk
     title: Adapter contract and the conformance suite
-    description: Every adapter must pass it - provenance on every claim, portable paths, honest evidence status, byte-identical determinism.
+    description: Every adapter must pass it - provenance on every claim, portable paths, honest evidence status, byte-identical determinism. Also the surface-conform command, so adapters outside this repository can be checked.
     owners: [packages/adapter-sdk/src/**]
     contracts: [docs/adapters.md]
     evidence: [test/conformance.test.js]

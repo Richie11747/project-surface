@@ -11,7 +11,7 @@
 export const SURFACE_SCHEMA: Readonly<Record<string, unknown>> = Object.freeze(
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://project-surface.dev/spec/v1/surface.schema.json",
+  "$id": "https://richie11747.github.io/project-surface/spec/v1/surface.schema.json",
   "title": "project-surface/v1",
   "description": "A machine-readable, evidence-backed model of a software project.",
   "type": "object",

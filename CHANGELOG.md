@@ -38,6 +38,20 @@ All notable changes to this project are documented here. This project adheres to
   `explainConfidence()` in core returns the same trace programmatically; `computeConfidence()` is unchanged.
 - The repository describes itself: `.project/surface.declare.yaml` declares 35 capabilities with contracts
   and evidence; CI runs `surface verify` and gates on `surface doctor --strict`.
+- **The spec as a standard.** `spec/v1/CONFORMANCE.md` states what a document, a generator in any
+  language, a consumer and an adapter must satisfy, independently of this implementation;
+  `spec/VERSIONING.md` states what may change within `v1`, what requires `v2`, and how package versions
+  relate to the format version. `@project-surface/adapter-sdk` gains the `surface-conform` command
+  (`npx -p @project-surface/adapter-sdk surface-conform <adapter-module.js> <fixture-dir>`), the
+  conformance suite for adapters that live outside this repository: exit `0` conforms, `2` a check failed,
+  `1` not an adapter.
+
+### Specification
+
+- The schema `$id` is now the stable, versioned URL
+  `https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`, served from `spec/` by a
+  Pages workflow. The path carries the version; `v1` at that URL only ever changes additively. Nothing
+  else in the schema changed.
 
 ## [0.1.0] - 2026-09-12
 

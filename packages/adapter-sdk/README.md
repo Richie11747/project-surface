@@ -17,6 +17,14 @@ The conformance suite enforces what every consumer relies on:
 - statically discovered evidence is never reported as `passed`,
 - two runs over the same project produce byte-identical output.
 
+The same suite runs as a command, for adapters that live outside the project-surface repository:
+
+```
+npx -p @project-surface/adapter-sdk surface-conform ./dist/index.js fixtures/my-fixture
+```
+
+Exit `0` conforms, `2` a check failed (each is printed with its detail), `1` the module is not an adapter.
+
 Also exported: claim builders, contract-document discovery (`findContracts`) and toolchain probes (`isOnPath`) that check for a binary without running it.
 
 Read [`docs/adapters.md`](../../docs/adapters.md) before writing one.

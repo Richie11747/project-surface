@@ -304,6 +304,14 @@ Adapters get read-only file access and **no exec capability** - they *propose* t
 
 The conformance suite enforces what every consumer relies on: every claim has a source, every path is project-relative, statically discovered evidence is never reported as `passed`, and **two runs over the same project produce byte-identical output**. That last one is checked mechanically, because it is the property contributors break most often.
 
+It runs as a command too, so an adapter does not have to live in this repository to be checked:
+
+```
+npx -p @project-surface/adapter-sdk surface-conform ./dist/index.js ./fixtures/elixir-app
+```
+
+What conforming means for a document, a generator in any language, a consumer, or an adapter is written down in [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md), independently of this implementation.
+
 ---
 
 ## What this is not
@@ -340,11 +348,15 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 - [docs/trust-model.md](docs/trust-model.md) - what a confidence number means
 - [docs/cli.md](docs/cli.md) · [docs/mcp.md](docs/mcp.md) · [docs/declarations.md](docs/declarations.md) · [docs/adapters.md](docs/adapters.md)
 - [spec/v1/SPEC.md](spec/v1/SPEC.md) - the normative format, with [validated examples](spec/v1/examples/)
+- [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md) - what a document, generator, consumer or adapter must satisfy · [spec/VERSIONING.md](spec/VERSIONING.md) - what may change within `v1`
 - [examples/](examples/README.md) - a full declaration file and an MCP client config
 
 ## Status
 
-`0.1.0`. The schema is versioned as `project-surface/v1`.
+`0.1.0`. The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
+[`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`](https://richie11747.github.io/project-surface/spec/v1/surface.schema.json)
+is its `$id`. A generator in any language can target it; [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md)
+says what that takes.
 
 The comparative benchmark - 50 golden questions with mechanically checkable answers, asked with and without
 a surface - is **built and reproducible** ([docs/benchmark.md](docs/benchmark.md)): recordings are committed

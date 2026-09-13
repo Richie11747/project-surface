@@ -1,7 +1,9 @@
 # project-surface/v1 — specification
 
 Status: **stable**. Schema identifier `project-surface/v1`. Normative machine-readable form:
-[`surface.schema.json`](surface.schema.json). Where this prose and the JSON Schema disagree, the schema wins.
+[`surface.schema.json`](surface.schema.json), published at the stable URL
+`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json` (its `$id`). Where this prose
+and the JSON Schema disagree, the schema wins.
 
 Examples: [`examples/minimal.surface.json`](examples/minimal.surface.json),
 [`examples/full.surface.json`](examples/full.surface.json). Both are validated in CI.
@@ -329,10 +331,15 @@ An adapter conforms when, over a fixture project, it: declares an id and version
 `detect`; produces a stack whose `id` matches its own; attaches at least one source to every claim; emits
 only relative POSIX paths; never leaks the absolute project root; never reports statically discovered
 evidence as `passed`; and produces identical output on two consecutive runs. The reference implementation
-ships this as `runConformance` in `@project-surface/adapter-sdk`.
+ships this as `runConformance` in `@project-surface/adapter-sdk` and as the `surface-conform` command.
+
+What each role - document, generator, consumer, adapter - must satisfy, stated independently of this
+implementation, is in [`CONFORMANCE.md`](CONFORMANCE.md).
 
 ## 19. Versioning
 
 The `schema` string is the version. Within `v1`, fields MAY be added (consumers MUST ignore unknown
 fields) and enumerations MAY gain values (consumers SHOULD tolerate unknown values). Removing a field,
-changing a type, or changing the meaning of a tier requires `v2`.
+changing a type, or changing the meaning of a tier requires `v2`. The full policy - what is additive, what
+is breaking, how `v2` would be introduced, and how package versions relate to the format version - is in
+[`../VERSIONING.md`](../VERSIONING.md).
