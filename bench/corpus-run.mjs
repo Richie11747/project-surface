@@ -22,11 +22,18 @@ import { fileURLToPath } from "node:url";
 
 const HERE = fileURLToPath(new URL("./", import.meta.url));
 const CLI = fileURLToPath(new URL("../packages/cli/dist/index.js", import.meta.url));
-const { values } = parseArgs({ options: { only: { type: "string" }, keep: { type: "boolean", default: false } } });
+const { values } = parseArgs({
+  options: { only: { type: "string", multiple: true }, keep: { type: "boolean", default: false } },
+});
 
-const corpus = JSON.parse(readFileSync(join(HERE, "corpus.json"), "utf8")).repositories.filter(
-  (r) => !values.only || r.name === values.only
-);
+const all = JSON.parse(readFileSync(join(HERE, "corpus.json"), "utf8")).repositories;
+const only = values.only ?? [];
+const unknown = only.filter((name) => !all.some((r) => r.name === name));
+if (unknown.length > 0) {
+  console.error(`not in bench/corpus.json: ${unknown.join(", ")}`);
+  process.exit(1);
+}
+const corpus = all.filter((r) => only.length === 0 || only.includes(r.name));
 const toolCommit = (() => {
   try {
     return execFileSync("git", ["rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim();
@@ -99,5 +106,12 @@ lines.push("");
 const crashed = rows.filter((r) => r.status !== "ok");
 lines.push(crashed.length === 0 ? `No crashes across ${rows.length} repositories.` : `**${crashed.length} of ${rows.length} repositories did not scan cleanly.** Each is a bug; open an issue with the row.`);
 lines.push("");
-writeFileSync(join(HERE, "corpus", "RESULTS.md"), `${lines.join("\n")}\n`);
-console.log("wrote bench/corpus/RESULTS.md");
+/* A partial run must not replace the committed table with a subset that
+   claims "no crashes across 1 repositories". Print it instead. */
+if (only.length > 0) {
+  console.log(`\n${lines.join("\n")}`);
+  console.log("(--only run: bench/corpus/RESULTS.md left untouched)");
+} else {
+  writeFileSync(join(HERE, "corpus", "RESULTS.md"), `${lines.join("\n")}\n`);
+  console.log("wrote bench/corpus/RESULTS.md");
+}

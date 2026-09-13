@@ -93,12 +93,34 @@ export function parseRust(content: string): ParsedRust {
   const envNames = new Set<string>();
   let hasInlineTests = false;
 
+  /* A `#[cfg(test)] mod tests { ... }` block is test code living in a source
+     file. Routes it registers and items it declares are not the crate's
+     behaviour, so everything between the attribute and the block's closing
+     brace at column zero is skipped - but its presence still makes the file a
+     unit-test host. */
+  let testAttrPending = false;
+  let inTestModule = false;
+
   lines.forEach((raw, index) => {
     const lineNumber = index + 1;
     const line = stripComment(raw);
     const trimmed = line.trim();
 
     if (/^#\[\s*(test|cfg\(test\)|tokio::test)/.test(trimmed)) hasInlineTests = true;
+
+    if (inTestModule) {
+      if (line === "}") inTestModule = false;
+      return;
+    }
+    if (/^#\[cfg\(test\)\]/.test(line)) {
+      testAttrPending = true;
+      return;
+    }
+    if (testAttrPending) {
+      if (/^(?:pub(?:\([^)]*\))?\s+)?mod\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/.test(line)) inTestModule = true;
+      if (!/^\s*#\[/.test(line)) testAttrPending = false;
+      if (inTestModule) return;
+    }
 
     if (line.length > 0 && !/^\s/.test(line)) {
       const item = ITEM.exec(line);
@@ -127,7 +149,7 @@ export function parseRust(content: string): ParsedRust {
       for (const method of methods.length > 0 ? methods : ["GET"]) routes.push({ method, path, line: lineNumber });
     }
 
-    for (const pattern of ENV) for (const m of all(pattern, line)) if (m[1]) envNames.add(m[1]);
+    for (const pattern of ENV) for (const m of all(pattern, line)) if (m[1] && !isCargoBuildVariable(m[1])) envNames.add(m[1]);
   });
 
   return { symbols, routes, uses, envNames: [...envNames].sort(), hasInlineTests };
@@ -214,9 +236,22 @@ function applyArray(manifest: CargoManifest, entry: { section: string; key: stri
   if (entry.section === "workspace" && entry.key === "members") manifest.workspaceMembers.push(...entry.items);
 }
 
-/** `tests/quote.rs` is an integration test; a file with `#[test]` is a unit test host. */
+/**
+ * Anything under a `tests/` or `benches/` directory, at any depth: integration
+ * tests, their helper modules, and trybuild-style compile-test fixtures such as
+ * `tests/ui/pass/*.rs` - none of which is the crate's behaviour. A file with
+ * `#[test]` elsewhere is a unit-test host and stays a source file.
+ */
 export function isRustTestPath(path: string): boolean {
-  return /(^|\/)tests\/[^/]+\.rs$/.test(path) || /(^|\/)benches\/[^/]+\.rs$/.test(path);
+  return /(^|\/)(tests|benches)\/.*\.rs$/.test(path) || /(^|\/)tests?\.rs$/.test(path);
+}
+
+/**
+ * Variables Cargo itself sets at build time. `env!("CARGO_PKG_VERSION")` is
+ * how a crate reads its own metadata, not configuration a deployment supplies.
+ */
+export function isCargoBuildVariable(name: string): boolean {
+  return name.startsWith("CARGO_") || name === "OUT_DIR" || name === "RUSTC" || name === "RUSTDOC" || name === "TARGET" || name === "HOST" || name === "PROFILE";
 }
 
 /** The crate root directory (the one holding Cargo.toml) that owns a path. */

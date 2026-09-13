@@ -1,0 +1,794 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-09-13T17:53:42Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.2.0"
+  },
+  "project": {
+    "name": "pricing-svc",
+    "root": ".",
+    "stacks": [
+      {
+        "id": "rust",
+        "adapter": "@project-surface/adapter-rust",
+        "adapterVersion": "0.2.0",
+        "toolchainAvailable": true,
+        "notes": [
+          "Rust extraction is line-based rather than AST-based; claims are structural."
+        ]
+      }
+    ],
+    "packages": [
+      {
+        "id": "root",
+        "path": ".",
+        "name": "pricing-svc",
+        "manager": "cargo"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "id": "build",
+      "run": "cargo build",
+      "cwd": ".",
+      "kind": "build",
+      "description": "Compile every crate.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Cargo.toml"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "check",
+      "run": "cargo check",
+      "cwd": ".",
+      "kind": "typecheck",
+      "description": "Type-check without producing binaries.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Cargo.toml"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "run",
+      "run": "cargo run",
+      "cwd": ".",
+      "kind": "start",
+      "description": "Run the package binary.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/main.rs"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "test",
+      "run": "cargo test",
+      "cwd": ".",
+      "kind": "test",
+      "description": "Run every test in the workspace.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Cargo.toml"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "health.list",
+      "title": "GET /health",
+      "description": "HTTP route registered in src/router.rs.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/router.rs",
+          "locator": "L11"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "http",
+        "get"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/health"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/router.rs",
+            "locator": "L11"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "e6211b9acc765f5ded542eac14e8571b",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "quote.create",
+      "title": "POST /quote",
+      "description": "HTTP route registered in src/router.rs.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/router.rs",
+          "locator": "L9"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/quote.md"
+        }
+      ],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "http",
+        "post"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/quote"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/router.rs",
+            "locator": "L9"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "e6211b9acc765f5ded542eac14e8571b",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "quote.for",
+      "title": "quote_for",
+      "description": "Public fn in src/quote.rs.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/quote.rs",
+          "locator": "fn:quote_for"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/quote.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/quote_test.rs",
+          "link": "import-graph"
+        },
+        {
+          "id": "evidence:src/quote.rs",
+          "link": "path-proximity"
+        }
+      ],
+      "environment": [
+        "PRICING_CURRENCY"
+      ],
+      "tags": [
+        "fn"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/quote.rs",
+            "locator": "L13"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "0163e737d7df8cf18140136c716567a4",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "quote.get",
+      "title": "GET /quote/:id",
+      "description": "HTTP route registered in src/router.rs.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/router.rs",
+          "locator": "L10"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/quote.md"
+        }
+      ],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "http",
+        "get"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/quote/:id"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/router.rs",
+            "locator": "L10"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "e6211b9acc765f5ded542eac14e8571b",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "quote.quote",
+      "title": "Quote",
+      "description": "Public struct in src/quote.rs.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/quote.rs",
+          "locator": "struct:Quote"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/quote.md"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "evidence:tests/quote_test.rs",
+          "link": "import-graph"
+        },
+        {
+          "id": "evidence:src/quote.rs",
+          "link": "path-proximity"
+        }
+      ],
+      "environment": [
+        "PRICING_CURRENCY"
+      ],
+      "tags": [
+        "struct"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/quote.rs",
+            "locator": "L5"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "0163e737d7df8cf18140136c716567a4",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "router.app",
+      "title": "app",
+      "description": "Public fn in src/router.rs.",
+      "kind": "export",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "src/router.rs",
+          "locator": "fn:app"
+        }
+      ],
+      "contracts": [],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "fn"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "src/router.rs",
+            "locator": "L7"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "e6211b9acc765f5ded542eac14e8571b",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint:rust-version",
+      "rule": "Requires Rust 1.75 or newer.",
+      "severity": "warn",
+      "status": "active",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Cargo.toml",
+            "locator": "package.rust-version"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "environment": [
+    {
+      "name": "PRICING_CURRENCY",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "src/quote.rs"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/quote.rs"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "risks": [],
+  "evidence": [
+    {
+      "id": "evidence:src/quote.rs",
+      "kind": "test",
+      "path": "src/quote.rs",
+      "status": "unknown",
+      "commandId": "test",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "src/quote.rs"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "evidence:tests/quote_test.rs",
+      "kind": "test",
+      "path": "tests/quote_test.rs",
+      "status": "unknown",
+      "commandId": "test",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "tests/quote_test.rs"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-09-13T17:53:42Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "health": [
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"health.list\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "health.list"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"router.app\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "router.app"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"health.list\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "health.list"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"quote.create\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "quote.create"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"quote.get\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "quote.get"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"router.app\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "router.app"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"build\" (cargo build) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "build"
+      },
+      "remediation": "Run: surface verify --command build"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"check\" (cargo check) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "check"
+      },
+      "remediation": "Run: surface verify --command check"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"run\" (cargo run) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "run"
+      },
+      "remediation": "Run: surface verify --command run"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"test\" (cargo test) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "test"
+      },
+      "remediation": "Run: surface verify --command test"
+    }
+  ],
+  "git": {
+    "available": true,
+    "head": "2dee914f6a307cb89acfd949e249e6da1b58697f",
+    "branch": "main",
+    "dirty": true,
+    "recentChanges": [
+      {
+        "path": ".project/surface.json",
+        "commits": 17,
+        "lastTouched": "2026-09-13T15:53:51Z"
+      },
+      {
+        "path": "README.md",
+        "commits": 15,
+        "lastTouched": "2026-09-13T15:53:51Z"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "commits": 13,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      },
+      {
+        "path": ".project/surface.declare.yaml",
+        "commits": 8,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      },
+      {
+        "path": "CLAUDE.md",
+        "commits": 7,
+        "lastTouched": "2026-09-13T15:53:51Z"
+      },
+      {
+        "path": "packages/core/src/index.ts",
+        "commits": 7,
+        "lastTouched": "2026-09-12T20:07:07Z"
+      },
+      {
+        "path": "docs/cli.md",
+        "commits": 5,
+        "lastTouched": "2026-09-12T20:07:07Z"
+      },
+      {
+        "path": "package-lock.json",
+        "commits": 5,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      },
+      {
+        "path": "packages/adapter-sdk/package.json",
+        "commits": 5,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/cli/package.json",
+        "commits": 5,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      },
+      {
+        "path": "packages/core/src/build/pipeline.ts",
+        "commits": 5,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      },
+      {
+        "path": "test/cli.test.js",
+        "commits": 5,
+        "lastTouched": "2026-09-12T20:01:04Z"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "commits": 4,
+        "lastTouched": "2026-09-12T20:21:12Z"
+      },
+      {
+        "path": "docs/README.md",
+        "commits": 4,
+        "lastTouched": "2026-09-13T15:53:51Z"
+      },
+      {
+        "path": "fixtures/ts-api/expected.surface.json",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "integrations/github-action/README.md",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/adapters/go/package.json",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/adapters/python/package.json",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/adapters/python/src/index.ts",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/adapters/typescript/package.json",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/core/package.json",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/mcp-server/package.json",
+        "commits": 4,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "SECURITY.md",
+        "commits": 4,
+        "lastTouched": "2026-09-13T15:48:44Z"
+      },
+      {
+        "path": "spec/v1/SPEC.md",
+        "commits": 4,
+        "lastTouched": "2026-09-13T12:06:24Z"
+      },
+      {
+        "path": "bench/package.json",
+        "commits": 3,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "commits": 3,
+        "lastTouched": "2026-09-13T15:48:44Z"
+      },
+      {
+        "path": "docs/adapters.md",
+        "commits": 3,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      },
+      {
+        "path": "docs/declarations.md",
+        "commits": 3,
+        "lastTouched": "2026-09-12T19:51:20Z"
+      },
+      {
+        "path": "docs/trust-model.md",
+        "commits": 3,
+        "lastTouched": "2026-09-12T19:51:20Z"
+      },
+      {
+        "path": "fixtures/go-svc/expected.surface.json",
+        "commits": 3,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "fixtures/py-api/expected.surface.json",
+        "commits": 3,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "package.json",
+        "commits": 3,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/adapter-sdk/README.md",
+        "commits": 3,
+        "lastTouched": "2026-09-13T12:06:24Z"
+      },
+      {
+        "path": "packages/adapter-sdk/src/index.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-12T19:51:20Z"
+      },
+      {
+        "path": "packages/adapters/go/src/index.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/adapters/typescript/src/index.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-13T14:22:55Z"
+      },
+      {
+        "path": "packages/cli/src/commands/diff.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-12T20:07:07Z"
+      },
+      {
+        "path": "packages/cli/src/index.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-12T20:01:04Z"
+      },
+      {
+        "path": "packages/cli/src/usage.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-12T20:01:04Z"
+      },
+      {
+        "path": "packages/core/src/adapter.ts",
+        "commits": 3,
+        "lastTouched": "2026-09-13T15:46:10Z"
+      }
+    ]
+  }
+}

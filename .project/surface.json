@@ -1,6 +1,6 @@
 {
   "schema": "project-surface/v1",
-  "generatedAt": "2026-09-13T15:53:49Z",
+  "generatedAt": "2026-09-13T15:59:33Z",
   "generator": {
     "name": "project-surface",
     "version": "0.2.0"
@@ -105,7 +105,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -134,7 +134,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -163,7 +163,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -188,7 +188,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -213,7 +213,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -238,7 +238,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -263,7 +263,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -288,7 +288,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -313,7 +313,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "verification": {
         "status": "passed",
@@ -345,7 +345,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -370,7 +370,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "verification": {
         "status": "passed",
@@ -441,7 +441,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "src.env-example-names",
@@ -513,7 +513,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "parse.go",
@@ -581,7 +581,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "parse.is-python-test",
@@ -660,7 +660,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "parse.cargo-toml",
@@ -770,7 +770,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "builders.classify-command",
@@ -909,7 +909,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "discover.build-capabilities",
@@ -999,7 +999,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "analysis.agents-files",
@@ -1059,7 +1059,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "analysis.evaluate-constraint-checks"
@@ -1117,7 +1117,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "analysis.estimate-tokens",
@@ -1177,7 +1177,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "analysis.diff-surfaces",
@@ -1236,7 +1236,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "analysis.detect-health",
@@ -1288,7 +1288,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "analysis.analyze-impact"
@@ -1343,7 +1343,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "analysis.explain-claim"
@@ -1424,7 +1424,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "declarations.expand-declared-owners",
@@ -1549,7 +1549,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "fs.default-ignores",
@@ -1653,7 +1653,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "adapter.empty-result",
@@ -1703,7 +1703,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -1746,7 +1746,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -1789,7 +1789,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -1832,7 +1832,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -1875,7 +1875,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -1918,7 +1918,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -1961,7 +1961,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -2004,7 +2004,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -2082,7 +2082,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "commands.badge",
@@ -2222,7 +2222,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "adapters.adapter-by-id",
@@ -2285,7 +2285,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -2328,7 +2328,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -2453,7 +2453,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2517,7 +2517,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "evidence.command-not-allowed-error",
@@ -2567,7 +2567,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -2610,7 +2610,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -2695,7 +2695,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "src.create-mcp-server",
@@ -2753,7 +2753,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "freshness": {
         "status": "fresh",
@@ -2860,7 +2860,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "bench.build-prompt",
@@ -2951,7 +2951,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "scripts.build-fixture-snapshot",
@@ -3024,7 +3024,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "redact.looks-secret-name",
@@ -3110,7 +3110,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "schema.assert-valid-surface",
@@ -3190,7 +3190,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "model.compute-confidence",
@@ -3262,7 +3262,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "model.days-between",
@@ -3356,7 +3356,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "aliases": [
         "model.camel-to-kebab",
@@ -3401,7 +3401,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "checked": {
         "status": "passed",
@@ -3423,7 +3423,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 0.7
     },
@@ -3441,7 +3441,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 0.7
     },
@@ -3459,7 +3459,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 1
     },
@@ -3487,7 +3487,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "checked": {
         "status": "passed",
@@ -3531,7 +3531,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "checked": {
         "status": "passed",
@@ -3553,7 +3553,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 1
     },
@@ -3571,7 +3571,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 0.7
     },
@@ -3617,7 +3617,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "checked": {
         "status": "passed",
@@ -3639,7 +3639,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 1
     }
@@ -3662,7 +3662,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 0.7
     },
@@ -3683,7 +3683,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 0.7
     },
@@ -3701,7 +3701,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 1
     }
@@ -3724,7 +3724,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 1
     },
@@ -3760,7 +3760,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 0.9
     },
@@ -3782,7 +3782,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 1
     },
@@ -3803,7 +3803,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "confidence": 1
     }
@@ -3823,7 +3823,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3843,7 +3843,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3863,7 +3863,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3883,7 +3883,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3903,7 +3903,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3923,7 +3923,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3943,7 +3943,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3963,7 +3963,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -3983,7 +3983,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -4003,7 +4003,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -4023,7 +4023,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -4043,7 +4043,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -4063,7 +4063,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -4083,7 +4083,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-13T15:53:49Z"
+        "observedAt": "2026-09-13T15:59:33Z"
       },
       "observedAt": "2026-09-13T15:53:15Z",
       "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ each tier sits at its floor with a single source (2.8718ms)\n✔ a guess never outranks an observation, however corroborated (0.6668ms)\n✔ corroborating sources raise confidence within the tier band (0.4032ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4589ms)\n✔ a declaration never decays: a human owns the statement (0.3813ms)\n✔ evidence promotes by exactly one tier (0.3576ms)\n✔ confidence stays inside the unit interval (0.6283ms)\n✔ labels track the numeric bands (0.3265ms)\n✔ forbid-import matches resolved project files and bare specifiers (3.4211ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.4875ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (0.7134ms)\n✔ require-test passes when every covered capability has evidence (0.7467ms)\n✔ glob: plain path names itself and its subtree (2.5439ms)\n✔ glob: star stops at slashes, doublestar does not (0.938ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.7157ms)\n✔ glob: expansion against a file list is ordered like the input (1.8921ms)\n✔ declarations: ignore accepts relative globs and rejects escapes (19.931ms)\n✔ declarations: glob owners expand to concrete files, and an empty match is an error (10.3654ms)\n✔ absorb: inferred claims fully covered by a declaration fold into it (23.2971ms)\n✔ absorb: without any declaration nothing changes (0.3596ms)\n✔ an empty diff says so and still carries the marker (2.3815ms)\n✔ a diff summarises counts on one line and lists findings with severity (1.4052ms)\n✔ long lists are collapsed (0.5661ms)\n✔ a claim that was never verified is unknown, not fresh and not stale (2.0969ms)\n✔ an unchanged fingerprint keeps a claim fresh (0.6457ms)\n✔ a changed owner file makes the claim stale (0.5797ms)\n✔ the stored fingerprint is the veri\n... [truncated 5876 chars]",
@@ -4204,19 +4204,19 @@
   ],
   "git": {
     "available": true,
-    "head": "01d11806c326165fdea68f7b278f145d7d23bc1f",
+    "head": "2dee914f6a307cb89acfd949e249e6da1b58697f",
     "branch": "main",
     "dirty": true,
     "recentChanges": [
       {
         "path": ".project/surface.json",
-        "commits": 16,
-        "lastTouched": "2026-09-13T15:46:10Z"
+        "commits": 17,
+        "lastTouched": "2026-09-13T15:53:51Z"
       },
       {
         "path": "README.md",
-        "commits": 14,
-        "lastTouched": "2026-09-13T15:46:10Z"
+        "commits": 15,
+        "lastTouched": "2026-09-13T15:53:51Z"
       },
       {
         "path": "CHANGELOG.md",
@@ -4229,14 +4229,14 @@
         "lastTouched": "2026-09-13T15:46:10Z"
       },
       {
+        "path": "CLAUDE.md",
+        "commits": 7,
+        "lastTouched": "2026-09-13T15:53:51Z"
+      },
+      {
         "path": "packages/core/src/index.ts",
         "commits": 7,
         "lastTouched": "2026-09-12T20:07:07Z"
-      },
-      {
-        "path": "CLAUDE.md",
-        "commits": 6,
-        "lastTouched": "2026-09-13T15:46:10Z"
       },
       {
         "path": "docs/cli.md",
@@ -4272,6 +4272,11 @@
         "path": ".github/workflows/ci.yml",
         "commits": 4,
         "lastTouched": "2026-09-12T20:21:12Z"
+      },
+      {
+        "path": "docs/README.md",
+        "commits": 4,
+        "lastTouched": "2026-09-13T15:53:51Z"
       },
       {
         "path": "fixtures/ts-api/expected.surface.json",
@@ -4342,11 +4347,6 @@
         "path": "docs/declarations.md",
         "commits": 3,
         "lastTouched": "2026-09-12T19:51:20Z"
-      },
-      {
-        "path": "docs/README.md",
-        "commits": 3,
-        "lastTouched": "2026-09-13T12:06:24Z"
       },
       {
         "path": "docs/trust-model.md",
