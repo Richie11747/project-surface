@@ -17,7 +17,7 @@ import { print, printJson, style } from "../output.js";
 import { renderHtml } from "./report-template.js";
 
 export async function run(args: string[], options: GlobalOptions): Promise<number> {
-  const { values } = parseArgs({ args, strict: false, options: { ...GLOBAL_OPTIONS, out: { type: "string" } } });
+  const { values } = parseArgs({ args, strict: true, allowPositionals: true, options: { ...GLOBAL_OPTIONS, out: { type: "string" } } });
 
   const surface = requireSurface(options);
   const relative = typeof values.out === "string" ? values.out : ".project/surface.html";

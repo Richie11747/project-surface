@@ -67,7 +67,11 @@ export async function main(argv: string[]): Promise<number> {
     return 1;
   }
 
-  const rest = argv.slice(1);
+  /* `--no-color` is handled here, before any parser sees it, so it works on
+     every Node this project supports (parseArgs learned negation only in 22.4)
+     and in every command. NO_COLOR (https://no-color.org) is honoured too. */
+  const noColor = argv.includes("--no-color") || (process.env.NO_COLOR ?? "") !== "";
+  const rest = argv.slice(1).filter((a) => a !== "--no-color");
   const { values } = parseArgs({
     args: rest,
     allowPositionals: true,
@@ -78,7 +82,7 @@ export async function main(argv: string[]): Promise<number> {
   const json = values.json === true;
   /* Colour off when piped: the most common consumer of this output is another
      program, and escape codes would be noise in its input. */
-  const color = values.color !== false && process.stdout.isTTY === true && !json;
+  const color = !noColor && values.color !== false && process.stdout.isTTY === true && !json;
   setColor(color);
 
   if (values.help === true) {
@@ -99,6 +103,14 @@ export async function main(argv: string[]): Promise<number> {
     if (error instanceof CliError) {
       printError(error.message);
       return error.exitCode;
+    }
+    /* A mistyped flag must fail loudly. Swallowing `--budget-tokens 2000`
+       would silently append "2000" to the task and run with the default
+       budget - wrong output that looks right. */
+    const code = (error as { code?: string }).code ?? "";
+    if (code.startsWith("ERR_PARSE_ARGS")) {
+      printError(`${(error as Error).message.split(". ")[0]}. Run surface ${first} --help for the options.`);
+      return 1;
     }
     printError((error as Error).message);
     return 1;

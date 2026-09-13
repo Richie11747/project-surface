@@ -263,3 +263,26 @@ test("every command answers --help and unknown commands fail", () => {
   }
   assert.equal(surface(".", "bogus").code, 1);
 });
+
+/* A mistyped flag must not be swallowed: `context "x" --budget-tokens 5` used
+   to run with the default budget and the task "x 5". */
+test("an unknown option or a stray positional fails with exit 1 and names the command", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    const unknown = surface(root, "context", "add a field", "--budget-tokens", "5");
+    assert.equal(unknown.code, 1);
+    assert.match(unknown.stderr, /Unknown option '--budget-tokens'/);
+    assert.match(unknown.stderr, /surface context --help/);
+
+    const stray = surface(root, "doctor", "extra");
+    assert.equal(stray.code, 1);
+    assert.match(stray.stderr, /Unexpected argument 'extra'/);
+
+    /* --no-color is documented and must be accepted by every command. */
+    assert.equal(surface(root, "doctor", "--no-color").code, 0);
+    assert.equal(surface(root, "map", "--no-color").code, 0);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

@@ -23,7 +23,7 @@ import { heading, print, printJson, style } from "../output.js";
 export async function run(args: string[], options: GlobalOptions): Promise<number> {
   const { values } = parseArgs({
     args,
-    strict: false,
+    strict: true,
     options: {
       ...GLOBAL_OPTIONS,
       command: { type: "string", multiple: true },

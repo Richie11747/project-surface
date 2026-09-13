@@ -70,6 +70,10 @@ First release on npm: `npx project-surface init` works as written. The schema is
   Pages workflow. The path carries the version; `v1` at that URL only ever changes additively. Nothing
   else in the schema changed.
 
+### Fixed
+
+- The CLI rejects an unknown option or a stray positional argument with exit 1 and a pointer to `--help`, instead of silently folding it into the task text; `--no-color` now works on a TTY and `NO_COLOR` is honoured.
+
 ## [0.1.0] - 2026-09-12
 
 First release. Establishes the `project-surface/v1` schema.

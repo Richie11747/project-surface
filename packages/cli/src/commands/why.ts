@@ -18,7 +18,7 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   const { positionals } = parseArgs({
     args,
     allowPositionals: true,
-    strict: false,
+    strict: true,
     options: { ...GLOBAL_OPTIONS },
   });
 

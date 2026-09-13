@@ -6,10 +6,12 @@
  * is a more honest test-coverage summary than a percentage.
  */
 
-import { requireSurface, type GlobalOptions } from "../context.js";
+import { parseArgs } from "node:util";
+import { GLOBAL_OPTIONS, requireSurface, type GlobalOptions } from "../context.js";
 import { confidence, freshness, heading, print, printJson, style, table, tier } from "../output.js";
 
-export async function run(_args: string[], options: GlobalOptions): Promise<number> {
+export async function run(args: string[], options: GlobalOptions): Promise<number> {
+  parseArgs({ args, strict: true, options: { ...GLOBAL_OPTIONS } });
   const surface = requireSurface(options);
   const evidenceById = new Map(surface.evidence.map((e) => [e.id, e]));
 
