@@ -1,0 +1,54 @@
+name: Demo
+
+# Records docs/demo/demo.gif from docs/demo/demo.tape with a real build of the
+# CLI on a fresh copy of fixtures/ts-api, and commits it. The GIF in the README
+# is therefore an artefact of the current code, not a screenshot from months
+# ago - the same rule the README applies to every transcript. Run it from the
+# Actions tab after a change that alters the demo output.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - uses: charmbracelet/vhs-action@v2
+        with:
+          install-only: true
+
+      - name: Put surface on PATH
+        run: |
+          printf '#!/bin/sh\nexec node "%s/packages/cli/dist/index.js" "$@"\n' "$GITHUB_WORKSPACE" | sudo tee /usr/local/bin/surface > /dev/null
+          sudo chmod +x /usr/local/bin/surface
+          surface --version
+
+      - name: Record on a fresh copy of the fixture
+        run: |
+          demo=$(mktemp -d)
+          cp -r fixtures/ts-api/. "$demo"
+          rm -f "$demo/expected.surface.json"
+          (cd "$demo" && git init -q && git add -A && git -c user.name=demo -c user.email=demo@example.com commit -qm "fixture")
+          (cd "$demo" && vhs "$GITHUB_WORKSPACE/docs/demo/demo.tape")
+          cp "$demo/demo.gif" docs/demo/demo.gif
+          ls -l docs/demo/demo.gif
+
+      - name: Commit the recording
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/demo/demo.gif
+          git diff --cached --quiet || git commit -m "Re-record the demo"
+          git push

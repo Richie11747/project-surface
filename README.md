@@ -317,7 +317,7 @@ What conforming means for a document, a generator in any language, a consumer, o
 
 ## What this is not
 
-Not a multi-agent swarm, a hosted vector database, a chat UI, or an automatic code modifier. It does not require an account. It will not tell you it is AGI for your repository.
+Not a multi-agent swarm, a hosted vector database, a chat UI, or an automatic code modifier. It does not require an account. It will not tell you it is AGI for your repository. How it relates to CLAUDE.md, Cursor rules, repomix, aider, Cody and Continue - including where each of them is better - is in [docs/comparison.md](docs/comparison.md).
 
 It is a small, fast, inspectable artifact that is honest about what it does not know.
 
@@ -347,14 +347,14 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 - [docs/concepts.md](docs/concepts.md) - what a surface is and why
 - [docs/trust-model.md](docs/trust-model.md) - what a confidence number means
-- [docs/cli.md](docs/cli.md) · [docs/mcp.md](docs/mcp.md) · [docs/declarations.md](docs/declarations.md) · [docs/adapters.md](docs/adapters.md)
+- [docs/cli.md](docs/cli.md) · [docs/mcp.md](docs/mcp.md) · [docs/declarations.md](docs/declarations.md) · [docs/adapters.md](docs/adapters.md) · [docs/comparison.md](docs/comparison.md)
 - [spec/v1/SPEC.md](spec/v1/SPEC.md) - the normative format, with [validated examples](spec/v1/examples/)
 - [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md) - what a document, generator, consumer or adapter must satisfy · [spec/VERSIONING.md](spec/VERSIONING.md) - what may change within `v1`
 - [examples/](examples/README.md) - a full declaration file and an MCP client config
 
 ## Status
 
-`0.1.0`. The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
+`0.2.0` on npm. What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
 [`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`](https://richie11747.github.io/project-surface/spec/v1/surface.schema.json)
 is its `$id`. A generator in any language can target it; [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md)
 says what that takes.
