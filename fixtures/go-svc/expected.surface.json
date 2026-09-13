@@ -3,7 +3,7 @@
   "generatedAt": "2026-01-01T00:00:00Z",
   "generator": {
     "name": "project-surface",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "project": {
     "name": "github.com/example/pricing-svc",
@@ -12,7 +12,7 @@
       {
         "id": "go",
         "adapter": "@project-surface/adapter-go",
-        "adapterVersion": "0.1.0",
+        "adapterVersion": "0.2.0",
         "toolchainAvailable": "<normalised>",
         "notes": [
           "Go extraction is line-based rather than AST-based; claims are structural."

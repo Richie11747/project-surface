@@ -1,6 +1,6 @@
 {
   "name": "@project-surface/mcp-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Model Context Protocol server exposing a project surface to AI agents.",
   "license": "Apache-2.0",
   "repository": {
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
-    "@project-surface/core": "0.1.0",
+    "@project-surface/core": "0.2.0",
     "zod": "^4.4.3"
   },
   "publishConfig": {

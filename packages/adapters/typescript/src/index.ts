@@ -26,7 +26,7 @@ import {
 import { isHttpMethodName, isRouteHandlerFile, parseSource, routeHandlerPath } from "./parse.js";
 import type { ParsedFile } from "./parse.js";
 
-export const ADAPTER_VERSION = "0.1.0";
+export const ADAPTER_VERSION = "0.2.0";
 
 /** Build output, type stubs and tool config are not project behaviour. */
 const NOT_BEHAVIOUR = /(\.d\.ts$|\.config\.[cm]?[jt]s$|(^|\/)(dist|build|out|coverage)\/)/;

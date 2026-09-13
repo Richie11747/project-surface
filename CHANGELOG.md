@@ -4,6 +4,11 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-13
+
+First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its
+`$id`; every `0.1.0` document remains valid.
+
 ### Added
 
 - **Declarations set scope and granularity.** `ignore:` removes globs from the scan before any adapter runs;
@@ -71,5 +76,6 @@ First release. Establishes the `project-surface/v1` schema.
 - **Integrations** - a Claude Code plugin and a composite GitHub Action under `integrations/`.
 - `surface verify` rebuilds the document after recording results, so capability confidence and freshness update immediately instead of on the next `init`.
 
-[Unreleased]: https://github.com/Richie11747/project-surface/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Richie11747/project-surface/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Richie11747/project-surface/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Richie11747/project-surface/releases/tag/v0.1.0

@@ -33,7 +33,7 @@ import { isPythonTest, parsePython, pythonModuleToPaths } from "./parse.js";
 import type { ParsedPython } from "./parse.js";
 
 export const ADAPTER_ID = "python";
-export const ADAPTER_VERSION = "0.1.0";
+export const ADAPTER_VERSION = "0.2.0";
 
 const NOT_BEHAVIOUR = /(^|\/)(\.venv|venv|build|dist|__pycache__|migrations)\//;
 const MAX_PARSED_FILES = 4000;

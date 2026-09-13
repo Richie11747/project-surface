@@ -57,7 +57,8 @@ stale. For example:
 Long sections are collapsed. The comment carries a marker so the action edits its own earlier comment
 instead of posting a new one on every push.
 
-The action runs the published npm package via `npx`. Until `0.1.0` is on npm, use the same three commands
-from a source checkout instead - see [`docs/cli.md`](../../docs/cli.md#typical-ci-step).
+The action runs the published npm package via `npx`; pin it with the `version` input. From a source
+checkout, pass `run: node <checkout>/packages/cli/dist/index.js` instead - see
+[`docs/cli.md`](../../docs/cli.md#typical-ci-step).
 
 Exit code `2` means "the project has drift"; `1` means the tool itself failed. Both fail the step.

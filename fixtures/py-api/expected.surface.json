@@ -3,7 +3,7 @@
   "generatedAt": "2026-01-01T00:00:00Z",
   "generator": {
     "name": "project-surface",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "project": {
     "name": "inventory-api",
@@ -12,7 +12,7 @@
       {
         "id": "python",
         "adapter": "@project-surface/adapter-python",
-        "adapterVersion": "0.1.0",
+        "adapterVersion": "0.2.0",
         "toolchainAvailable": "<normalised>",
         "notes": []
       }

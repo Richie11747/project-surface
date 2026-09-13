@@ -27,17 +27,16 @@ A repository is not a folder of files. It is a graph of capabilities, contracts,
 
 ## Install
 
-`0.1.0` is not on npm yet. Until it is, run it from a checkout:
-
 ```console
-git clone https://github.com/Richie11747/project-surface
-cd project-surface
-npm install && npm run build
-node packages/cli/dist/index.js --help       # or: npm run surface -- --help
+npx project-surface init          # nothing to install; or: npm i -g project-surface
 ```
 
-Once published, every `npx project-surface …` line below works as written. Node 20.10 or newer, no
-native modules, no other runtime.
+Node 20.10 or newer. No native modules, no other runtime, no account, no network - the tool never
+leaves your machine.
+
+From a source checkout, `git clone https://github.com/Richie11747/project-surface && cd project-surface &&
+npm install && npm run build`, then `node packages/cli/dist/index.js` (or `npm run surface --`) wherever
+the docs say `npx project-surface`.
 
 ## Sixty seconds
 

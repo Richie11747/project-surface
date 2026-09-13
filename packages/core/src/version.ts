@@ -6,7 +6,7 @@
  */
 
 export const GENERATOR_NAME = "project-surface";
-export const GENERATOR_VERSION = "0.1.0";
+export const GENERATOR_VERSION = "0.2.0";
 export const SPEC_VERSION = "project-surface/v1";
 
 /** Everything project-surface writes lives here, so it is easy to inspect or delete. */

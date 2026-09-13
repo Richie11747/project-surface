@@ -36,7 +36,7 @@ import { goPackageDir, isGoTest, parseGo, parseGoMod } from "./parse.js";
 import type { ParsedGo } from "./parse.js";
 
 export const ADAPTER_ID = "go";
-export const ADAPTER_VERSION = "0.1.0";
+export const ADAPTER_VERSION = "0.2.0";
 
 const NOT_BEHAVIOUR = /(^|\/)(vendor|testdata|third_party)\//;
 const MAX_PARSED_FILES = 4000;

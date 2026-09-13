@@ -1,6 +1,6 @@
 {
   "name": "@project-surface/bench",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Fifty golden questions, answered with and without a surface. Recording talks to the Claude API; scoring never does.",
   "type": "module",
@@ -9,11 +9,11 @@
     "score": "node score.mjs"
   },
   "dependencies": {
-    "@project-surface/adapter-go": "0.1.0",
-    "@project-surface/adapter-python": "0.1.0",
-    "@project-surface/adapter-sdk": "0.1.0",
-    "@project-surface/adapter-typescript": "0.1.0",
-    "@project-surface/core": "0.1.0",
+    "@project-surface/adapter-go": "0.2.0",
+    "@project-surface/adapter-python": "0.2.0",
+    "@project-surface/adapter-sdk": "0.2.0",
+    "@project-surface/adapter-typescript": "0.2.0",
+    "@project-surface/core": "0.2.0",
     "@anthropic-ai/sdk": "^0.125.0",
     "zod": "^4.4.3"
   }
