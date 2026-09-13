@@ -34,6 +34,9 @@ jobs:
           vhs --version
           ttyd --version
           ffmpeg -version | head -1
+          # A control: the smallest possible tape must produce a file here.
+          printf 'Output control.gif\nType "echo hello"\nEnter\nSleep 1s\n' > /tmp/control.tape
+          (cd /tmp && vhs control.tape 2>&1; echo "vhs exit=$?"; ls -l /tmp/control.gif)
 
       - name: Put surface on PATH
         run: |
@@ -50,7 +53,8 @@ jobs:
           # The output path is given explicitly and absolutely; the tape's own
           # `Output` line serves local runs.
           cp docs/demo/demo.tape "$demo/demo.tape"
-          (cd "$demo" && vhs demo.tape -o "$GITHUB_WORKSPACE/docs/demo/demo.gif")
+          (cd "$demo" && vhs demo.tape -o "$GITHUB_WORKSPACE/docs/demo/demo.gif" 2>&1; echo "vhs exit=$?")
+          ls -la "$demo" docs/demo
           ls -l docs/demo/demo.gif
 
       - name: Commit the recording
