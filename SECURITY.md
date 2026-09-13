@@ -8,7 +8,12 @@ Report vulnerabilities through a [private security advisory](https://github.com/
 
 | Version | Supported |
 |---|---|
-| 0.1.x | Yes |
+| 0.2.x | Yes - current; fixes land here |
+| 0.1.x | Security fixes only, until 0.3.0 |
+
+Releases are built by `.github/workflows/release.yml` from a `v*` tag: tarballs and a CycloneDX SBOM are
+attached to the GitHub Release, and npm publish runs with provenance behind a reviewer-gated environment.
+A package on npm can be traced to the workflow run and commit that produced it.
 
 ## Design boundaries
 

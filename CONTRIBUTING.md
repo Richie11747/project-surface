@@ -42,3 +42,10 @@ Conformance checks that every claim has a source, no absolute path leaks, discov
 - `npm test` green, including the fixture snapshots.
 - Regenerate snapshots deliberately (`npm run fixtures:update`) and review the diff - a changed snapshot is a changed promise to users.
 - If you change `spec/v1/surface.schema.json`, run `node scripts/gen-schema-module.mjs`. CI fails if the embedded copy drifts.
+
+## Releasing
+
+1. Move the `[Unreleased]` entries in `CHANGELOG.md` under a new `[x.y.z] - date` heading and add its compare link.
+2. Bump every workspace, internal pin and version constant: `npm version x.y.z --workspaces --include-workspace-root --no-git-tag-version`, then repin `"@project-surface/*": "x.y.z"`, `GENERATOR_VERSION` in `packages/core/src/version.ts` and `ADAPTER_VERSION` in each adapter, `npm install`, `npm run fixtures:update`.
+3. Regenerate the self-surface (`surface init`, `verify --command test --command typecheck`, `agents --write CLAUDE.md`, `init`, `doctor --strict`), commit, tag `vx.y.z`, push the tag.
+4. The `Release` workflow builds, tests, packs, attaches tarballs and an SBOM to the GitHub Release with the CHANGELOG section as notes, then waits at the `npm` environment. A reviewer approves the publish job; nothing reaches npm before that.
