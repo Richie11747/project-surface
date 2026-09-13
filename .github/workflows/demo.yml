@@ -41,7 +41,9 @@ jobs:
           cp -r fixtures/ts-api/. "$demo"
           rm -f "$demo/expected.surface.json"
           (cd "$demo" && git init -q && git add -A && git -c user.name=demo -c user.email=demo@example.com commit -qm "fixture")
-          (cd "$demo" && vhs "$GITHUB_WORKSPACE/docs/demo/demo.tape")
+          # vhs writes `Output` relative to the tape file, so the tape runs from a copy inside the demo directory.
+          cp docs/demo/demo.tape "$demo/demo.tape"
+          (cd "$demo" && vhs demo.tape)
           cp "$demo/demo.gif" docs/demo/demo.gif
           ls -l docs/demo/demo.gif
 
