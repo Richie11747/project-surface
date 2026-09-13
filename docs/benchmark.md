@@ -43,6 +43,7 @@ Scoring is offline and deterministic; recording talks to the Claude API and cost
 npm run bench:score            # grade bench/recorded/, write bench/RESULTS.md - no network
 npm run bench:check            # CI: fail if RESULTS.md does not match the recordings
 npm run bench:record           # ask the model; needs ANTHROPIC_API_KEY or `ant auth login`
+npm run bench:record -- --provider openai --model gpt-5-mini   # or a second vendor; needs OPENAI_API_KEY
 node bench/record.mjs --dry-run   # prompt sizes only, no calls
 ```
 

@@ -29,8 +29,26 @@ export const RECORDED_DIR = join(BENCH_DIR, "recorded");
 export const CONDITIONS = ["raw", "surface"];
 
 export const MODEL = "claude-opus-5";
-/** USD per million tokens, from the pricing table current at recording time. */
-export const PRICE = { input: 5, output: 25 };
+/**
+ * USD per million tokens, from each vendor's pricing table current at
+ * recording time, keyed by model id prefix. A model that is not listed costs
+ * `null`, and the results table says so rather than printing $0.00.
+ */
+export const PRICES = {
+  "claude-opus-5": { input: 5, output: 25 },
+  "claude-sonnet-5": { input: 3, output: 15 },
+  "gpt-5-mini": { input: 0.25, output: 2 },
+  "gpt-5": { input: 1.25, output: 10 },
+};
+/** @deprecated use PRICES; kept for callers that priced the default model. */
+export const PRICE = PRICES[MODEL];
+
+export function priceFor(model) {
+  const key = Object.keys(PRICES)
+    .sort((a, b) => b.length - a.length)
+    .find((k) => (model ?? MODEL).startsWith(k));
+  return key ? PRICES[key] : null;
+}
 
 export function loadQuestions() {
   return JSON.parse(readFileSync(join(BENCH_DIR, "questions.json"), "utf8")).questions;
@@ -170,6 +188,9 @@ export function grade(question, answer) {
   return { ...out, precision: mean("precision"), recall: mean("recall"), exact: parts.every((p) => p.exact) };
 }
 
-export function cost(usage) {
-  return ((usage.input_tokens ?? 0) * PRICE.input + (usage.output_tokens ?? 0) * PRICE.output) / 1_000_000;
+/** USD for one recording, or `null` when the model has no known price. */
+export function cost(usage, model) {
+  const price = priceFor(model);
+  if (!price) return null;
+  return ((usage.input_tokens ?? 0) * price.input + (usage.output_tokens ?? 0) * price.output) / 1_000_000;
 }

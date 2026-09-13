@@ -52,7 +52,9 @@ function summarise(condition, subset) {
     recall: sum((x) => x.score.recall) / n,
     inputTokens: sum((x) => x.record.usage.input_tokens),
     outputTokens: sum((x) => x.record.usage.output_tokens),
-    cost: sum((x) => cost(x.record.usage)),
+    cost: present.every((x) => cost(x.record.usage, x.record.model) !== null)
+      ? sum((x) => cost(x.record.usage, x.record.model))
+      : null,
     drifted: sum((x) => (x.drifted ? 1 : 0)),
     unparsed: sum((x) => (x.score.unparsed ? 1 : 0)),
   };
@@ -89,7 +91,7 @@ if (recorded.length === 0) {
       continue;
     }
     lines.push(
-      `| ${condition} | ${s.n} | ${s.exact} (${pct(s.exact / s.n)}) | ${pct(s.precision)} | ${pct(s.recall)} | ${s.inputTokens.toLocaleString("en-US")} | ${s.outputTokens.toLocaleString("en-US")} | $${s.cost.toFixed(2)} | ${s.drifted}${s.unparsed ? `; ${s.unparsed} unparsed` : ""} |`
+      `| ${condition} | ${s.n} | ${s.exact} (${pct(s.exact / s.n)}) | ${pct(s.precision)} | ${pct(s.recall)} | ${s.inputTokens.toLocaleString("en-US")} | ${s.outputTokens.toLocaleString("en-US")} | ${s.cost === null ? "n/a (unpriced model)" : `$${s.cost.toFixed(2)}`} | ${s.drifted}${s.unparsed ? `; ${s.unparsed} unparsed` : ""} |`
     );
   }
   lines.push("");
