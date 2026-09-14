@@ -4,6 +4,12 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Rust adapter**: fully-qualified route attributes such as `#[rocket::get("/path")]` and
+  `#[actix_web::get("/path")]` are recognised alongside the bare `#[get("/path")]` form. Covered by
+  `fixtures/rust-svc` and a parser test. (#18, thanks @mamicicekel)
+
 ## [0.2.0] - 2026-09-13
 
 First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its
