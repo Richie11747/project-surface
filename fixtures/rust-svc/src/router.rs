@@ -22,3 +22,17 @@ async fn get_quote() -> &'static str {
 async fn health() -> &'static str {
     "ok"
 }
+
+// These cfg-disabled handlers exercise parser support for fully-qualified
+// route attributes without adding Rocket or Actix dependencies to the fixture.
+#[cfg(any())]
+#[rocket::get("/rocket/quote")]
+async fn rocket_quote() -> &'static str {
+    "rocket"
+}
+
+#[cfg(any())]
+#[actix_web::get("/actix/quote")]
+async fn actix_quote() -> &'static str {
+    "actix"
+}
