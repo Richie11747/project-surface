@@ -29,7 +29,7 @@ const TASKFILES = ["Taskfile.yml", "Taskfile.yaml", "taskfile.yml"];
 const ENV_EXAMPLES = [".env.example", ".env.sample", ".env.template"];
 
 const MAKE_TARGET = /^([A-Za-z0-9][A-Za-z0-9_.-]*)\s*:(?!=)/;
-const JUST_RECIPE = /^(?:@)?([A-Za-z_][A-Za-z0-9_-]*)(?:\s+[^:]*)?\s*:(?!=)/;
+const JUST_RECIPE = /^(?:@)?([A-Za-z_][A-Za-z0-9_-]*)(?:\s+([^:]*?))?\s*:(?!=)/;
 const ENV_LINE = /^\s*(?:export\s+)?([A-Z][A-Z0-9_]*)\s*=/;
 
 function first(ctx: AdapterContext, names: string[]): string | null {
@@ -49,15 +49,18 @@ export function makeTargets(content: string): string[] {
   return out;
 }
 
-export function justRecipes(content: string): string[] {
-  const out: string[] = [];
+export type JustRecipe = { name: string; parameters: string[] };
+
+export function justRecipes(content: string): JustRecipe[] {
+  const out: JustRecipe[] = [];
   for (const raw of content.split("\n")) {
     if (/^\s/.test(raw) || raw.startsWith("#") || raw.startsWith("set ") || raw.startsWith("import ") || raw.startsWith("mod ")) continue;
     if (/^[A-Za-z_][A-Za-z0-9_-]*\s*:=/.test(raw)) continue;
     const m = JUST_RECIPE.exec(raw);
     const name = m?.[1];
     if (!name || name.startsWith("_")) continue;
-    if (!out.includes(name)) out.push(name);
+    const parameters = (m[2] ?? "").trim().split(/\s+/).filter(Boolean);
+    if (!out.some((recipe) => recipe.name === name)) out.push({ name, parameters });
   }
   return out;
 }
@@ -135,14 +138,18 @@ export const genericAdapter: Adapter = {
       const content = ctx.readFile(file);
       if (content === null) return;
       for (const target of targets(content)) {
-        if (!isSafeCommandToken(target)) continue;
+        const name = typeof target === "string" ? target : target.name;
+        if (!isSafeCommandToken(name)) continue;
+        const parameterText = typeof target === "string" || target.parameters.length === 0
+          ? ""
+          : ` Parameters: ${target.parameters.join(", ")}.`;
         commands.push({
-          id: commandId(`${runner}-${target}`),
-          run: `${runner} ${target}`,
+          id: commandId(`${runner}-${name}`),
+          run: `${runner} ${name}`,
           cwd: ".",
-          kind: classifyCommand(target),
-          description: `${target} target in ${file}.`,
-          provenance: provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: [source(file, target)] }),
+          kind: classifyCommand(name),
+          description: `${name} target in ${file}.${parameterText}`,
+          provenance: provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: [source(file, name)] }),
         });
       }
     };
