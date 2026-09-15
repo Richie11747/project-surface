@@ -12,7 +12,7 @@
   "bugs": "https://github.com/Richie11747/project-surface/issues",
   "type": "module",
   "bin": {
-    "project-surface-mcp": "./dist/bin.js"
+    "project-surface-mcp": "dist/bin.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

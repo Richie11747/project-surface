@@ -13,8 +13,8 @@
   "bugs": "https://github.com/Richie11747/project-surface/issues",
   "type": "module",
   "bin": {
-    "surface": "./dist/index.js",
-    "project-surface": "./dist/index.js"
+    "surface": "dist/index.js",
+    "project-surface": "dist/index.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
