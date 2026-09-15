@@ -212,10 +212,12 @@ export const SURFACE_SCHEMA: Readonly<Record<string, unknown>> = Object.freeze(
       "required": ["kind"],
       "description": "A machine-checkable form of the rule. Evaluated on every scan; a failure is a CONSTRAINT_VIOLATED health finding at the constraint's severity.",
       "properties": {
-        "kind": { "enum": ["forbid-import","forbid-file","require-test"] },
+        "kind": { "enum": ["forbid-import","forbid-file","require-test","forbid-env","max-owners"] },
         "from": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/globPattern" } },
         "to": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/globPattern" } },
-        "paths": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/globPattern" } }
+        "paths": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/globPattern" } },
+        "names": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9_*?]+$" }, "description": "forbid-env: environment variable names; * and ? are wildcards over the whole name." },
+        "limit": { "type": "integer", "minimum": 1, "description": "max-owners: the most owner files a capability may have." }
       }
     },
     "constraintOutcome": {

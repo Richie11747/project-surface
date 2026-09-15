@@ -151,3 +151,54 @@ test("absorb: without any declaration nothing changes", () => {
   const input = [cap("a", "inferred", ["x.ts"]), cap("b", "derived", ["y.ts"])];
   assert.deepEqual(absorbInferred(input), input);
 });
+
+test("declarations: forbid-env and max-owners checks are validated, not silently dropped", () => {
+  const root = scratch(`
+constraints:
+  - id: keys-in-config
+    rule: Provider keys are read only in src/config.
+    check:
+      kind: forbid-env
+      names: ["STRIPE_*", PAYMENT_PROVIDER_KEY]
+      paths: [src/config/**]
+  - id: no-legacy
+    rule: LEGACY_DB_URL is read nowhere.
+    check:
+      kind: forbid-env
+      names: [LEGACY_DB_URL]
+  - id: small
+    rule: A capability owns at most four files.
+    check:
+      kind: max-owners
+      limit: 4
+  - id: bad-name
+    rule: Names must look like variable names.
+    check:
+      kind: forbid-env
+      names: ["not a name"]
+  - id: bad-limit
+    rule: The limit is a whole number.
+    check:
+      kind: max-owners
+      limit: 0
+  - id: bad-scope
+    rule: Scope globs stay inside the project.
+    check:
+      kind: max-owners
+      limit: 2
+      paths: [../elsewhere/**]
+`);
+  try {
+    const decl = loadDeclarations(root, NOW);
+    const checks = Object.fromEntries(decl.constraints.map((c) => [c.id, c.check]));
+    assert.deepEqual(checks["constraint:keys-in-config"], { kind: "forbid-env", names: ["STRIPE_*", "PAYMENT_PROVIDER_KEY"], paths: ["src/config/**"] });
+    assert.deepEqual(checks["constraint:no-legacy"], { kind: "forbid-env", names: ["LEGACY_DB_URL"] });
+    assert.deepEqual(checks["constraint:small"], { kind: "max-owners", limit: 4 });
+    assert.equal(decl.errors.length, 3, decl.errors.join("\n"));
+    assert.match(decl.errors[0], /names must be variable names/);
+    assert.match(decl.errors[1], /limit must be a whole number/);
+    assert.match(decl.errors[2], /project-relative/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

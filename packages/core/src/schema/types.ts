@@ -165,7 +165,7 @@ export interface Capability extends Claim {
 
 export type Severity = "error" | "warn" | "info";
 
-export type ConstraintCheckKind = "forbid-import" | "forbid-file" | "require-test";
+export type ConstraintCheckKind = "forbid-import" | "forbid-file" | "require-test" | "forbid-env" | "max-owners";
 
 /**
  * A machine-checkable form of a rule. Prose tells an agent what not to do;
@@ -177,8 +177,16 @@ export interface ConstraintCheck {
   from?: string[];
   /** `forbid-import`: globs for project files, or bare module specifiers, that must not be imported. */
   to?: string[];
-  /** `forbid-file`: globs no file may match. `require-test`: globs whose owners must have evidence. */
+  /**
+   * `forbid-file`: globs no file may match. `require-test`: globs whose owners must have evidence.
+   * `forbid-env`: the only files that may read the variables (absent: nobody may).
+   * `max-owners`: globs selecting the capabilities to measure (absent: every capability).
+   */
   paths?: string[];
+  /** `forbid-env`: environment variable names; `*` and `?` are wildcards over the whole name. */
+  names?: string[];
+  /** `max-owners`: the most owner files a capability may have. */
+  limit?: number;
 }
 
 export interface ConstraintOutcome {

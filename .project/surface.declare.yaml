@@ -128,7 +128,7 @@ capabilities:
     tags: [analysis]
 
   - id: analysis.constraint-checks
-    title: Machine-checked constraints - forbid-import, forbid-file, require-test
+    title: Machine-checked constraints - forbid-import, forbid-file, require-test, forbid-env, max-owners
     owners: [packages/core/src/analysis/constraints.ts]
     contracts: [docs/declarations.md]
     evidence: [packages/core/test/constraints.test.js, test/cli.test.js]
@@ -340,6 +340,22 @@ constraints:
     severity: warn
     check:
       kind: require-test
+      paths: [packages/core/src/**]
+  - id: model-keys-in-bench
+    rule: Model provider keys and BENCH_PROVIDER are read only by the benchmark recorder.
+    rationale: The tool never talks to a model. Only the benchmark does, and only from bench/.
+    severity: error
+    check:
+      kind: forbid-env
+      names: ["*_API_KEY", BENCH_PROVIDER]
+      paths: [bench/**]
+  - id: core-capability-size
+    rule: No capability in core spans more than eight owner files.
+    rationale: A capability that needs more files than that is two capabilities. Split it in the declarations.
+    severity: warn
+    check:
+      kind: max-owners
+      limit: 8
       paths: [packages/core/src/**]
   - id: golden-snapshots
     rule: Golden snapshots under fixtures/ are regenerated with npm run fixtures:update and reviewed as a diff, never edited by hand.

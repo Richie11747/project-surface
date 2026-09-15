@@ -193,7 +193,7 @@ $ surface doctor
       Handlers must stay idempotent; provider calls go through the job queue. Fix the listed files, or change the check in .project/surface.declare.yaml.
 ```
 
-Three kinds exist today - `forbid-import`, `forbid-file`, `require-test` - and a check that no adapter can
+Five kinds exist today - `forbid-import`, `forbid-file`, `require-test`, `forbid-env`, `max-owners` - and a check that no adapter can
 evaluate is reported as `unchecked`, never as passed. See [docs/declarations.md](docs/declarations.md).
 
 ---

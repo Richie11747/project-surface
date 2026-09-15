@@ -100,3 +100,95 @@ test("require-test passes when every covered capability has evidence", () => {
   assert.equal(wider.constraints[0].checked.status, "violated");
   assert.deepEqual(wider.violations.map((v) => v.detail), ["capability util.helper has no linked evidence"]);
 });
+
+const environment = [
+  { name: "STRIPE_SECRET_KEY", required: true, secret: true, usedBy: [{ path: "src/payments/stripe.ts", locator: "L4" }, { path: "src/handlers/checkout.ts", locator: "L9" }, { path: ".env.example", locator: "STRIPE_SECRET_KEY" }] },
+  { name: "PORT", required: false, secret: false, usedBy: [{ path: "src/util.ts" }] },
+];
+
+test("forbid-env reports reads outside the allowed paths; a dotenv listing is not a read", () => {
+  const { constraints, violations } = evaluateConstraintChecks({
+    constraints: [constraint("keys", { kind: "forbid-env", names: ["STRIPE_*"], paths: ["src/payments/**"] })],
+    capabilities: [],
+    files,
+    imports: [],
+    importsAvailable: false,
+    environment,
+    environmentAvailable: true,
+  });
+  assert.equal(constraints[0].checked.status, "violated");
+  assert.deepEqual(
+    violations.map((v) => `${v.path} ${v.detail}`),
+    ["src/handlers/checkout.ts reads STRIPE_SECRET_KEY"]
+  );
+});
+
+test("forbid-env without paths forbids every read, and passes when nothing reads the name", () => {
+  const nowhere = evaluateConstraintChecks({
+    constraints: [constraint("legacy", { kind: "forbid-env", names: ["PORT"] })],
+    capabilities: [],
+    files,
+    imports: [],
+    importsAvailable: false,
+    environment,
+    environmentAvailable: true,
+  });
+  assert.equal(nowhere.constraints[0].checked.status, "violated");
+  assert.deepEqual(nowhere.violations.map((v) => v.path), ["src/util.ts"]);
+
+  const unused = evaluateConstraintChecks({
+    constraints: [constraint("legacy", { kind: "forbid-env", names: ["LEGACY_DB_URL"] })],
+    capabilities: [],
+    files,
+    imports: [],
+    importsAvailable: false,
+    environment,
+    environmentAvailable: true,
+  });
+  assert.equal(unused.constraints[0].checked.status, "passed");
+});
+
+test("forbid-env is unchecked when only the fallback adapter saw the project", () => {
+  const { constraints, violations } = evaluateConstraintChecks({
+    constraints: [constraint("keys", { kind: "forbid-env", names: ["STRIPE_*"], paths: ["src/payments/**"] })],
+    capabilities: [],
+    files,
+    imports: [],
+    importsAvailable: false,
+    environment: [{ name: "STRIPE_SECRET_KEY", required: false, secret: true, usedBy: [{ path: ".env.example" }] }],
+    environmentAvailable: false,
+  });
+  assert.equal(constraints[0].checked.status, "unchecked");
+  assert.match(constraints[0].checked.reason, /environment reads/);
+  assert.deepEqual(violations, []);
+});
+
+test("max-owners flags a capability over the limit, scoped by paths when given", () => {
+  const wide = capability("checkout", ["src/handlers/checkout.ts", "src/payments/stripe.ts", "src/util.ts"]);
+  const narrow = capability("util.helper", ["src/util.ts"]);
+  const base = { capabilities: [wide, narrow], files, imports: [], importsAvailable: false, environment: [], environmentAvailable: true };
+
+  const all = evaluateConstraintChecks({ ...base, constraints: [constraint("small", { kind: "max-owners", limit: 2 })] });
+  assert.equal(all.constraints[0].checked.status, "violated");
+  assert.deepEqual(all.violations.map((v) => `${v.path} ${v.detail}`), ["src/handlers/checkout.ts capability checkout has 3 owner files, limit 2"]);
+
+  const roomy = evaluateConstraintChecks({ ...base, constraints: [constraint("small", { kind: "max-owners", limit: 3 })] });
+  assert.equal(roomy.constraints[0].checked.status, "passed");
+
+  const elsewhere = evaluateConstraintChecks({ ...base, constraints: [constraint("small", { kind: "max-owners", limit: 2, paths: ["src/jobs/**"] })] });
+  assert.equal(elsewhere.constraints[0].checked.status, "passed", "no owner under paths means the capability is out of scope");
+});
+
+test("max-owners counts distinct files, not owner entries with different locators", () => {
+  const twice = capability("checkout.create", ["src/handlers/checkout.ts", "src/handlers/checkout.ts"]);
+  const { constraints } = evaluateConstraintChecks({
+    constraints: [constraint("one-file", { kind: "max-owners", limit: 1 })],
+    capabilities: [twice],
+    files,
+    imports: [],
+    importsAvailable: false,
+    environment: [],
+    environmentAvailable: true,
+  });
+  assert.equal(constraints[0].checked.status, "passed");
+});

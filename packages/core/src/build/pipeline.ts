@@ -94,10 +94,15 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
      nothing else recognised the project, otherwise only if it detects
      something of its own (a Makefile beside a Go module, say). */
   const results: AdapterResult[] = [];
+  /* A language adapter that reports `environment` scanned source for reads.
+     The fallback only mirrors .env.example, so it does not count. */
+  let environmentAvailable = false;
   const run = async (adapter: Adapter, force: boolean): Promise<void> => {
     try {
       if (!force && !(await adapter.detect(ctx))) return;
-      results.push(await adapter.extract(ctx));
+      const result = await adapter.extract(ctx);
+      results.push(result);
+      if (!adapter.fallback && result.environment !== undefined) environmentAvailable = true;
     } catch (e) {
       warnings.push(`Adapter "${adapter.id}" failed and was skipped: ${(e as Error).message}`);
     }
@@ -222,7 +227,8 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
   });
 
   /* Checks run once the capabilities are final, because `require-test` reads
-     their evidence links. Imports are a build-time fact and are not stored. */
+     their evidence links and `max-owners` counts their owners. Imports are a
+     build-time fact and are not stored; environment reads are, as `usedBy`. */
   const importsAvailable = results.some((r) => r.imports !== undefined);
   const checked = evaluateConstraintChecks({
     constraints,
@@ -230,6 +236,8 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
     files: fileSet,
     imports: results.flatMap((r) => r.imports ?? []),
     importsAvailable,
+    environment,
+    environmentAvailable,
   });
   const finalConstraints = checked.constraints.map(scoreClaim);
   const finalRisks = risks.map(scoreClaim);

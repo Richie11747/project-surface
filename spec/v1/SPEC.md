@@ -153,9 +153,15 @@ done anyway. `check.kind` is one of:
 | `forbid-import` | `from[]`, `to[]` | A file matching `from` imports a project file matching `to`, or a bare module specifier matching `to` (`stripe`, `@stripe/*`). |
 | `forbid-file` | `paths[]` | Any project file matches `paths`. |
 | `require-test` | `paths[]` | A capability with an owner matching `paths` has no linked evidence. |
+| `forbid-env` | `names[]`, `paths[]` (optional) | A file not matching `paths` reads an environment variable matching `names`; with no `paths`, any read. A `usedBy` entry that is a dotenv file (`.env`, `.env.*`) is a declaration, not a read. |
+| `max-owners` | `limit` (integer ≥ 1), `paths[]` (optional) | A capability with an owner matching `paths` (any capability when omitted) has more than `limit` distinct owner files. |
 
 Patterns are project-relative globs: `**` crosses directory boundaries, `*` and `?` do not, and a bare
-path names a file or a whole tree. The same restrictions apply as to `relPath`.
+path names a file or a whole tree. The same restrictions apply as to `relPath`. `names` are environment
+variable names (`[A-Za-z0-9_]`), where `*` and `?` match any run of characters or one character within the
+name. `forbid-env` and `max-owners` were added after the first release (the CHANGELOG names the
+generator version); a consumer that predates them treats the unknown kind as `unchecked`
+([VERSIONING](../VERSIONING.md)).
 
 ### 7.2 `checked` - what the generator found
 
@@ -163,7 +169,8 @@ When a constraint has a `check`, the generator MUST set `checked` on every scan:
 `{ status: "passed" | "violated" | "unchecked", violations: n, reason? }`. A `violated` outcome MUST also
 be reported as a `CONSTRAINT_VIOLATED` health finding (§14) at the constraint's severity, listing the
 offending paths. A check the generator cannot evaluate - `forbid-import` when no adapter in the scan reports
-an import graph - MUST be `unchecked` with a `reason`, never `passed`. Silence is not compliance.
+an import graph, `forbid-env` when no adapter scanned source for environment reads - MUST be `unchecked`
+with a `reason`, never `passed`. Silence is not compliance.
 
 ## 8. `EnvironmentVariable`
 

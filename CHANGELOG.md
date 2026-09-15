@@ -6,9 +6,21 @@ All notable changes to this project are documented here. This project adheres to
 
 ### Added
 
+- **Two new constraint checks.** `forbid-env` - variables matching `names` may be read only by files under
+  `paths` (or by nobody, when `paths` is omitted); a dotenv file that lists the name is a declaration, not a
+  read. `max-owners` - no capability (under `paths`, or any) owns more than `limit` distinct files. Both are
+  evaluated on every scan like the existing kinds; `forbid-env` is `unchecked` with a reason when only the
+  generic fallback saw the project. The repository now applies both to itself (`model-keys-in-bench`,
+  `core-capability-size`), and `fixtures/ts-api` carries one of each.
 - **Rust adapter**: fully-qualified route attributes such as `#[rocket::get("/path")]` and
   `#[actix_web::get("/path")]` are recognised alongside the bare `#[get("/path")]` form. Covered by
   `fixtures/rust-svc` and a parser test. (#18, thanks @mamicicekel)
+
+### Specification
+
+- `check.kind` gains `forbid-env` and `max-owners`; `check` gains the optional fields `names` (variable name
+  patterns) and `limit` (integer ≥ 1). Additive under [VERSIONING.md](spec/VERSIONING.md): a consumer that
+  does not know a kind treats it as `unchecked`. First emitted by the generator release after 0.2.0.
 
 ## [0.2.0] - 2026-09-13
 

@@ -10,7 +10,7 @@ is best. Claims about other tools link to their own documentation; if one is out
 | **Provenance per claim** | Yes - `declared` / `verified` / `derived` / `inferred`, with source file and locator | No - prose | No - prose | No - raw source | No - symbols, ranked | No | No |
 | **Evidence linking** | Yes - test ↔ implementation via import graph; `path-proximity` is labelled as a guess | No | No | No | Indirect - references count toward rank | No | No |
 | **Staleness detection** | Yes - fingerprint-anchored; a verified claim goes `stale` when its owner files change and stays stale | No - the file silently ages | No | n/a - regenerated on demand | n/a - regenerated per chat | n/a - index refreshes | n/a |
-| **Machine-checked rules** | Yes - `forbid-import`, `forbid-file`, `require-test`; violation is a health finding and exit `2` | No - the agent may or may not obey | No | No | No | No | No |
+| **Machine-checked rules** | Yes - `forbid-import`, `forbid-file`, `require-test`, `forbid-env`, `max-owners`; violation is a health finding and exit `2` | No - the agent may or may not obey | No | No | No | No | No |
 | **Deterministic output** | Yes - byte-identical given the same tree; tested | n/a | n/a | Mostly - depends on options | No - depends on chat context | No | No |
 | **Works offline, no account** | Yes | Yes | Editor | Yes | Yes (model aside) | Hosted / enterprise | Depends on providers |
 | **Execution boundary** | One spawn site, only commands already in the document, gated over MCP | n/a | n/a | n/a | n/a | n/a | n/a |

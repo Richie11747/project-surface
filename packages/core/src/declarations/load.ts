@@ -239,7 +239,29 @@ export function expandDeclaredOwners(declarations: Declarations, files: readonly
   declarations.capabilities = declarations.capabilities.filter((c) => c.owners.length > 0);
 }
 
-const CHECK_KINDS = new Set(["forbid-import", "forbid-file", "require-test"]);
+const CHECK_KINDS = new Set(["forbid-import", "forbid-file", "require-test", "forbid-env", "max-owners"]);
+
+/** An environment variable name pattern: the characters a name may contain, plus `*` and `?`. */
+const ENV_NAME_PATTERN = /^[A-Za-z0-9_*?]+$/;
+
+function nameList(value: unknown, at: string, errors: string[]): string[] | null {
+  const list = asStringArray(value).filter((v) => v.trim() !== "");
+  if (list.length === 0) {
+    errors.push(`${at}.check.names needs at least one environment variable name.`);
+    return null;
+  }
+  const bad = list.find((v) => !ENV_NAME_PATTERN.test(v));
+  if (bad !== undefined) {
+    errors.push(`${at}.check.names must be variable names (letters, digits, _, * and ?): ${bad}`);
+    return null;
+  }
+  return list;
+}
+
+/** `paths` where the field is optional: absent is fine, present-but-empty or escaping is not. */
+function optionalGlobList(value: unknown, at: string, errors: string[]): string[] | null | undefined {
+  return value === undefined ? undefined : globList(value, at, "paths", errors);
+}
 
 /** Globs for a check. Every entry must be project-relative, like every other path here. */
 function globList(value: unknown, at: string, field: string, errors: string[]): string[] | null {
@@ -270,6 +292,20 @@ function parseCheck(value: unknown, at: string, errors: string[]): ConstraintChe
     const from = globList(value.from, at, "from", errors);
     const to = globList(value.to, at, "to", errors);
     return from && to ? { kind, from, to } : undefined;
+  }
+  if (kind === "forbid-env") {
+    const names = nameList(value.names, at, errors);
+    const paths = optionalGlobList(value.paths, at, errors);
+    return names && paths !== null ? { kind, names, ...(paths ? { paths } : {}) } : undefined;
+  }
+  if (kind === "max-owners") {
+    const limit = value.limit;
+    if (typeof limit !== "number" || !Number.isInteger(limit) || limit < 1) {
+      errors.push(`${at}.check.limit must be a whole number of at least 1.`);
+      return undefined;
+    }
+    const paths = optionalGlobList(value.paths, at, errors);
+    return paths !== null ? { kind, limit, ...(paths ? { paths } : {}) } : undefined;
   }
   const paths = globList(value.paths, at, "paths", errors);
   return paths ? { kind, paths } : undefined;

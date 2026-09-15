@@ -25,3 +25,20 @@ constraints:
     check:
       kind: require-test
       paths: [src/checkout/**, src/auth/**]
+
+  - id: provider-key-stays-in-payments
+    rule: The payment provider key is read only by the payments module.
+    rationale: One place to rotate, one place to audit.
+    severity: error
+    check:
+      kind: forbid-env
+      names: [PAYMENT_PROVIDER_KEY, "STRIPE_*"]
+      paths: [src/payments/**]
+
+  - id: one-file-per-handler
+    rule: A handler capability is a single file.
+    severity: warn
+    check:
+      kind: max-owners
+      limit: 1
+      paths: [src/checkout/**, src/auth/**]

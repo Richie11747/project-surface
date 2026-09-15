@@ -4,15 +4,18 @@
  * A constraint written as prose is advice: an agent reads "never call the
  * payment provider from a handler" and may or may not comply. A constraint
  * with a `check` is a fact the generator can establish on every scan. The
- * three kinds cover what people actually write down:
+ * kinds cover what people actually write down:
  *
  *   forbid-import   files matching `from` must not import anything matching `to`
  *   forbid-file     no project file may match `paths`
  *   require-test    every capability owning a file under `paths` has evidence
+ *   forbid-env      variables matching `names` are read only by files under `paths`
+ *   max-owners      no capability (under `paths`) owns more than `limit` files
  *
  * Every outcome is explicit. A check whose inputs no adapter could supply -
- * `forbid-import` on a stack that reports no import graph - is `unchecked`,
- * with a reason, never silently `passed`.
+ * `forbid-import` on a stack that reports no import graph, `forbid-env` when
+ * only the fallback adapter ran - is `unchecked`, with a reason, never
+ * silently `passed`.
  */
 
 import { globFilter } from "../fs/glob.js";
@@ -21,6 +24,7 @@ import type {
   ConstraintCheck,
   ConstraintOutcome,
   DraftConstraint,
+  DraftEnvironmentVariable,
   ImportEdge,
   RelPath,
 } from "../schema/types.js";
@@ -38,6 +42,14 @@ export interface CheckInput {
   imports: ImportEdge[];
   /** Whether any adapter in this build is able to report imports at all. */
   importsAvailable: boolean;
+  /** Environment variables with the files that read them, as merged by the pipeline. */
+  environment: DraftEnvironmentVariable[];
+  /**
+   * Whether a language adapter scanned source for environment reads. The
+   * fallback adapter only mirrors `.env.example`, which is a declaration of a
+   * variable, not a read of it.
+   */
+  environmentAvailable: boolean;
 }
 
 export interface CheckResult {
@@ -82,6 +94,43 @@ function checkRequireTest(id: string, check: ConstraintCheck, input: CheckInput)
   return out;
 }
 
+/** A dotenv file lists a variable; it does not read it. */
+function isDotenvFile(path: string): boolean {
+  const base = path.slice(path.lastIndexOf("/") + 1);
+  return base === ".env" || base.startsWith(".env.");
+}
+
+function checkForbidEnv(id: string, check: ConstraintCheck, input: CheckInput): ConstraintViolation[] {
+  const named = globFilter(check.names ?? []);
+  const allowed = check.paths ? globFilter(check.paths) : () => false;
+  const out: ConstraintViolation[] = [];
+  for (const variable of input.environment) {
+    if (!named(variable.name)) continue;
+    for (const ref of variable.usedBy) {
+      if (isDotenvFile(ref.path) || allowed(ref.path)) continue;
+      out.push({ constraintId: id, path: ref.path, detail: `reads ${variable.name}` });
+    }
+  }
+  return out.sort((a, b) => a.path.localeCompare(b.path) || a.detail.localeCompare(b.detail));
+}
+
+function checkMaxOwners(id: string, check: ConstraintCheck, input: CheckInput): ConstraintViolation[] {
+  const limit = check.limit ?? Number.POSITIVE_INFINITY;
+  const inScope = check.paths ? globFilter(check.paths) : () => true;
+  const out: ConstraintViolation[] = [];
+  for (const capability of input.capabilities) {
+    /* Distinct files: one file can appear twice as an owner, with different locators. */
+    const owners = [...new Set(capability.owners.map((o) => o.path))].sort();
+    if (owners.length <= limit || !owners.some(inScope)) continue;
+    out.push({
+      constraintId: id,
+      path: owners[0]!,
+      detail: `capability ${capability.id} has ${owners.length} owner files, limit ${limit}`,
+    });
+  }
+  return out;
+}
+
 function outcome(status: ConstraintOutcome["status"], violations: number, reason?: string): ConstraintOutcome {
   return { status, violations, ...(reason ? { reason } : {}) };
 }
@@ -99,12 +148,23 @@ export function evaluateConstraintChecks(input: CheckInput): CheckResult {
       };
     }
 
+    if (check.kind === "forbid-env" && !input.environmentAvailable) {
+      return {
+        ...constraint,
+        checked: outcome("unchecked", 0, "No adapter in this scan reports environment reads, so the rule could not be evaluated."),
+      };
+    }
+
     const found =
       check.kind === "forbid-import"
         ? checkForbidImport(constraint.id, check, input)
         : check.kind === "forbid-file"
           ? checkForbidFile(constraint.id, check, input)
-          : checkRequireTest(constraint.id, check, input);
+          : check.kind === "forbid-env"
+            ? checkForbidEnv(constraint.id, check, input)
+            : check.kind === "max-owners"
+              ? checkMaxOwners(constraint.id, check, input)
+              : checkRequireTest(constraint.id, check, input);
 
     const deduped = found.filter(
       (v, i) => found.findIndex((o) => o.path === v.path && o.detail === v.detail) === i

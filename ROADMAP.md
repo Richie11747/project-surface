@@ -8,7 +8,7 @@ not on the list. Items link to issues where one exists; a checked box means it i
 - [x] `project-surface/v1` schema, published at a stable URL, with [conformance](spec/v1/CONFORMANCE.md) and [versioning](spec/VERSIONING.md) documents
 - [x] Trust model: computed confidence, single-step promotion, fingerprint-anchored freshness that does not self-heal
 - [x] Adapters: TypeScript/JavaScript, Python (full); Go, Rust (structural); generic fallback (manifest-only)
-- [x] Machine-checked constraints (`forbid-import`, `forbid-file`, `require-test`) with `CONSTRAINT_VIOLATED`
+- [x] Machine-checked constraints (`forbid-import`, `forbid-file`, `require-test`, `forbid-env`, `max-owners`) with `CONSTRAINT_VIOLATED`
 - [x] `surface why` - the derivation behind every confidence number
 - [x] `surface agents` - generated AGENTS.md / CLAUDE.md with a citation per line and a staleness check
 - [x] GitHub Action that posts the semantic diff to the pull request
@@ -20,7 +20,7 @@ not on the list. Items link to issues where one exists; a checked box means it i
 
 - [ ] **Record the benchmark** and put the number in the README - the single most important open item
 - [ ] Reproducible demo GIF from a VHS tape, generated in CI (`docs/demo/`) - tape and workflow are in place; blocked on vhs writing no file on ubuntu-latest, see [#16](https://github.com/Richie11747/project-surface/issues/16)
-- [ ] More `check.kind`s: `require-contract` (every owner glob has a contract doc), `forbid-env` (a variable name must not be read outside a path), `max-owners`
+- [ ] `check.kind: require-contract` (every owner glob has a contract doc) - a [good first issue](#good-first-issues)
 - [ ] `surface diff` against the last *release* tag, not only a git ref
 - [ ] Python: `unittest` discovery and `setup.cfg` entry points (today: `pyproject` and pytest only)
 - [ ] Go: `//go:generate` and `Makefile` awareness through the generic adapter

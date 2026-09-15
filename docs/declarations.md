@@ -38,9 +38,15 @@ constraints:
     rationale: Handlers must stay idempotent; provider calls go through the job queue.
     severity: error             # error | warn | info (default warn)
     check:                      # optional - makes the rule machine-checked on every scan
-      kind: forbid-import       # forbid-import | forbid-file | require-test
+      kind: forbid-import       # forbid-import | forbid-file | require-test | forbid-env | max-owners
       from: [src/handlers/**]
       to: [src/payments/**, stripe, "@stripe/*"]
+  - rule: The provider key is read only by the payments module.
+    severity: error
+    check:
+      kind: forbid-env
+      names: [PAYMENT_PROVIDER_KEY, "STRIPE_*"]   # * and ? match within a name
+      paths: [src/payments/**]                    # the only readers allowed; omit to forbid every read
 
 risks:
   - paths: [db/migrations]
@@ -77,11 +83,17 @@ fails.
 | `forbid-import` | `from: [globs]`, `to: [globs or module names]` | a file under `from` imports project code under `to`, or a package named in `to` (`stripe`, `@stripe/*`) |
 | `forbid-file` | `paths: [globs]` | any project file matches - `.env`, `**/*.pem`, `dist/**` |
 | `require-test` | `paths: [globs]` | a capability owning a file under `paths` has no linked evidence |
+| `forbid-env` | `names: [variable names]`, optional `paths: [globs]` | a file outside `paths` reads a variable matching `names` (`*` and `?` match within a name); with no `paths`, any read at all |
+| `max-owners` | `limit: n`, optional `paths: [globs]` | a capability (with an owner under `paths`, or any capability when omitted) owns more than `n` distinct files |
+
+A read is what an adapter saw in source - `process.env.X`, `os.environ["X"]`, `std::env::var("X")`,
+`os.Getenv("X")`. A dotenv file (`.env.example`, `.env.local`) that lists the name is a declaration of the
+variable, not a read, and never counts.
 
 Two honesty rules apply. A check that cannot run - `forbid-import` on a stack whose adapter reports no
-import graph (today: TypeScript and Python do, Go does not yet) - is recorded as `unchecked` with a reason
-and an info finding, never as `passed`. And an invalid `check` is a `DECLARATION_INVALID` error, because a
-maintainer who wrote one expects it to run.
+import graph (today: TypeScript and Python do, Go does not yet), or `forbid-env` when only the generic
+fallback saw the project - is recorded as `unchecked` with a reason and an info finding, never as `passed`.
+And an invalid `check` is a `DECLARATION_INVALID` error, because a maintainer who wrote one expects it to run.
 
 The `ts-api` fixture carries a deliberately violated rule so the behaviour is covered by the golden
 snapshot: `src/checkout/create.ts` imports `src/payments/provider.ts`, and `surface doctor` says so, with

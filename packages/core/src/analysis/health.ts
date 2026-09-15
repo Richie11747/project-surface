@@ -86,7 +86,7 @@ export function detectHealth(input: HealthInput): HealthFinding[] {
         severity: "info",
         message: `Constraint "${constraint.rule}" has a check that could not run. ${constraint.checked.reason ?? ""}`.trim(),
         subject: { kind: "constraint", id: constraint.id },
-        remediation: "Use an adapter that reports imports for this stack, or express the rule as forbid-file / require-test.",
+        remediation: "Use an adapter that reports the facts this check needs (imports, environment reads) for this stack, or express the rule as forbid-file / require-test / max-owners.",
       });
     }
   }
