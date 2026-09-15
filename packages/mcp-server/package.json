@@ -32,7 +32,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
     "@project-surface/core": "0.2.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.2"
   },
   "publishConfig": {
     "access": "public"
