@@ -15,6 +15,10 @@ All notable changes to this project are documented here. This project adheres to
 - **Rust adapter**: fully-qualified route attributes such as `#[rocket::get("/path")]` and
   `#[actix_web::get("/path")]` are recognised alongside the bare `#[get("/path")]` form. Covered by
   `fixtures/rust-svc` and a parser test. (#18, thanks @mamicicekel)
+- **Rust workspaces**: a member crate with a binary gets its own `start` command - `cargo run -p <crate>`,
+  or `cargo run -p <crate> --bin <name>` per `[[bin]]` target - sourced from the member manifest and run
+  from the workspace root. Any `#[<runtime>::test]` attribute (`tokio`, `async_std`, `sqlx`, `actix_web`)
+  now marks a file as a test host, not only `#[tokio::test]`. New fixture `fixtures/rust-workspace`.
 
 ### Specification
 

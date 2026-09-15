@@ -51,7 +51,8 @@ function dirOf(path: string): string {
   return i === -1 ? "." : path.slice(0, i);
 }
 
-function standardCommands(ctx: AdapterContext, root: CargoManifest | null): DraftCommand[] {
+function standardCommands(ctx: AdapterContext, manifests: Map<string, CargoManifest>): DraftCommand[] {
+  const root = manifests.get(".");
   if (!root) return [];
   const fromManifest = provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: [source("Cargo.toml")] });
   const commands: DraftCommand[] = [
@@ -59,27 +60,41 @@ function standardCommands(ctx: AdapterContext, root: CargoManifest | null): Draf
     { id: commandId("build"), run: "cargo build", cwd: ".", kind: "build", description: "Compile every crate.", provenance: fromManifest },
     { id: commandId("check"), run: "cargo check", cwd: ".", kind: "typecheck", description: "Type-check without producing binaries.", provenance: fromManifest },
   ];
-  const bins = root.bins.filter(isSafeCommandToken);
-  if (bins.length > 0) {
-    for (const bin of bins) {
+
+  /* One `cargo run` per binary. The root package runs bare; a workspace
+     member is selected with `-p <crate>`, and a crate with several `[[bin]]`
+     targets needs `--bin` as well. Every command runs from the workspace root,
+     which is where cargo resolves `-p`. */
+  for (const dir of [...manifests.keys()].sort()) {
+    const manifest = manifests.get(dir)!;
+    const isRoot = dir === ".";
+    const crate = isRoot ? null : manifest.name;
+    if (!isRoot && (!crate || !isSafeCommandToken(crate))) continue;
+    const select = crate ? ` -p ${crate}` : "";
+    const at = (rel: string): string => (isRoot ? rel : `${dir}/${rel}`);
+
+    const bins = manifest.bins.filter(isSafeCommandToken);
+    if (bins.length > 0) {
+      for (const bin of bins) {
+        commands.push({
+          id: commandId(crate ? `run-${crate}-${bin}` : `run-${bin}`),
+          run: `cargo run${select} --bin ${bin}`,
+          cwd: ".",
+          kind: "start",
+          description: crate ? `Run the ${bin} binary of ${crate}.` : `Run the ${bin} binary.`,
+          provenance: provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: [source(at("Cargo.toml"), "bin")] }),
+        });
+      }
+    } else if (ctx.exists(at("src/main.rs"))) {
       commands.push({
-        id: commandId(`run-${bin}`),
-        run: `cargo run --bin ${bin}`,
+        id: commandId(crate ? `run-${crate}` : "run"),
+        run: `cargo run${select}`,
         cwd: ".",
         kind: "start",
-        description: `Run the ${bin} binary.`,
-        provenance: provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: [source("Cargo.toml", "bin")] }),
+        description: crate ? `Run the ${crate} binary.` : "Run the package binary.",
+        provenance: provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: [source(at("src/main.rs"))] }),
       });
     }
-  } else if (ctx.exists("src/main.rs")) {
-    commands.push({
-      id: commandId("run"),
-      run: "cargo run",
-      cwd: ".",
-      kind: "start",
-      description: "Run the package binary.",
-      provenance: provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: [source("src/main.rs")] }),
-    });
   }
   return commands;
 }
@@ -237,7 +252,7 @@ export const rustAdapter: Adapter = {
         provenance: provenance({ tier: "derived", adapter: ADAPTER_ID, now: ctx.now, sources: paths.sort().map((p) => source(p)) }),
       }));
 
-    return { stack, packages, commands: standardCommands(ctx, root), constraints, capabilities, evidence, environment, imports };
+    return { stack, packages, commands: standardCommands(ctx, manifests), constraints, capabilities, evidence, environment, imports };
   },
 };
 

@@ -1,0 +1,11 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "api-server"
+path = "src/main.rs"
+
+[dependencies]
+pricing-core = { path = "../core" }

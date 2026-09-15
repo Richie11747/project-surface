@@ -1,0 +1,343 @@
+{
+  "schema": "project-surface/v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "generator": {
+    "name": "project-surface",
+    "version": "0.2.0"
+  },
+  "project": {
+    "name": "rust-workspace",
+    "root": ".",
+    "stacks": [
+      {
+        "id": "rust",
+        "adapter": "@project-surface/adapter-rust",
+        "adapterVersion": "0.2.0",
+        "toolchainAvailable": "<normalised>",
+        "notes": [
+          "Rust extraction is line-based rather than AST-based; claims are structural."
+        ]
+      }
+    ],
+    "packages": [
+      {
+        "id": "crates-api",
+        "path": "crates/api",
+        "name": "api",
+        "manager": "cargo"
+      },
+      {
+        "id": "crates-core",
+        "path": "crates/core",
+        "name": "pricing-core",
+        "manager": "cargo"
+      },
+      {
+        "id": "root",
+        "path": ".",
+        "manager": "cargo"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "id": "build",
+      "run": "cargo build",
+      "cwd": ".",
+      "kind": "build",
+      "description": "Compile every crate.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Cargo.toml"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "check",
+      "run": "cargo check",
+      "cwd": ".",
+      "kind": "typecheck",
+      "description": "Type-check without producing binaries.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Cargo.toml"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "run-api-api-server",
+      "run": "cargo run -p api --bin api-server",
+      "cwd": ".",
+      "kind": "start",
+      "description": "Run the api-server binary of api.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "crates/api/Cargo.toml",
+            "locator": "bin"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "test",
+      "run": "cargo test",
+      "cwd": ".",
+      "kind": "test",
+      "description": "Run every test in the workspace.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "Cargo.toml"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "src.quote",
+      "title": "Quote",
+      "description": "Public struct in crates/core/src/lib.rs.",
+      "kind": "export",
+      "packageId": "crates-core",
+      "owners": [
+        {
+          "path": "crates/core/src/lib.rs",
+          "locator": "struct:Quote"
+        }
+      ],
+      "contracts": [],
+      "evidence": [
+        {
+          "id": "evidence:crates/core/tests/quote_test.rs",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [],
+      "tags": [
+        "struct"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "crates/core/src/lib.rs",
+            "locator": "L2"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    },
+    {
+      "id": "src.quote-for",
+      "title": "quote_for",
+      "description": "Public fn in crates/core/src/lib.rs.",
+      "kind": "export",
+      "packageId": "crates-core",
+      "owners": [
+        {
+          "path": "crates/core/src/lib.rs",
+          "locator": "fn:quote_for"
+        }
+      ],
+      "contracts": [],
+      "evidence": [
+        {
+          "id": "evidence:crates/core/tests/quote_test.rs",
+          "link": "import-graph"
+        }
+      ],
+      "environment": [],
+      "tags": [
+        "fn"
+      ],
+      "provenance": {
+        "tier": "inferred",
+        "sources": [
+          {
+            "path": "crates/core/src/lib.rs",
+            "locator": "L8"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.4
+    }
+  ],
+  "constraints": [],
+  "environment": [
+    {
+      "name": "PORT",
+      "required": true,
+      "secret": false,
+      "usedBy": [
+        {
+          "path": "crates/api/src/main.rs"
+        }
+      ],
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "crates/api/src/main.rs"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "risks": [],
+  "evidence": [
+    {
+      "id": "evidence:crates/core/tests/quote_test.rs",
+      "kind": "test",
+      "path": "crates/core/tests/quote_test.rs",
+      "status": "unknown",
+      "commandId": "test",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "crates/core/tests/quote_test.rs"
+          }
+        ],
+        "adapter": "rust",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "confidence": 0.7
+    }
+  ],
+  "health": [
+    {
+      "code": "LOW_CONFIDENCE_MAJORITY",
+      "severity": "warn",
+      "message": "2 of 2 capabilities are low confidence: most of this surface is inference, not evidence.",
+      "subject": {
+        "kind": "project",
+        "id": "capabilities"
+      },
+      "remediation": "Run surface verify, or declare the important capabilities by hand."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"src.quote\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "src.quote"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNDOCUMENTED_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"src.quote-for\" has no contract: no doc, schema, or API definition specifies it.",
+      "subject": {
+        "kind": "capability",
+        "id": "src.quote-for"
+      },
+      "remediation": "Link a document in .project/surface.declare.yaml under contracts."
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"build\" (cargo build) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "build"
+      },
+      "remediation": "Run: surface verify --command build"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"check\" (cargo check) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "check"
+      },
+      "remediation": "Run: surface verify --command check"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"run-api-api-server\" (cargo run -p api --bin api-server) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "run-api-api-server"
+      },
+      "remediation": "Run: surface verify --command run-api-api-server"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"test\" (cargo test) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "test"
+      },
+      "remediation": "Run: surface verify --command test"
+    }
+  ],
+  "git": {
+    "available": false
+  }
+}

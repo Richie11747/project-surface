@@ -8,6 +8,7 @@ not on the list. Items link to issues where one exists; a checked box means it i
 - [x] `project-surface/v1` schema, published at a stable URL, with [conformance](spec/v1/CONFORMANCE.md) and [versioning](spec/VERSIONING.md) documents
 - [x] Trust model: computed confidence, single-step promotion, fingerprint-anchored freshness that does not self-heal
 - [x] Adapters: TypeScript/JavaScript, Python (full); Go, Rust (structural); generic fallback (manifest-only)
+- [x] Rust workspaces: a member crate with a binary gets `cargo run -p <crate>` (`--bin` for named targets); `#[tokio::test]` and other runtime test attributes count as tests
 - [x] Machine-checked constraints (`forbid-import`, `forbid-file`, `require-test`, `forbid-env`, `max-owners`) with `CONSTRAINT_VIOLATED`
 - [x] `surface why` - the derivation behind every confidence number
 - [x] `surface agents` - generated AGENTS.md / CLAUDE.md with a citation per line and a staleness check
@@ -23,8 +24,6 @@ not on the list. Items link to issues where one exists; a checked box means it i
 - [ ] `check.kind: require-contract` (every owner glob has a contract doc) - a [good first issue](#good-first-issues)
 - [ ] `surface diff` against the last *release* tag, not only a git ref
 - [ ] Python: `unittest` discovery and `setup.cfg` entry points (today: `pyproject` and pytest only)
-- [ ] Go: `//go:generate` and `Makefile` awareness through the generic adapter
-- [ ] Rust: workspace-level `[[bin]]` in member crates; `#[tokio::test]` in `tests/`
 - [ ] Editor integration that reads the document rather than re-deriving it (VS Code hover on a capability id)
 - [ ] A second generator in another language, to prove the format is a format
 

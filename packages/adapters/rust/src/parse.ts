@@ -106,7 +106,9 @@ export function parseRust(content: string): ParsedRust {
     const line = stripComment(raw);
     const trimmed = line.trim();
 
-    if (/^#\[\s*(test|cfg\(test\)|tokio::test)/.test(trimmed)) hasInlineTests = true;
+    /* `#[test]`, `#[cfg(test)]`, and any runtime-provided form: `#[tokio::test]`,
+       `#[async_std::test]`, `#[sqlx::test]`, `#[actix_web::test]`. */
+    if (/^#\[\s*(test|cfg\(test\)|[A-Za-z0-9_]+(::[A-Za-z0-9_]+)*::test)\b/.test(trimmed)) hasInlineTests = true;
 
     if (inTestModule) {
       if (line === "}") inTestModule = false;
