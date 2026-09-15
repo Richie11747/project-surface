@@ -286,3 +286,44 @@ test("an unknown option or a stray positional fails with exit 1 and names the co
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("map JSON rows stay in parity with the text table", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+
+    const jsonResult = surface(root, "map", "--json");
+    assert.equal(jsonResult.code, 0);
+
+    const rows = JSON.parse(jsonResult.stdout).capabilities;
+    assert.equal(rows.length, 9);
+
+    for (const row of rows) {
+      for (const field of [
+        "id",
+        "owners",
+        "contracts",
+        "evidence",
+        "tier",
+        "confidence",
+        "freshness",
+      ]) {
+        assert.ok(field in row, `${row.id} is missing ${field}`);
+      }
+    }
+
+    const textResult = surface(root, "map", "--no-color");
+    assert.equal(textResult.code, 0);
+
+    assert.match(
+      textResult.stdout,
+      /CAPABILITY\s+OWNER\s+CONTRACT\s+EVIDENCE\s+TIER\s+CONFIDENCE\s+FRESHNESS/
+    );
+
+    for (const row of rows) {
+      assert.match(textResult.stdout, new RegExp(`^\\s*${row.id}\\s`, "m"));
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
