@@ -4,6 +4,11 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-15
+
+First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its
+`$id`; every `0.1.0` document remains valid.
+
 ### Added
 
 - **Two new constraint checks.** `forbid-env` - variables matching `names` may be read only by files under
@@ -19,20 +24,6 @@ All notable changes to this project are documented here. This project adheres to
   or `cargo run -p <crate> --bin <name>` per `[[bin]]` target - sourced from the member manifest and run
   from the workspace root. Any `#[<runtime>::test]` attribute (`tokio`, `async_std`, `sqlx`, `actix_web`)
   now marks a file as a test host, not only `#[tokio::test]`. New fixture `fixtures/rust-workspace`.
-
-### Specification
-
-- `check.kind` gains `forbid-env` and `max-owners`; `check` gains the optional fields `names` (variable name
-  patterns) and `limit` (integer ≥ 1). Additive under [VERSIONING.md](spec/VERSIONING.md): a consumer that
-  does not know a kind treats it as `unchecked`. First emitted by the generator release after 0.2.0.
-
-## [0.2.0] - 2026-09-13
-
-First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its
-`$id`; every `0.1.0` document remains valid.
-
-### Added
-
 - **Rust adapter** (`@project-surface/adapter-rust`): `Cargo.toml` (workspace members, binaries,
   `rust-version`), public items, axum / actix-web / rocket routes, env usage, `cargo test|build|check|run`.
   Integration tests under `tests/` are linked to the files their `use` lines name (`import-graph`); inline
@@ -87,6 +78,9 @@ First release on npm: `npx project-surface init` works as written. The schema is
 
 ### Specification
 
+- `check.kind` gains `forbid-env` and `max-owners`; `check` gains the optional fields `names` (variable name
+  patterns) and `limit` (integer ≥ 1). Additive under [VERSIONING.md](spec/VERSIONING.md): a consumer that
+  does not know a kind treats it as `unchecked`. First emitted by 0.2.0.
 - The schema `$id` is now the stable, versioned URL
   `https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`, served from `spec/` by a
   Pages workflow. The path carries the version; `v1` at that URL only ever changes additively. Nothing

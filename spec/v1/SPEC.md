@@ -159,8 +159,7 @@ done anyway. `check.kind` is one of:
 Patterns are project-relative globs: `**` crosses directory boundaries, `*` and `?` do not, and a bare
 path names a file or a whole tree. The same restrictions apply as to `relPath`. `names` are environment
 variable names (`[A-Za-z0-9_]`), where `*` and `?` match any run of characters or one character within the
-name. `forbid-env` and `max-owners` were added after the first release (the CHANGELOG names the
-generator version); a consumer that predates them treats the unknown kind as `unchecked`
+name. New kinds may be added within `v1`; a consumer that does not know a kind treats it as `unchecked`
 ([VERSIONING](../VERSIONING.md)).
 
 ### 7.2 `checked` - what the generator found
