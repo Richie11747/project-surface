@@ -142,18 +142,27 @@ export {
 } from "./analysis/why.js";
 
 // Declarations
-export { expandDeclaredOwners, loadDeclarations, type Declarations } from "./declarations/load.js";
+export {
+  expandDeclaredOwners,
+  isRelativePath,
+  loadDeclarations,
+  normalizeDeclaredPath,
+  type Declarations,
+} from "./declarations/load.js";
 
 // Filesystem and git
 export { expandGlob, globFilter, globToRegExp, isGlob, matchesAny, matchesGlob } from "./fs/glob.js";
 export {
   existsSafe,
+  createGuardedReader,
   readFileSafe,
   readJsonSafe,
   toPosix,
   walkProject,
   DEFAULT_IGNORES,
   MAX_FILES,
+  MAX_FILE_BYTES,
+  type FileReader,
   type WalkResult,
   type WalkSource,
 } from "./fs/walk.js";
@@ -176,7 +185,9 @@ export {
   patternNames,
   redactPaths,
   redactText,
+  redactValues,
   sanitizeOutput,
+  secretEnvValues,
   truncate,
   MAX_SUMMARY_LENGTH,
   REDACTION,

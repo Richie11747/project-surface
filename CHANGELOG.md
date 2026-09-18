@@ -4,6 +4,43 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+### Security
+
+- **Redaction ran in quadratic time on hostile output.** The `assignment` and `connection-string` patterns
+  in `sanitizeOutput` had unbounded quantifiers around their keywords; a test log made of long dash-separated
+  tokens or many `://` with no `@` took seconds per 40 KB and the runner captures up to 8 MiB, so
+  `surface verify` could hang for hours. Every quantifier is now bounded, and redaction scans only the part
+  of the output that can survive the length cap (plus 4 KiB of headroom so a credential straddling the cut
+  is still caught whole). The truncation note still counts every dropped character.
+- **`surface_context` / `surface context --content` could return any in-root file the document named.**
+  Declarations are repository content, so a hostile `owners: [.env, .git/config]` handed those files - a
+  gitignored `.env`, the `extraheader` token `actions/checkout` leaves in `.git/config` - straight back to
+  the caller, unredacted. Both now read through `createGuardedReader`: only files the project lists
+  (tracked or untracked-and-not-ignored), never `.git/`, dotenv (`.env.example` stays readable), `.npmrc`,
+  `.netrc`, key or certificate files, and the content is redacted. Refused files appear under *Omitted*.
+- **The runner scrubs exact environment values.** The child inherits the operator's environment; the value
+  of any variable whose name looks like a credential (`looksSecretName`, length ≥ 6) is removed from the
+  captured output before pattern matching, so `env` in a test script no longer leaks `PRIVATE_KEY=...` or
+  `BASIC_AUTH=user:pass` into the committed summary. `private[_-]?key` joined the assignment keywords.
+- **`surface agents --write` accepted `docs/../../AGENTS.md`.** The containment check looked only at the
+  leading segment; `surface report --out` had no check at all. Both now resolve the target first, compare
+  it with the root lexically and physically (real path of the nearest existing ancestor), and refuse with
+  `Refusing to write outside the project root`. Shared as `resolveWriteTarget` in the CLI.
+- **Declared paths are validated everywhere.** `owners`, `contracts`, `evidence`, `usedBy` and `risks.paths`
+  go through the same check as `ignore`: backslashes are folded to `/` first (so `..\x` cannot pass a check
+  that splits on `/`), `~`, absolute and `..` paths are rejected as a declaration error next to the entry
+  that wrote them, instead of aborting the whole build at schema validation.
+- `git hash-object` no longer receives an owner path that does not resolve to a regular file inside the
+  root, so a committed symlink cannot make git read outside the tree for a fingerprint - and one absent
+  owner no longer fails a whole batch.
+- `readFileSafe` refuses files larger than 2 MiB (`MAX_FILE_BYTES`); adjacent `**` in a glob fold to one
+  and a pattern with more than eight doublestars matches nothing, so a declaration cannot make matching
+  polynomial over a 20 000-file tree.
+- MCP: `surface_constraints` and `surface_health` wrap repository-authored text in `<repo-data>` and the
+  trust note says what that means; `surface_verify` warns when a *declared* command contains shell
+  metacharacters (`; | & $ \` < >`). Execution is not blocked - `SECURITY.md` and `docs/mcp.md` describe
+  the boundary.
+
 ## [0.2.0] - 2026-09-15
 
 First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its

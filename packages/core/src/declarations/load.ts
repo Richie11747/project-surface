@@ -61,8 +61,25 @@ function empty(): Declarations {
   };
 }
 
-function isRelativePath(p: string): boolean {
-  return !p.startsWith("/") && !/^[A-Za-z]:/.test(p) && !p.split("/").includes("..");
+/**
+ * A path a declaration may name: inside the project, expressed with forward
+ * slashes. Backslashes are folded first so `..\\x` cannot slip past a check
+ * that only splits on `/`; `~` is refused because the shell would expand it
+ * and nothing here does.
+ */
+export function normalizeDeclaredPath(p: string): string {
+  return p.replace(/\\/g, "/").replace(/^\.\/+/, "");
+}
+
+export function isRelativePath(p: string): boolean {
+  const n = normalizeDeclaredPath(p);
+  return (
+    n.length > 0 &&
+    !n.startsWith("/") &&
+    !n.startsWith("~") &&
+    !/^[A-Za-z]:/.test(n) &&
+    !n.split("/").includes("..")
+  );
 }
 
 function provenance(locator: string, now: Timestamp): Provenance {
@@ -82,8 +99,26 @@ function asStringArray(value: unknown): string[] {
   return asArray(value).filter((v): v is string => typeof v === "string");
 }
 
-function toSourceRefs(value: unknown): SourceRef[] {
-  return asStringArray(value).map((path) => ({ path }));
+/**
+ * The strings in a path list that are usable, normalised. Each rejected entry
+ * becomes a declaration error at `at`, so a stray `../` or an absolute path is
+ * reported next to the line that wrote it instead of failing schema validation
+ * of the whole document at the end of the build.
+ */
+function declaredPaths(value: unknown, at: string, errors: string[]): string[] {
+  const out: string[] = [];
+  for (const raw of asStringArray(value)) {
+    if (!isRelativePath(raw)) {
+      errors.push(`${at} must be project-relative: ${raw}`);
+      continue;
+    }
+    out.push(normalizeDeclaredPath(raw));
+  }
+  return out;
+}
+
+function toSourceRefs(value: unknown, at: string, errors: string[]): SourceRef[] {
+  return declaredPaths(value, at, errors).map((path) => ({ path }));
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -121,13 +156,13 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
     const at = `ignore[${i}]`;
     if (typeof entry !== "string" || entry.trim() === "") return void out.errors.push(`${at} must be a path or glob.`);
     if (!isRelativePath(entry)) return void out.errors.push(`${at} must be project-relative: ${entry}`);
-    out.ignore.push(entry);
+    out.ignore.push(normalizeDeclaredPath(entry));
   });
 
   asArray(doc.capabilities).forEach((entry, i) => {
     const at = `capabilities[${i}]`;
     if (!isRecord(entry)) return void out.errors.push(`${at} must be a mapping.`);
-    const owners = toSourceRefs(entry.owners);
+    const owners = toSourceRefs(entry.owners, `${at}.owners`, out.errors);
     if (owners.length === 0) return void out.errors.push(`${at} needs at least one owner path.`);
     const id = typeof entry.id === "string" ? slug(entry.id) : slug(String(owners[0]?.path));
     out.capabilities.push({
@@ -136,8 +171,8 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
       ...(typeof entry.description === "string" ? { description: entry.description } : {}),
       kind: "module",
       owners,
-      contracts: toSourceRefs(entry.contracts),
-      evidence: asStringArray(entry.evidence).map((p) => ({ id: `evidence:${slug(p)}`, link: "declared" as const })),
+      contracts: toSourceRefs(entry.contracts, `${at}.contracts`, out.errors),
+      evidence: declaredPaths(entry.evidence, `${at}.evidence`, out.errors).map((p) => ({ id: `evidence:${slug(p)}`, link: "declared" as const })),
       environment: asStringArray(entry.environment),
       tags: asStringArray(entry.tags),
       provenance: provenance(at, now),
@@ -179,7 +214,7 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
   asArray(doc.risks).forEach((entry, i) => {
     const at = `risks[${i}]`;
     if (!isRecord(entry)) return void out.errors.push(`${at} must be a mapping.`);
-    const paths = asStringArray(entry.paths);
+    const paths = declaredPaths(entry.paths, `${at}.paths`, out.errors);
     if (paths.length === 0) return void out.errors.push(`${at} needs at least one path.`);
     const type = isRiskType(entry.type) ? entry.type : "infra";
     out.risks.push({
@@ -201,7 +236,7 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
       name,
       required,
       secret: isRecord(entry) && typeof entry.secret === "boolean" ? entry.secret : looksSecretName(name),
-      usedBy: isRecord(entry) ? toSourceRefs(entry.usedBy) : [],
+      usedBy: isRecord(entry) ? toSourceRefs(entry.usedBy, `${at}.usedBy`, out.errors) : [],
       provenance: provenance(at, now),
     });
   });

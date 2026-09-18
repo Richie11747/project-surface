@@ -8,7 +8,7 @@
  */
 
 import { parseArgs } from "node:util";
-import { packContext, readFileSafe } from "@project-surface/core";
+import { createGuardedReader, packContext } from "@project-surface/core";
 import { GLOBAL_OPTIONS, requireSurface, CliError, type GlobalOptions } from "../context.js";
 import { bullet, heading, print, printJson, style, table } from "../output.js";
 
@@ -35,7 +35,7 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   const maxCapabilities =
     typeof values["max-capabilities"] === "string" ? Number(values["max-capabilities"]) : undefined;
 
-  const pack = packContext(surface, task, (p) => readFileSafe(options.root, p), {
+  const pack = packContext(surface, task, createGuardedReader(options.root), {
     ...(budget && Number.isFinite(budget) ? { budgetTokens: budget } : {}),
     ...(maxCapabilities && Number.isFinite(maxCapabilities) ? { maxCapabilities } : {}),
     includeContent: values.content === true,

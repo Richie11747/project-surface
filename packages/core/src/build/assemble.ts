@@ -7,6 +7,7 @@
 
 import { basename, resolve } from "node:path";
 import type { AdapterResult } from "../adapter.js";
+import { existsSafe } from "../fs/walk.js";
 import { hashObjects } from "../git/git.js";
 import { computeConfidence } from "../model/confidence.js";
 import { fingerprintFiles, hashContent, ownerPaths } from "../model/freshness.js";
@@ -54,7 +55,13 @@ export function buildFingerprints(
   const allPaths = [...new Set(capabilities.flatMap((c) => c.owners.map((o) => o.path)))].sort();
   if (allPaths.length === 0) return new Map();
 
-  const hashes = gitAvailable ? hashObjects(root, allPaths) : new Map<string, string>();
+  /* Declared owners are only names. `git hash-object` opens whatever a name
+     resolves to, a committed symlink included, so paths that do not resolve
+     to a regular file inside the root never reach it; they fall through to
+     `readFile`, which refuses them, and fingerprint as `missing`. Dropping them
+     here also keeps one absent owner from failing a whole batch. */
+  const hashable = allPaths.filter((p) => existsSafe(root, p));
+  const hashes = gitAvailable && hashable.length > 0 ? hashObjects(root, hashable) : new Map<string, string>();
   const hashFor = (path: string): string => {
     const fromGit = hashes.get(path);
     if (fromGit) return fromGit;

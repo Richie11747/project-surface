@@ -21,9 +21,11 @@ These are the properties the project intends to hold. A break in any of them is 
 
 **Project commands run from one module only.** `packages/core/src/evidence/runner.ts` is the only code that executes a project command. It will only run a command that already exists in the surface document, obtained through `resolveAllowedCommand`, from a working directory physically inside the project. There is no code path that executes an arbitrary string. Adapters have no exec capability at all. The only other spawn site is `packages/core/src/git/git.ts`, which invokes a fixed `git` binary with an argument array (no shell) for read-only queries and refuses refs that look like options.
 
-**Symlinks are never followed.** The file reader refuses any path whose real location leaves the project root, so a committed link to a file outside the repository is not read.
+**Symlinks are never followed.** The file reader refuses any path whose real location leaves the project root, so a committed link to a file outside the repository is not read. Files larger than 2 MiB are not read at all.
 
-**MCP execution is gated twice.** `surface_verify` requires `PROJECT_SURFACE_ALLOW_EXEC=1` *and* a command id already present in the document. It accepts an id, never a shell string. The worst outcome from an adversarial prompt is running a command the project itself declares.
+**Content handed out is guarded.** `surface context --content` and the MCP `surface_context` tool serve only files the project itself lists (tracked, or untracked and not ignored), never `.git/`, dotenv or key files, and redact what they return - so a declaration naming `.env` as an owner yields an omission, not the file.
+
+**MCP execution is gated twice.** `surface_verify` requires `PROJECT_SURFACE_ALLOW_EXEC=1` *and* a command id already present in the document. It accepts an id, never a shell string. The worst outcome from an adversarial prompt is running a command the project itself declares; when such a declared command contains shell metacharacters the tool says so in its result, and repository-authored text in tool output is delimited as `<repo-data>` so a model can tell it from instructions.
 
 **Working directories are contained.** A command whose `cwd` resolves outside the project root is refused.
 

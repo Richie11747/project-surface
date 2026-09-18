@@ -78,6 +78,39 @@ ignore:
   }
 });
 
+test("declarations: every path field is checked, so an escape is a finding rather than a crash", () => {
+  const root = scratch(`
+capabilities:
+  - id: planted
+    title: Planted
+    owners: ["..\\\\..\\\\etc\\\\passwd", "~/secrets", "/abs/path", "C:/abs", "./src\\\\ok.ts"]
+    contracts: [../outside.md, docs/fine.md]
+    evidence: [../../tests/x.test.ts]
+environment:
+  - name: TOKEN
+    usedBy: [../../leak.ts]
+risks:
+  - type: infra
+    paths: [../infra, deploy/ok.tf]
+`);
+  try {
+    const decl = loadDeclarations(root, NOW);
+    assert.equal(decl.capabilities.length, 1, decl.errors.join("\n"));
+    assert.deepEqual(decl.capabilities[0].owners, [{ path: "src/ok.ts" }]);
+    assert.deepEqual(decl.capabilities[0].contracts, [{ path: "docs/fine.md" }]);
+    assert.deepEqual(decl.capabilities[0].evidence, []);
+    assert.deepEqual(decl.environment[0].usedBy, []);
+    assert.deepEqual(decl.risks[0].paths, ["deploy/ok.tf"]);
+    const bad = decl.errors.filter((e) => /project-relative/.test(e));
+    assert.equal(bad.length, 8, decl.errors.join("\n"));
+    assert.ok(bad.some((e) => e.startsWith("capabilities[0].owners")), bad.join("\n"));
+    assert.ok(bad.some((e) => e.startsWith("environment[0].usedBy")), bad.join("\n"));
+    assert.ok(bad.some((e) => e.startsWith("risks[0].paths")), bad.join("\n"));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("declarations: glob owners expand to concrete files, and an empty match is an error", () => {
   const root = scratch(`
 capabilities:
@@ -201,4 +234,15 @@ constraints:
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test("glob: stacked doublestars fold to one and an absurd pattern matches nothing", () => {
+  assert.ok(matchesGlob("a/b/c/d.ts", "**/**/**/*.ts"));
+  assert.equal(globToRegExp("**/**/**/*.ts").source, globToRegExp("**/*.ts").source);
+  const absurd = Array.from({ length: 12 }, () => "**").join("/x/") + "/y";
+  assert.ok(!matchesGlob("x/x/x/y", absurd));
+  const started = Date.now();
+  const deep = Array.from({ length: 200 }, (_, i) => `d${i % 7}`).join("/") + "/z.js";
+  for (let i = 0; i < 50; i++) matchesGlob(deep, "**/**/**/**/**/**/**/**/**/**/**/**/nope");
+  assert.ok(Date.now() - started < 500, "matching stays cheap on a deep non-matching path");
 });

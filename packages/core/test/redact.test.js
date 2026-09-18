@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { looksSecretName, patternNames, redactPaths, sanitizeOutput, REDACTION } from "../dist/index.js";
+import { looksSecretName, patternNames, redactPaths, redactText, sanitizeOutput, secretEnvValues, REDACTION } from "../dist/index.js";
 
 /**
  * Every value below is a documented example or an obvious placeholder. The
@@ -70,6 +70,52 @@ test("output is truncated to a bounded size", () => {
   const output = sanitizeOutput("x".repeat(50_000), { maxLength: 100 });
   assert.ok(output.length < 200, `length was ${output.length}`);
   assert.match(output, /truncated/);
+});
+
+test("the truncation note counts every dropped character, scanned or not", () => {
+  const output = sanitizeOutput("y".repeat(50_000), { maxLength: 100 });
+  assert.match(output, /truncated 49900 chars/);
+});
+
+test("redaction time is linear in the input, whatever shape the output takes", () => {
+  /* Each of these defeated an earlier pattern quadratically: a long run of
+     word boundaries with no `=`, and many `://` with no `@`. An 8 MiB test log
+     of either shape used to hang `surface verify` for hours. */
+  const shapes = ["a-".repeat(200_000), "a://a:".repeat(70_000), "a.b_c".repeat(80_000)];
+  for (const shape of shapes) {
+    const started = Date.now();
+    redactText(shape);
+    const elapsed = Date.now() - started;
+    assert.ok(elapsed < 1500, `redactText took ${elapsed} ms on ${shape.length} chars`);
+  }
+  const started = Date.now();
+  sanitizeOutput("a-".repeat(4_000_000));
+  assert.ok(Date.now() - started < 500, "sanitizeOutput must not scan far past the length cap");
+});
+
+test("a credential straddling the length cap is redacted, not half-kept", () => {
+  const input = "x".repeat(95) + " GITHUB_TOKEN=ghp_" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const output = sanitizeOutput(input, { maxLength: 100 });
+  assert.ok(!output.includes("ghp_A"), output);
+  assert.ok(!output.includes("KLMNOP"), output);
+});
+
+test("known secret values are removed wherever they appear", () => {
+  const output = sanitizeOutput("token was hunter2-extra and again hunter2-extra\nother line", {
+    secrets: ["hunter2-extra", "short"],
+  });
+  assert.ok(!output.includes("hunter2"), output);
+  assert.equal(output.split(REDACTION).length - 1, 2);
+});
+
+test("secret values are collected from the environment by name, values never read otherwise", () => {
+  const env = { MY_API_KEY: "abcdef1234", PORT: "3000", SHORT_SECRET: "abc", AUTH: "z".repeat(8) };
+  assert.deepEqual(secretEnvValues(env).sort(), ["abcdef1234", "zzzzzzzz"]);
+});
+
+test("private key assignments are redacted like every other credential", () => {
+  const output = sanitizeOutput("PRIVATE_KEY=MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQ");
+  assert.ok(!output.includes("MIIEvQ"), output);
 });
 
 test("secret-bearing names are recognised, ordinary ones are not", () => {

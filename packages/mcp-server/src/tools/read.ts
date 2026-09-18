@@ -6,7 +6,7 @@
 
 import { z } from "zod";
 import { explainClaim } from "@project-surface/core";
-import { describeCapability, json, loadSurface, text, trustNote } from "../support.js";
+import { describeCapability, json, loadSurface, repoData, text, trustNote } from "../support.js";
 import type { ToolContext, ToolResult } from "../support.js";
 
 export const overviewTool = {
@@ -131,24 +131,21 @@ export const constraintsTool = {
     );
     if (constraints.length === 0) return text("No constraints were discovered or declared for this project.");
 
-    return text(
-      [
-        ...constraints.map(
-          (c) =>
-            `[${c.severity}] ${c.rule}\n` +
-            `  source     ${c.provenance.sources.map((s) => `${s.path}${s.locator ? `#${s.locator}` : ""}`).join(", ")}\n` +
-            `  provenance ${c.provenance.tier}, confidence ${c.confidence.toFixed(2)}` +
-            (c.rationale ? `\n  why        ${c.rationale}` : "") +
-            (c.check
-              ? `\n  checked    ${c.check.kind}: ${c.checked?.status ?? "unchecked"}` +
-                (c.checked?.status === "violated" ? ` in ${c.checked.violations} place(s) - see surface_health` : "") +
-                (c.checked?.reason ? ` (${c.checked.reason})` : "")
-              : `\n  checked    no - prose only; nothing verifies compliance`)
-        ),
-        "",
-        trustNote(),
-      ].join("\n")
-    );
+    const body = constraints
+      .map(
+        (c) =>
+          `[${c.severity}] ${c.rule}\n` +
+          `  source     ${c.provenance.sources.map((s) => `${s.path}${s.locator ? `#${s.locator}` : ""}`).join(", ")}\n` +
+          `  provenance ${c.provenance.tier}, confidence ${c.confidence.toFixed(2)}` +
+          (c.rationale ? `\n  why        ${c.rationale}` : "") +
+          (c.check
+            ? `\n  checked    ${c.check.kind}: ${c.checked?.status ?? "unchecked"}` +
+              (c.checked?.status === "violated" ? ` in ${c.checked.violations} place(s) - see surface_health` : "") +
+              (c.checked?.reason ? ` (${c.checked.reason})` : "")
+            : `\n  checked    no - prose only; nothing verifies compliance`)
+      )
+      .join("\n");
+    return text([repoData(body), "", trustNote()].join("\n"));
   },
 };
 
@@ -167,16 +164,15 @@ export const healthTool = {
 
     if (findings.length === 0) return text("No health findings. Every claim is backed and current.");
 
-    return text(
-      findings
-        .map(
-          (f) =>
-            `[${f.severity}] ${f.code}${f.subject ? ` (${f.subject.kind} ${f.subject.id})` : ""}\n` +
-            `  ${f.message}` +
-            (f.remediation ? `\n  fix: ${f.remediation}` : "")
-        )
-        .join("\n\n")
-    );
+    const body = findings
+      .map(
+        (f) =>
+          `[${f.severity}] ${f.code}${f.subject ? ` (${f.subject.kind} ${f.subject.id})` : ""}\n` +
+          `  ${f.message}` +
+          (f.remediation ? `\n  fix: ${f.remediation}` : "")
+      )
+      .join("\n\n");
+    return text([repoData(body), "", trustNote()].join("\n"));
   },
 };
 

@@ -8,7 +8,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdtempSync, rmSync } from "node:fs";
+import { appendFileSync, cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -135,6 +135,37 @@ test("surface_verify with execution enabled runs only a recorded command id", as
 
     const ran = await client.callTool({ name: "surface_verify", arguments: { commandId: "test", timeoutSeconds: 120 } });
     assert.match(textOf(ran), /passed/);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("surface_context never returns a credential file, whatever the document names as an owner", async () => {
+  /* The document is repository-authored. A hostile declaration can list `.env`
+     or `.git/config` as an owner; that must produce an omission, not content. */
+  const root = mkdtempSync(join(tmpdir(), "project-surface-mcp-guard-"));
+  cpSync(join(FIXTURES_DIR, "ts-api"), root, { recursive: true });
+  rmSync(join(root, "expected.surface.json"), { force: true });
+  const planted = "planted-secret-" + Date.now();
+  writeFileSync(join(root, ".env"), `LEAK_TOKEN=${planted}\n`);
+  mkdirSync(join(root, ".git"), { recursive: true });
+  writeFileSync(join(root, ".git", "config"), `[http]\n\textraheader = AUTHORIZATION: basic ${planted}\n`);
+  appendFileSync(
+    join(root, ".project", "surface.declare.yaml"),
+    "\ncapabilities:\n  - id: planted.owner\n    title: Planted owner list\n    owners: [.env, .git/config, README.md]\n"
+  );
+  const init = spawnSync(process.execPath, [CLI, "init", "--root", root], { encoding: "utf8" });
+  assert.equal(init.status, 0, init.stderr);
+
+  const client = await connect(root);
+  try {
+    const out = textOf(
+      await client.callTool({ name: "surface_context", arguments: { task: "planted owner list", includeContent: true } })
+    );
+    assert.ok(!out.includes(planted), out);
+    assert.match(out, /--- README\.md ---/);
+    assert.match(out, /\.env - File is missing, unreadable, or not one the project lists\./);
   } finally {
     await client.close();
     rmSync(root, { recursive: true, force: true });
