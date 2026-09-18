@@ -111,16 +111,25 @@ export function runCommand(
   const summary = sanitizeOutput(combined, { root });
 
   if (result.error) {
-    const timedOut = (result.error as NodeJS.ErrnoException).code === "ETIMEDOUT";
+    const code = (result.error as NodeJS.ErrnoException).code;
+    /* ETIMEDOUT and ENOBUFS both mean the command ran and was cut short - by
+       the clock, or by printing more than the capture buffer holds. Neither is
+       "could not be started", and neither is a verdict on the command. On
+       Windows the timeout kills the shell, not necessarily the process tree
+       it started; that limitation is documented, not hidden. */
+    const reason =
+      code === "ETIMEDOUT"
+        ? `Command exceeded the ${timeout} ms timeout.`
+        : code === "ENOBUFS"
+          ? `Command printed more than the ${MAX_OUTPUT_BYTES} byte capture limit and was stopped.`
+          : `Command could not be started: ${sanitizeOutput(String(result.error), { root })}`;
     return {
       status: "unknown",
       exitCode: null,
       durationMs,
       observedAt: options.now,
       ...(summary ? { summary } : {}),
-      reason: timedOut
-        ? `Command exceeded the ${timeout} ms timeout.`
-        : `Command could not be started: ${sanitizeOutput(String(result.error), { root })}`,
+      reason,
     };
   }
 

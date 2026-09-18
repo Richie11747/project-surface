@@ -327,3 +327,67 @@ test("map JSON rows stay in parity with the text table", () => {
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("a declared command stays declared when verified, and does not decay with age", () => {
+  const root = freshCopy();
+  const file = join(root, ".project", "surface.json");
+  try {
+    writeFileSync(
+      join(root, ".project", "surface.declare.yaml"),
+      `${readFileSync(join(root, ".project", "surface.declare.yaml"), "utf8")}\ncommands:\n  - id: hello\n    run: echo hello\n    kind: other\n`
+    );
+    assert.equal(surface(root, "init").code, 0);
+    const verify = surface(root, "verify", "--command", "hello", "--json");
+    assert.equal(verify.code, 0, verify.stderr);
+    assert.equal(JSON.parse(verify.stdout).results[0].status, "passed");
+
+    const after = JSON.parse(readFileSync(file, "utf8")).commands.find((c) => c.id === "hello");
+    assert.equal(after.provenance.tier, "declared");
+    assert.equal(after.verification.status, "passed");
+    assert.equal(after.confidence, 1, "a human statement is not lowered by agreeing with it");
+
+    const why = JSON.parse(surface(root, "why", "hello", "--json").stdout);
+    assert.equal(why.consistent, true, JSON.stringify(why.trace));
+    assert.equal(why.promotion, null);
+
+    /* Age the verification past the TTL. The claim goes stale - a health
+       finding - but its confidence is untouched: declared never decays. */
+    const doc = JSON.parse(readFileSync(file, "utf8"));
+    const cmd = doc.commands.find((c) => c.id === "hello");
+    cmd.verification.observedAt = "2020-01-01T00:00:00Z";
+    writeFileSync(file, `${JSON.stringify(doc, null, 2)}\n`);
+    assert.equal(surface(root, "init").code, 0);
+    const aged = JSON.parse(readFileSync(file, "utf8")).commands.find((c) => c.id === "hello");
+    assert.equal(aged.freshness.status, "stale");
+    assert.equal(aged.confidence, 1);
+    assert.equal(JSON.parse(surface(root, "why", "hello", "--json").stdout).consistent, true);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("agents blocks remember their options and every stale file is reported, not only the first", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    /* The option changes the body; without it in the marker the block was
+       reported stale on every scan because the check re-rendered with 40. */
+    assert.equal(surface(root, "agents", "--write", "AGENTS.md", "--max-capabilities", "2").code, 0);
+    assert.match(readFileSync(join(root, "AGENTS.md"), "utf8"), /max=2 -->/);
+    assert.equal(surface(root, "agents", "--write", "CLAUDE.md").code, 0);
+    assert.equal(surface(root, "init").code, 0);
+    let findings = JSON.parse(surface(root, "doctor", "--json").stdout).findings;
+    assert.deepEqual(findings.filter((f) => f.code === "AGENTS_MD_STALE"), []);
+
+    writeFileSync(
+      join(root, ".project", "surface.declare.yaml"),
+      `${readFileSync(join(root, ".project", "surface.declare.yaml"), "utf8")}\ncommands:\n  - id: hello\n    run: echo hello\n    kind: other\n`
+    );
+    assert.equal(surface(root, "init").code, 0);
+    findings = JSON.parse(surface(root, "doctor", "--json").stdout).findings;
+    const stale = findings.filter((f) => f.code === "AGENTS_MD_STALE").map((f) => f.subject.id).sort();
+    assert.deepEqual(stale, ["AGENTS.md", "CLAUDE.md"]);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

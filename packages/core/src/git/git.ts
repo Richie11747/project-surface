@@ -64,13 +64,24 @@ export function hashObjects(root: string, paths: string[]): Map<string, string> 
   for (let i = 0; i < paths.length; i += ARG_BATCH) {
     const batch = paths.slice(i, i + ARG_BATCH);
     const r = runGit(root, ["hash-object", "--", ...batch]);
-    if (!r.ok) continue;
-    const hashes = r.stdout.split("\n").filter((l) => l.length > 0);
-    if (hashes.length !== batch.length) continue;
-    batch.forEach((p, idx) => {
-      const h = hashes[idx];
+    const hashes = r.ok ? r.stdout.split("\n").filter((l) => l.length > 0) : [];
+    if (r.ok && hashes.length === batch.length) {
+      batch.forEach((p, idx) => {
+        const h = hashes[idx];
+        if (h) out.set(p, h);
+      });
+      continue;
+    }
+    /* One unreadable path fails the whole invocation. Falling back to content
+       hashing for all eighty would put them in a different hash space than
+       their neighbours, and which paths share a batch depends on how many
+       capabilities exist - so fingerprints would change with no edit to the
+       files. Hash the rest one by one instead. */
+    for (const p of batch) {
+      const one = runGit(root, ["hash-object", "--", p]);
+      const h = one.ok ? one.stdout.trim() : "";
       if (h) out.set(p, h);
-    });
+    }
   }
   return out;
 }
@@ -96,20 +107,32 @@ export function showFileAtRef(root: string, ref: string, file: string): string |
   return r.ok ? r.stdout : null;
 }
 
-/** Paths changed between `ref` and the working tree. */
+/*
+ * Every path-listing query below uses `-z` and `--relative`. Without `-z`,
+ * git C-quotes any name with a byte above 0x7F (`"caf\303\251.ts"`), and the
+ * quotes and backslashes then fail the schema's relPath rule and abort the
+ * build. Without `--relative`, paths are relative to the repository top level
+ * while everything else here is relative to `root`, which differ whenever a
+ * package inside a monorepo is scanned on its own.
+ */
+const NUL_LIST = (stdout: string): string[] => stdout.split("\0").filter((p) => p.length > 0);
+
+/** `%cI` (strict ISO 8601 with offset), optionally followed by the commit's first path. */
+const COMMIT_HEADER = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2}))(?:\n([^]*))?$/;
+
+/** Paths changed between `ref` and the working tree, relative to `root`. */
 export function changedSince(root: string, ref: string): string[] | null {
   if (!isSafeRef(ref)) return null;
-  const r = runGit(root, ["diff", "--name-only", `${ref}...HEAD`]);
+  const r = runGit(root, ["diff", "--name-only", "-z", "--relative", `${ref}...HEAD`]);
   if (!r.ok) return null;
-  const committed = r.stdout.split("\n").filter(Boolean);
-  const working = runGit(root, ["diff", "--name-only", "HEAD"]);
-  const dirty = working.ok ? working.stdout.split("\n").filter(Boolean) : [];
-  return [...new Set([...committed, ...dirty])].sort();
+  const working = runGit(root, ["diff", "--name-only", "-z", "--relative", "HEAD"]);
+  const dirty = working.ok ? NUL_LIST(working.stdout) : [];
+  return [...new Set([...NUL_LIST(r.stdout), ...dirty])].sort();
 }
 
 export function stagedPaths(root: string): string[] {
-  const r = runGit(root, ["diff", "--name-only", "--cached"]);
-  return r.ok ? r.stdout.split("\n").filter(Boolean).sort() : [];
+  const r = runGit(root, ["diff", "--name-only", "-z", "--relative", "--cached"]);
+  return r.ok ? NUL_LIST(r.stdout).sort() : [];
 }
 
 /**
@@ -121,23 +144,27 @@ function recentChanges(root: string): GitRecentChange[] {
     "log",
     `--since=${RECENT_WINDOW_DAYS}.days`,
     "--name-only",
+    "-z",
+    "--relative",
     "--pretty=format:%cI",
   ]);
   if (!r.ok) return [];
 
+  /* With -z the stream is NUL-separated entries. A commit opens with
+     `<date>\n<first path>` (or a bare `<date>` when it touched nothing under
+     `root`), and every further path of that commit is its own entry. */
   const counts = new Map<string, { commits: number; lastTouched?: string }>();
   let currentDate: string | undefined;
-  for (const raw of r.stdout.split("\n")) {
-    const line = raw.trim();
-    if (line.length === 0) continue;
-    if (/^\d{4}-\d{2}-\d{2}T/.test(line)) {
-      currentDate = line;
-      continue;
-    }
-    const entry = counts.get(line) ?? { commits: 0 };
+  for (const token of r.stdout.split("\0")) {
+    if (token.length === 0) continue;
+    const header = COMMIT_HEADER.exec(token);
+    const path = header ? (header[2] ?? "") : token;
+    if (header) currentDate = header[1];
+    if (path.length === 0) continue;
+    const entry = counts.get(path) ?? { commits: 0 };
     entry.commits += 1;
     entry.lastTouched ??= currentDate;
-    counts.set(line, entry);
+    counts.set(path, entry);
   }
 
   return [...counts.entries()]

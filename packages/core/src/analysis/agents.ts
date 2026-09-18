@@ -24,6 +24,9 @@ export const AGENTS_END = "<!-- project-surface:end -->";
 /** Where a generated block is looked for when checking staleness. */
 export const AGENTS_FILES: readonly string[] = Object.freeze(["AGENTS.md", "CLAUDE.md"]);
 
+/** Capabilities listed before the rest is summarised as a count. */
+export const DEFAULT_MAX_CAPABILITIES = 40;
+
 export interface AgentsOptions {
   includeInferred?: boolean;
   /** Cap on capabilities listed. The rest is summarised as a count. */
@@ -68,7 +71,7 @@ function isTrustworthy(tier: string, includeInferred: boolean): boolean {
  */
 export function renderAgentsBody(surface: Surface, options: AgentsOptions = {}): string {
   const includeInferred = options.includeInferred ?? false;
-  const max = options.maxCapabilities ?? 40;
+  const max = options.maxCapabilities ?? DEFAULT_MAX_CAPABILITIES;
   const evidenceById = new Map(surface.evidence.map((e) => [e.id, e]));
   const lines: string[] = [];
 
@@ -191,13 +194,22 @@ export function agentsFingerprint(body: string): string {
 /** The full block, markers included. */
 export function renderAgentsBlock(surface: Surface, options: AgentsOptions = {}): string {
   const body = renderAgentsBody(surface, options);
-  const flags = options.includeInferred ? " inferred=1" : "";
+  /* Every option that changes the body is recorded in the marker, so the
+     staleness check re-renders with the same options and compares like with
+     like. A block written with --max-capabilities 5 is not stale because the
+     default would have listed 40. */
+  const flags =
+    (options.includeInferred ? " inferred=1" : "") +
+    (options.maxCapabilities !== undefined && options.maxCapabilities !== DEFAULT_MAX_CAPABILITIES
+      ? ` max=${options.maxCapabilities}`
+      : "");
   return `${AGENTS_BEGIN} fingerprint=${agentsFingerprint(body)}${flags} -->\n${body}\n${AGENTS_END}`;
 }
 
 export interface AgentsMarker {
   fingerprint: string;
   includeInferred: boolean;
+  maxCapabilities: number;
   start: number;
   end: number;
 }
@@ -211,37 +223,47 @@ export function findAgentsBlock(content: string): AgentsMarker | null {
   if (headerEnd < 0 || end < 0) return null;
   const header = content.slice(start, headerEnd);
   const fingerprint = /fingerprint=([0-9a-f]+)/.exec(header)?.[1] ?? "";
-  return { fingerprint, includeInferred: /\binferred=1\b/.test(header), start, end: end + AGENTS_END.length };
+  const max = /\bmax=(\d+)\b/.exec(header)?.[1];
+  return {
+    fingerprint,
+    includeInferred: /\binferred=1\b/.test(header),
+    maxCapabilities: max ? Number(max) : DEFAULT_MAX_CAPABILITIES,
+    start,
+    end: end + AGENTS_END.length,
+  };
 }
 
 /**
- * Compare a committed block against what the current surface would render.
- * Returns a finding when the file no longer describes the surface, or null
- * when there is no block or it is current.
+ * Compare each committed block against what the current surface would render
+ * with the options recorded in its marker. One finding per file that no
+ * longer describes the surface; a file without a block is not a finding.
  */
 export function detectAgentsDrift(
   files: ReadonlySet<string>,
   readFile: (relPath: string) => string | null,
   surface: Surface
-): HealthFinding | null {
+): HealthFinding[] {
+  const findings: HealthFinding[] = [];
   for (const path of AGENTS_FILES) {
     if (!files.has(path)) continue;
     const content = readFile(path);
     if (content === null) continue;
     const block = findAgentsBlock(content);
     if (!block) continue;
-    const expected = agentsFingerprint(renderAgentsBody(surface, { includeInferred: block.includeInferred }));
-    if (expected === block.fingerprint) return null;
-    return {
+    const expected = agentsFingerprint(
+      renderAgentsBody(surface, { includeInferred: block.includeInferred, maxCapabilities: block.maxCapabilities })
+    );
+    if (expected === block.fingerprint) continue;
+    findings.push({
       code: "AGENTS_MD_STALE",
       severity: "warn",
       message: `${path} contains a generated project-surface block that no longer matches the surface: what it tells an agent is out of date.`,
       subject: { kind: "project", id: path },
       paths: [path],
       remediation: `Run: surface agents --write ${path}`,
-    };
+    });
   }
-  return null;
+  return findings;
 }
 
 /**

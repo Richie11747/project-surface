@@ -9,9 +9,31 @@
  * All output matches the spec identifier pattern: ^[a-z0-9][a-z0-9._:/-]*$
  */
 
+import { createHash } from "node:crypto";
+
 const ALLOWED = /[^a-z0-9._:/-]+/g;
 const COLLAPSE = /-{2,}/g;
 const TRIM = /^[^a-z0-9]+|[^a-z0-9]+$/g;
+
+/**
+ * The schema caps an identifier at 200 characters. Every id producer here
+ * passes through `slug`, so the cap is enforced once: a longer slug keeps its
+ * readable head and gains a short content hash, which keeps two long names
+ * that share a prefix distinct and keeps the result stable across scans.
+ */
+const MAX_SLUG_LENGTH = 180;
+const MAX_ID_LENGTH = 200;
+
+function shorten(id: string, max: number): string {
+  if (id.length <= max) return id;
+  const digest = createHash("sha256").update(id).digest("hex").slice(0, 8);
+  return `${id.slice(0, max - 9).replace(TRIM, "")}-${digest}`;
+}
+
+/** Composite ids join several slugs; the schema cap applies to the whole. */
+function bounded(id: string): string {
+  return shorten(id, MAX_ID_LENGTH);
+}
 
 /** Normalize arbitrary text into an identifier-safe segment. */
 export function slug(input: string): string {
@@ -21,7 +43,7 @@ export function slug(input: string): string {
     .replace(ALLOWED, "-")
     .replace(COLLAPSE, "-")
     .replace(TRIM, "");
-  return out.length > 0 ? out : "unnamed";
+  return out.length > 0 ? shorten(out, MAX_SLUG_LENGTH) : "unnamed";
 }
 
 /**
@@ -78,7 +100,7 @@ export function capabilityIdFromRoute(method: string, path: string): string {
     .map(slug);
 
   const resource = segments.length > 0 ? segments.join(".") : "root";
-  return `${resource}.${routeVerb(method, path)}`;
+  return bounded(`${resource}.${routeVerb(method, path)}`);
 }
 
 /** Path segments that describe layout, not domain, and make poor namespaces. */
@@ -116,7 +138,7 @@ export function capabilityIdFromSymbol(modulePath: string, symbol: string): stri
   const tokens = camelToKebab(symbol).split("-").filter((t) => t.length > 0);
   const trimmed = tokens.filter((t) => t !== namespace);
   const name = (trimmed.length > 0 ? trimmed : tokens).join("-");
-  return `${namespace}.${slug(name)}`;
+  return bounded(`${namespace}.${slug(name)}`);
 }
 
 export function packageIdFromPath(path: string): string {
@@ -126,19 +148,19 @@ export function packageIdFromPath(path: string): string {
 
 export function commandId(name: string, packageId?: string): string {
   const base = slug(name);
-  return packageId && packageId !== "root" ? `${packageId}:${base}` : base;
+  return packageId && packageId !== "root" ? bounded(`${packageId}:${base}`) : base;
 }
 
 export function evidenceId(path: string): string {
-  return `evidence:${slug(path)}`;
+  return bounded(`evidence:${slug(path)}`);
 }
 
 export function constraintId(key: string): string {
-  return `constraint:${slug(key)}`;
+  return bounded(`constraint:${slug(key)}`);
 }
 
 export function riskId(type: string, path: string): string {
-  return `risk:${slug(type)}:${slug(path)}`;
+  return bounded(`risk:${slug(type)}:${slug(path)}`);
 }
 
 /**

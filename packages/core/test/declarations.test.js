@@ -202,3 +202,23 @@ constraints:
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("declarations: a plain directory owner expands to its files, a missing one stays as written", () => {
+  const root = scratch(`
+capabilities:
+  - id: model
+    title: The model
+    owners: [src/model, src/index.ts, src/vanished]
+`);
+  try {
+    const decl = loadDeclarations(root, NOW);
+    expandDeclaredOwners(decl, ["src/index.ts", "src/model/a.ts", "src/model/b.ts", "src/modeller.ts"]);
+    assert.deepEqual(
+      decl.capabilities[0].owners.map((o) => o.path),
+      ["src/model/a.ts", "src/model/b.ts", "src/index.ts", "src/vanished"]
+    );
+    assert.deepEqual(decl.errors, []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

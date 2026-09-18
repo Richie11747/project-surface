@@ -1,6 +1,6 @@
 {
   "schema": "project-surface/v1",
-  "generatedAt": "2026-09-15T19:27:09Z",
+  "generatedAt": "2026-09-18T17:50:10Z",
   "generator": {
     "name": "project-surface",
     "version": "0.2.0"
@@ -105,7 +105,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -134,7 +134,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -163,7 +163,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -188,7 +188,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -213,7 +213,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -238,7 +238,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -263,7 +263,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -288,7 +288,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -313,18 +313,18 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "verification": {
         "status": "passed",
         "exitCode": 0,
-        "durationMs": 42141,
-        "observedAt": "2026-09-15T17:56:36Z",
-        "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]"
+        "durationMs": 100463,
+        "observedAt": "2026-09-18T17:48:25Z",
+        "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14
       },
       "confidence": 0.95
@@ -345,7 +345,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -370,18 +370,18 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "verification": {
         "status": "passed",
         "exitCode": 0,
-        "durationMs": 686,
-        "observedAt": "2026-09-15T17:56:36Z",
-        "summary": "> project-surface-monorepo@0.2.0 typecheck\n> tsc --build --dry\n\n19:57:19 - Project './packages/core/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/adapter-sdk/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/adapters/typescript/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/adapters/python/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/adapters/go/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/adapters/rust/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/adapters/generic/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/mcp-server/tsconfig.json' is up to date\n\n19:57:19 - Project './packages/cli/tsconfig.json' is up to date"
+        "durationMs": 1604,
+        "observedAt": "2026-09-18T17:48:25Z",
+        "summary": "> project-surface-monorepo@0.2.0 typecheck\n> tsc --build --dry\n\n19:50:07 - Project './packages/core/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/adapter-sdk/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/adapters/typescript/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/adapters/python/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/adapters/go/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/adapters/rust/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/adapters/generic/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/mcp-server/tsconfig.json' is up to date\n\n19:50:07 - Project './packages/cli/tsconfig.json' is up to date"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14
       },
       "confidence": 0.95
@@ -441,7 +441,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "src.env-example-names",
@@ -451,7 +451,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "5497045e543a0e6ac5d446e41eb02618"
       },
@@ -513,7 +513,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "parse.go",
@@ -523,7 +523,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "b17e75775ed2f3047623a60b5f4df6d8"
       },
@@ -581,7 +581,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "parse.is-python-test",
@@ -590,7 +590,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "c5136f73c1ac63451446ba85f784cc63"
       },
@@ -664,7 +664,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "parse.cargo-toml",
@@ -677,7 +677,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "e6bfd6cdff96cc40b2e29208a1cee9ef"
       },
@@ -775,7 +775,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "builders.classify-command",
@@ -791,7 +791,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "554e8549957c0bc432a94ea5e4a2fee4"
       },
@@ -914,7 +914,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "discover.build-capabilities",
@@ -937,7 +937,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "f0b44f6d13fd159bb7b1903467037598"
       },
@@ -976,19 +976,19 @@
           },
           {
             "path": "packages/core/src/analysis/agents.ts",
-            "locator": "L187"
+            "locator": "L190"
           },
           {
             "path": "packages/core/src/analysis/agents.ts",
-            "locator": "L192"
+            "locator": "L195"
           },
           {
             "path": "packages/core/src/analysis/agents.ts",
-            "locator": "L206"
+            "locator": "L218"
           },
           {
             "path": "packages/core/src/analysis/agents.ts",
-            "locator": "L222"
+            "locator": "L241"
           },
           {
             "path": "packages/core/src/analysis/agents.ts",
@@ -996,15 +996,15 @@
           },
           {
             "path": "packages/core/src/analysis/agents.ts",
-            "locator": "L252"
+            "locator": "L274"
           },
           {
             "path": "packages/core/src/analysis/agents.ts",
-            "locator": "L69"
+            "locator": "L72"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "analysis.agents-files",
@@ -1017,9 +1017,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "14fa38737e09c58cdd2fba5a1fe4d4f4"
+        "ownersFingerprint": "c5b4893f4941b267c3f201f5f9f66652"
       },
       "confidence": 1
     },
@@ -1060,20 +1060,20 @@
           },
           {
             "path": "packages/core/src/analysis/constraints.ts",
-            "locator": "L138"
+            "locator": "L146"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "analysis.evaluate-constraint-checks"
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "a6dc6b9afc73aa0a46b7306d175d3d82"
+        "ownersFingerprint": "ca3175a58be4d589fdc4d414d52162d8"
       },
       "confidence": 1
     },
@@ -1122,7 +1122,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "analysis.estimate-tokens",
@@ -1131,7 +1131,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "a3eadd3f302b2d4aec6ecfc888ed6480"
       },
@@ -1182,7 +1182,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "analysis.diff-surfaces",
@@ -1190,7 +1190,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "1a9a95cd742ecd02c8bc6deca53d5f83"
       },
@@ -1212,6 +1212,10 @@
       ],
       "evidence": [
         {
+          "id": "evidence:packages/core/test/health.test.js",
+          "link": "path-proximity"
+        },
+        {
           "id": "evidence:test/cli.test.js",
           "link": "declared"
         }
@@ -1229,11 +1233,11 @@
           },
           {
             "path": "packages/core/src/analysis/health.ts",
-            "locator": "L236"
+            "locator": "L251"
           },
           {
             "path": "packages/core/src/analysis/health.ts",
-            "locator": "L246"
+            "locator": "L261"
           },
           {
             "path": "packages/core/src/analysis/health.ts",
@@ -1241,7 +1245,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "analysis.detect-health",
@@ -1250,9 +1254,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "b0187368301fa2d61b12995c5a943226"
+        "ownersFingerprint": "6ceaa15fceef000005f4ed6b9acbefa6"
       },
       "confidence": 1
     },
@@ -1289,20 +1293,20 @@
           },
           {
             "path": "packages/core/src/analysis/impact.ts",
-            "locator": "L52"
+            "locator": "L69"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "analysis.analyze-impact"
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "1a65d4b8324d75edbf999f8dd35e427b"
+        "ownersFingerprint": "8d9b401691e11b0e261c95c3f92fff81"
       },
       "confidence": 1
     },
@@ -1344,20 +1348,20 @@
           },
           {
             "path": "packages/core/src/analysis/why.ts",
-            "locator": "L211"
+            "locator": "L212"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "analysis.explain-claim"
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "da4fb472519f6b50c3af6517db882405"
+        "ownersFingerprint": "283b03c33d93230f51daf6973e8f8d59"
       },
       "confidence": 1
     },
@@ -1429,7 +1433,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "declarations.expand-declared-owners",
@@ -1443,9 +1447,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "685943e0c7dfce6a2054ae7ed73dcd0f"
+        "ownersFingerprint": "d2cc3d54389efe90016d5dc1fe20b985"
       },
       "confidence": 1
     },
@@ -1467,6 +1471,10 @@
         }
       ],
       "evidence": [
+        {
+          "id": "evidence:packages/core/test/git.test.js",
+          "link": "path-proximity"
+        },
         {
           "id": "evidence:packages/core/test/safety.test.js",
           "link": "declared"
@@ -1514,19 +1522,23 @@
           },
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L100"
+            "locator": "L104"
           },
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L110"
+            "locator": "L124"
           },
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L153"
+            "locator": "L133"
           },
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L170"
+            "locator": "L180"
+          },
+          {
+            "path": "packages/core/src/git/git.ts",
+            "locator": "L197"
           },
           {
             "path": "packages/core/src/git/git.ts",
@@ -1546,15 +1558,11 @@
           },
           {
             "path": "packages/core/src/git/git.ts",
-            "locator": "L88"
-          },
-          {
-            "path": "packages/core/src/git/git.ts",
-            "locator": "L93"
+            "locator": "L99"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "fs.default-ignores",
@@ -1577,9 +1585,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "2906ad30b26ba0d4122c5f800730ccea"
+        "ownersFingerprint": "250ea6d1f6daaa6de6332c29576e0c51"
       },
       "confidence": 1
     },
@@ -1658,7 +1666,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "adapter.empty-result",
@@ -1669,9 +1677,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "5ac2ff2391cedd286204b91384f0638c"
+        "ownersFingerprint": "3843d15762a2e7b375ac49026d55f687"
       },
       "confidence": 1
     },
@@ -1708,11 +1716,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "761e3124fd343e99d62f4e74f9a7cc56"
       },
@@ -1751,11 +1759,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "da0d933922b9c022412e8b54431d49fa"
       },
@@ -1794,11 +1802,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "fe28e66b8f2409e87a05c6ddf1953f1e"
       },
@@ -1837,11 +1845,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "cdf16af8669db5d741b777e6b4641628"
       },
@@ -1880,11 +1888,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "0c6fa0243a3ce953fb39ab61b89f68a7"
       },
@@ -1923,11 +1931,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "61f109eb98cc4bbb23eeef6d5a39ce77"
       },
@@ -1966,11 +1974,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "53c59f3c0396c49370806cf183bf37d6"
       },
@@ -2009,11 +2017,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "1888e324a04e15700fc1de6601856ab4"
       },
@@ -2087,7 +2095,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "commands.badge",
@@ -2101,7 +2109,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "900ba90cf69eb589b59524e5e2783825"
       },
@@ -2229,7 +2237,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "adapters.adapter-by-id",
@@ -2253,7 +2261,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "0368b04da7906b1f38ccf381b99e9144"
       },
@@ -2292,11 +2300,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "9e837922fe97baf80071a3056e933de3"
       },
@@ -2335,11 +2343,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "fafe4de67091bdad5994c2fe6f5854f2"
       },
@@ -2460,7 +2468,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "unknown",
@@ -2504,7 +2512,7 @@
           },
           {
             "path": "packages/core/src/evidence/runner.ts",
-            "locator": "L141"
+            "locator": "L150"
           },
           {
             "path": "packages/core/src/evidence/runner.ts",
@@ -2524,7 +2532,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "evidence.command-not-allowed-error",
@@ -2535,9 +2543,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "d131521dfebe62fea6cbdbbcdd0a0f60"
+        "ownersFingerprint": "23f64e67ae785018c1986ebaff53e215"
       },
       "confidence": 1
     },
@@ -2574,11 +2582,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "bef72367e584f3b8b4002a9b0eeb276f"
       },
@@ -2617,11 +2625,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "80190113755b12616320a489d18c5c14"
       },
@@ -2702,7 +2710,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "src.create-mcp-server",
@@ -2717,7 +2725,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "7989ace403438870a77a278797fb8a89"
       },
@@ -2760,11 +2768,11 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "86fb8817411ab9108da8ce265708f1d3"
       },
@@ -2871,7 +2879,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "bench.build-prompt",
@@ -2890,7 +2898,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "0bef9f758be136d5b25b6aec0ab63437"
       },
@@ -2963,7 +2971,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "scripts.build-fixture-snapshot",
@@ -2973,7 +2981,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "b8fad57bc2ddb0124c1154d033bab204"
       },
@@ -3036,7 +3044,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "redact.looks-secret-name",
@@ -3048,7 +3056,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "820dd2138b823b34b4c63f1ea457f02c"
       },
@@ -3122,7 +3130,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "schema.assert-valid-surface",
@@ -3132,7 +3140,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "2e280ea7d9623f04af165c078621f850"
       },
@@ -3202,7 +3210,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "model.compute-confidence",
@@ -3215,7 +3223,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "6d2fe57a453a3725b8285b5513773fa9"
       },
@@ -3274,7 +3282,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "model.days-between",
@@ -3285,7 +3293,7 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
         "ownersFingerprint": "71b4ecfb4d671fc977b781434d9b65b2"
       },
@@ -3324,19 +3332,7 @@
           },
           {
             "path": "packages/core/src/model/ids.ts",
-            "locator": "L114"
-          },
-          {
-            "path": "packages/core/src/model/ids.ts",
-            "locator": "L122"
-          },
-          {
-            "path": "packages/core/src/model/ids.ts",
-            "locator": "L127"
-          },
-          {
-            "path": "packages/core/src/model/ids.ts",
-            "locator": "L132"
+            "locator": "L119"
           },
           {
             "path": "packages/core/src/model/ids.ts",
@@ -3344,31 +3340,43 @@
           },
           {
             "path": "packages/core/src/model/ids.ts",
-            "locator": "L140"
+            "locator": "L144"
           },
           {
             "path": "packages/core/src/model/ids.ts",
-            "locator": "L148"
+            "locator": "L149"
           },
           {
             "path": "packages/core/src/model/ids.ts",
-            "locator": "L17"
+            "locator": "L154"
           },
           {
             "path": "packages/core/src/model/ids.ts",
-            "locator": "L32"
+            "locator": "L158"
           },
           {
             "path": "packages/core/src/model/ids.ts",
-            "locator": "L70"
+            "locator": "L162"
           },
           {
             "path": "packages/core/src/model/ids.ts",
-            "locator": "L97"
+            "locator": "L170"
+          },
+          {
+            "path": "packages/core/src/model/ids.ts",
+            "locator": "L39"
+          },
+          {
+            "path": "packages/core/src/model/ids.ts",
+            "locator": "L54"
+          },
+          {
+            "path": "packages/core/src/model/ids.ts",
+            "locator": "L92"
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "aliases": [
         "model.camel-to-kebab",
@@ -3385,9 +3393,9 @@
       ],
       "freshness": {
         "status": "fresh",
-        "verifiedAt": "2026-09-15T17:56:36Z",
+        "verifiedAt": "2026-09-18T17:48:25Z",
         "staleAfterDays": 14,
-        "ownersFingerprint": "842643e0368fbe79db329af22257883c"
+        "ownersFingerprint": "6720098c4b5cdbeb95d4b13580852082"
       },
       "confidence": 1
     }
@@ -3415,7 +3423,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "checked": {
         "status": "passed",
@@ -3443,7 +3451,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "checked": {
         "status": "passed",
@@ -3465,7 +3473,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3483,7 +3491,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3501,7 +3509,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 1
     },
@@ -3530,7 +3538,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "checked": {
         "status": "passed",
@@ -3562,7 +3570,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "checked": {
         "status": "passed",
@@ -3606,7 +3614,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "checked": {
         "status": "passed",
@@ -3628,7 +3636,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 1
     },
@@ -3646,7 +3654,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3692,7 +3700,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "checked": {
         "status": "passed",
@@ -3714,7 +3722,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 1
     }
@@ -3737,7 +3745,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3758,7 +3766,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3779,7 +3787,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3800,7 +3808,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3821,7 +3829,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.7
     },
@@ -3839,7 +3847,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 1
     }
@@ -3862,7 +3870,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 1
     },
@@ -3898,7 +3906,7 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 0.9
     },
@@ -3920,7 +3928,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 1
     },
@@ -3941,7 +3949,7 @@
           }
         ],
         "adapter": "declarations",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
       "confidence": 1
     }
@@ -3961,10 +3969,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -3981,10 +3989,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4001,10 +4009,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4021,10 +4029,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4041,10 +4049,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4061,10 +4069,50 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
+      "confidence": 0.95
+    },
+    {
+      "id": "evidence:packages/core/test/git.test.js",
+      "kind": "test",
+      "path": "packages/core/test/git.test.js",
+      "commandId": "test",
+      "status": "passed",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "packages/core/test/git.test.js"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-18T17:50:10Z"
+      },
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
+      "confidence": 0.95
+    },
+    {
+      "id": "evidence:packages/core/test/health.test.js",
+      "kind": "test",
+      "path": "packages/core/test/health.test.js",
+      "commandId": "test",
+      "status": "passed",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "packages/core/test/health.test.js"
+          }
+        ],
+        "adapter": "typescript",
+        "observedAt": "2026-09-18T17:50:10Z"
+      },
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4081,10 +4129,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4101,10 +4149,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4121,10 +4169,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4141,10 +4189,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4161,10 +4209,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4181,10 +4229,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4201,10 +4249,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4221,10 +4269,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     },
     {
@@ -4241,10 +4289,10 @@
           }
         ],
         "adapter": "typescript",
-        "observedAt": "2026-09-15T19:27:09Z"
+        "observedAt": "2026-09-18T17:50:10Z"
       },
-      "observedAt": "2026-09-15T17:56:36Z",
-      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (5.9729ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.4495ms)\n✔ parseRust counts runtime-provided test attributes as tests (2.9903ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (2.0406ms)\n✔ each tier sits at its floor with a single source (1.9762ms)\n✔ a guess never outranks an observation, however corroborated (0.5659ms)\n✔ corroborating sources raise confidence within the tier band (0.3571ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.4222ms)\n✔ a declaration never decays: a human owns the statement (0.3094ms)\n✔ evidence promotes by exactly one tier (0.2793ms)\n✔ confidence stays inside the unit interval (0.4274ms)\n✔ labels track the numeric bands (0.2608ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.1883ms)\n✔ forbid-import without an import graph is unchecked, never passed (0.8484ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.3049ms)\n✔ require-test passes when every covered capability has evidence (1.769ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.0065ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (0.848ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (0.4591ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.0509ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.5876ms)\n✔ glob: plain path names itself and its subtree (1.7113ms)\n✔ glob: star stops at slashes, doublestar does not (0.7324ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.4291ms)\n✔ glob: expansion against a file list is or\n... [truncated 7132 chars]",
+      "observedAt": "2026-09-18T17:48:25Z",
+      "summary": "> project-surface-monorepo@0.2.0 test\n> npm run build && node scripts/run-tests.mjs\n\n\n> project-surface-monorepo@0.2.0 build\n> tsc --build\n\n✔ parseRust recognises unqualified and fully-qualified route attributes (8.2099ms)\n✔ parseRust ignores qualified route attributes without absolute paths (0.6975ms)\n✔ parseRust counts runtime-provided test attributes as tests (4.2409ms)\n✔ parseCargoToml reads workspace members and named [[bin]] targets (4.4575ms)\n✔ each tier sits at its floor with a single source (4.9986ms)\n✔ a guess never outranks an observation, however corroborated (0.8771ms)\n✔ corroborating sources raise confidence within the tier band (0.5519ms)\n✔ a stale verified claim is demoted, because the proof no longer describes the code (0.8465ms)\n✔ a declaration never decays: a human owns the statement (0.5911ms)\n✔ evidence promotes by exactly one tier (0.5958ms)\n✔ confidence stays inside the unit interval (0.9873ms)\n✔ labels track the numeric bands (0.5554ms)\n✔ forbid-import matches resolved project files and bare specifiers (9.2452ms)\n✔ forbid-import without an import graph is unchecked, never passed (1.1243ms)\n✔ forbid-file reports every matching project file, and .env.example is not .env (1.5394ms)\n✔ require-test passes when every covered capability has evidence (2.1699ms)\n✔ forbid-env reports reads outside the allowed paths; a dotenv listing is not a read (1.8511ms)\n✔ forbid-env without paths forbids every read, and passes when nothing reads the name (1.9727ms)\n✔ forbid-env is unchecked when only the fallback adapter saw the project (1.0476ms)\n✔ max-owners flags a capability over the limit, scoped by paths when given (1.6365ms)\n✔ max-owners counts distinct files, not owner entries with different locators (0.7257ms)\n✔ glob: plain path names itself and its subtree (4.4364ms)\n✔ glob: star stops at slashes, doublestar does not (1.3731ms)\n✔ glob: question mark is one non-slash character; regex specials are literal (0.8553ms)\n✔ glob: expansion against a file list is \n... [truncated 8169 chars]",
       "confidence": 0.95
     }
   ],
@@ -4375,24 +4423,24 @@
   ],
   "git": {
     "available": true,
-    "head": "b50934fba6693c43b07fa578f3f785c8e6083e69",
-    "branch": "main",
+    "head": "12d40fe221065b4c7aba01d700042b5b64cbd082",
+    "branch": "fix/core-correctness",
     "dirty": true,
     "recentChanges": [
       {
         "path": ".project/surface.json",
-        "commits": 23,
-        "lastTouched": "2026-09-15T19:09:51Z"
+        "commits": 24,
+        "lastTouched": "2026-09-15T19:27:24Z"
+      },
+      {
+        "path": "README.md",
+        "commits": 19,
+        "lastTouched": "2026-09-15T19:27:24Z"
       },
       {
         "path": "CHANGELOG.md",
         "commits": 18,
         "lastTouched": "2026-09-15T19:09:51Z"
-      },
-      {
-        "path": "README.md",
-        "commits": 18,
-        "lastTouched": "2026-09-15T17:57:39Z"
       },
       {
         "path": "CLAUDE.md",
@@ -4430,9 +4478,24 @@
         "lastTouched": "2026-09-15T14:55:39Z"
       },
       {
+        "path": "packages/adapter-sdk/package.json",
+        "commits": 6,
+        "lastTouched": "2026-09-15T19:27:24Z"
+      },
+      {
+        "path": "packages/cli/package.json",
+        "commits": 6,
+        "lastTouched": "2026-09-15T19:27:24Z"
+      },
+      {
         "path": "packages/core/src/build/pipeline.ts",
         "commits": 6,
         "lastTouched": "2026-09-15T17:49:02Z"
+      },
+      {
+        "path": "packages/mcp-server/package.json",
+        "commits": 6,
+        "lastTouched": "2026-09-15T19:27:24Z"
       },
       {
         "path": "spec/v1/SPEC.md",
@@ -4448,21 +4511,6 @@
         "path": "fixtures/ts-api/expected.surface.json",
         "commits": 5,
         "lastTouched": "2026-09-15T17:49:02Z"
-      },
-      {
-        "path": "packages/adapter-sdk/package.json",
-        "commits": 5,
-        "lastTouched": "2026-09-13T14:22:55Z"
-      },
-      {
-        "path": "packages/cli/package.json",
-        "commits": 5,
-        "lastTouched": "2026-09-13T15:46:10Z"
-      },
-      {
-        "path": "packages/mcp-server/package.json",
-        "commits": 5,
-        "lastTouched": "2026-09-15T14:58:45Z"
       },
       {
         "path": "bench/package.json",

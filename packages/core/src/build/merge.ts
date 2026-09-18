@@ -208,11 +208,15 @@ export function mergeEnvironment(items: DraftEnvironmentVariable[]): DraftEnviro
       byName.set(item.name, item);
       continue;
     }
+    /* `required` follows rule 1: a maintainer declaring `required: false`
+       overrides an adapter that assumed every read is mandatory. `secret` is
+       sticky in either direction - the cost of the two mistakes is not equal. */
+    const winner = bWins(existing.provenance, item.provenance) ? item : existing;
     byName.set(item.name, {
-      ...(bWins(existing.provenance, item.provenance) ? item : existing),
+      ...winner,
       provenance: mergeProvenance(existing.provenance, item.provenance),
       usedBy: uniqueRefs([...existing.usedBy, ...item.usedBy]),
-      required: existing.required || item.required,
+      required: winner.required,
       secret: existing.secret || item.secret,
     });
   }
