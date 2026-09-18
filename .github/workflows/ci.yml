@@ -8,10 +8,16 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same branch supersedes the run in flight.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: node ${{ matrix.node }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -28,6 +34,10 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+
+      # `tsc --build` skips projects it considers up to date; --force re-checks
+      # every source file regardless of build state.
+      - run: npm run typecheck
 
       # The embedded schema module must match the normative spec file.
       - name: Schema is in sync with the spec

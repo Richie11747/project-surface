@@ -4,6 +4,23 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **`npm run typecheck` was a no-op.** `tsc --build --dry` only reports which projects would be built; it
+  read no source file when `dist/` was current. The script now runs `tsc --build --force`, and CI runs it
+  as its own step. `tsconfig.base.json` additionally enables `noUnusedLocals` and `noUnusedParameters`.
+- `@types/node` is pinned to the 20.x line the `engines` field promises, so code cannot compile against
+  APIs that do not exist on the oldest supported runtime.
+- Transitive advisories cleared via `npm audit fix`: `fast-uri` (through `ajv`), `hono` and `qs`
+  (through `@modelcontextprotocol/sdk`). No direct dependency changed.
+- `fixtures/rust-svc` no longer carries a committed `.project/surface.json`; no other fixture did, and the
+  snapshot never referenced it.
+
+### Changed
+
+- CI: matrix jobs have a 20-minute timeout and a newer push to the same ref cancels the run in flight.
+- `project-surface` (the CLI package) declares an `exports` map like every other workspace package.
+
 ## [0.2.0] - 2026-09-15
 
 First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its

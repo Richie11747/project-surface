@@ -9,7 +9,7 @@
  * taken so consumers know how trustworthy the listing is.
  */
 
-import { lstatSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { listFiles } from "../git/git.js";
 
