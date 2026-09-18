@@ -41,8 +41,3 @@ export function isOnPath(binary: string): boolean {
   }
   return false;
 }
-
-/** The first of several interchangeable binaries that is present. */
-export function firstOnPath(binaries: string[]): string | null {
-  return binaries.find((b) => isOnPath(b)) ?? null;
-}

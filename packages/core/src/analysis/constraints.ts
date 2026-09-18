@@ -19,6 +19,7 @@
  */
 
 import { globFilter } from "../fs/glob.js";
+import { ownerPaths } from "../model/freshness.js";
 import type {
   Capability,
   ConstraintCheck,
@@ -120,7 +121,7 @@ function checkMaxOwners(id: string, check: ConstraintCheck, input: CheckInput): 
   const out: ConstraintViolation[] = [];
   for (const capability of input.capabilities) {
     /* Distinct files: one file can appear twice as an owner, with different locators. */
-    const owners = [...new Set(capability.owners.map((o) => o.path))].sort();
+    const owners = ownerPaths(capability.owners);
     if (owners.length <= limit || !owners.some(inScope)) continue;
     out.push({
       constraintId: id,
@@ -166,9 +167,15 @@ export function evaluateConstraintChecks(input: CheckInput): CheckResult {
               ? checkMaxOwners(constraint.id, check, input)
               : checkRequireTest(constraint.id, check, input);
 
-    const deduped = found.filter(
-      (v, i) => found.findIndex((o) => o.path === v.path && o.detail === v.detail) === i
-    );
+    // First occurrence wins, in one pass: a `forbid-file` glob over every log
+    // file or a large import graph can produce thousands of hits.
+    const seen = new Set<string>();
+    const deduped = found.filter((v) => {
+      const key = `${v.path}\n${v.detail}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
     violations.push(...deduped);
     return {
       ...constraint,

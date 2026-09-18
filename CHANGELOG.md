@@ -4,6 +4,30 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- A declared `ignore:` is applied inside the file walk, before the 20 000-file cap, so an ignored tree
+  no longer spends the budget the project's own files then run out of (`walkProject` takes an optional
+  `exclude` predicate). The fallback walk skips the built-in ignore names only when they are directories;
+  a file called `build` or `env` is a file.
+- Fewer syscalls and spawns per scan: the root's real path is resolved once rather than once per file
+  read; `AdapterContext.readJson` parses each manifest once (the TypeScript adapter asked for the root
+  `package.json` once per package); `git rev-parse` answers `HEAD` and the branch in one spawn; constraint
+  violations are de-duplicated in one pass instead of quadratically; context-pack keyword matching
+  lower-cases each field once. `AdapterContext.match` also strips a sticky `y` flag, which made a filter
+  stateful just as `g` did.
+- `surface diff` distinguishes `DECLARATION_INVALID` findings by message, so fixing one declaration error
+  while introducing another no longer reads as "no change".
+- One helper instead of six copies: `indexById` (core) replaces the hand-built evidence maps in `agents`,
+  `context`, `impact`, `why`, `diff` and the MCP read tools; `ownerPaths` is reused where owner paths were
+  de-duplicated inline; declared evidence ids go through `evidenceId`.
+
+### Removed
+
+- Dead exports, none referenced inside the repository or documented: `matchesAny`, `uniqueId`,
+  `CACHE_DIR` (core), `extractEnvNames`, `firstOnPath` (adapter-sdk), the internal `SCHEMA_ID`,
+  `Declarations.present`, `crateOf` (Rust adapter) and the `uniqueRefs` alias of `dedupeSources`.
+
 ## [0.2.0] - 2026-09-15
 
 First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its

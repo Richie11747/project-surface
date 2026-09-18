@@ -11,6 +11,7 @@
  */
 
 import { confidenceLabel } from "../model/confidence.js";
+import { ownerPaths } from "../model/freshness.js";
 import type { ConstraintViolation } from "./constraints.js";
 import type {
   Capability,
@@ -92,7 +93,7 @@ export function detectHealth(input: HealthInput): HealthFinding[] {
   }
 
   for (const capability of input.capabilities) {
-    const missing = capability.owners.map((o) => o.path).filter((p) => !input.files.has(p));
+    const missing = ownerPaths(capability.owners).filter((p) => !input.files.has(p));
     if (missing.length > 0) {
       findings.push({
         code: capability.provenance.tier === "declared" ? "DECLARATION_ORPHANED" : "MISSING_OWNER",

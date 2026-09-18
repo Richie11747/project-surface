@@ -52,11 +52,6 @@ export function matchesGlob(path: string, pattern: string): boolean {
   return globToRegExp(pattern).test(path);
 }
 
-/** Whether `path` matches at least one of `patterns`. Empty pattern lists match nothing. */
-export function matchesAny(path: string, patterns: readonly string[]): boolean {
-  return patterns.some((p) => matchesGlob(path, p));
-}
-
 /** Compile a pattern list once and test many paths against it. */
 export function globFilter(patterns: readonly string[]): (path: string) => boolean {
   const compiled = patterns.map(globToRegExp);

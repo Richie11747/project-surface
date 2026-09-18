@@ -16,6 +16,7 @@
  */
 
 import { hashContent } from "../model/freshness.js";
+import { indexById } from "../model/ids.js";
 import type { Capability, Command, Constraint, HealthFinding, Surface } from "../schema/types.js";
 
 export const AGENTS_BEGIN = "<!-- project-surface:begin";
@@ -69,7 +70,7 @@ function isTrustworthy(tier: string, includeInferred: boolean): boolean {
 export function renderAgentsBody(surface: Surface, options: AgentsOptions = {}): string {
   const includeInferred = options.includeInferred ?? false;
   const max = options.maxCapabilities ?? 40;
-  const evidenceById = new Map(surface.evidence.map((e) => [e.id, e]));
+  const evidenceById = indexById(surface.evidence);
   const lines: string[] = [];
 
   lines.push(`# ${surface.project.name} - what is known, and how`);
@@ -144,7 +145,7 @@ export function renderAgentsBody(surface: Surface, options: AgentsOptions = {}):
     .filter((c) => isTrustworthy(c.provenance.tier, includeInferred))
     .slice()
     .sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id));
-  const omittedInferred = surface.capabilities.length - surface.capabilities.filter((c) => isTrustworthy(c.provenance.tier, includeInferred)).length;
+  const omittedInferred = surface.capabilities.length - capabilities.length;
   if (capabilities.length > 0) {
     lines.push("## Where things live");
     lines.push("");

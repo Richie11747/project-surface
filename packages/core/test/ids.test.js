@@ -7,7 +7,6 @@ import {
   moduleNamespace,
   packageIdFromPath,
   slug,
-  uniqueId,
 } from "../dist/index.js";
 
 const IDENTIFIER = /^[a-z0-9][a-z0-9._:/-]*$/;
@@ -55,11 +54,4 @@ test("id derivation is a pure function of its inputs", () => {
   for (let i = 0; i < 100; i++) {
     assert.equal(capabilityIdFromRoute("POST", "/checkout"), "checkout.create");
   }
-});
-
-test("collisions resolve deterministically", () => {
-  const taken = new Set();
-  assert.equal(uniqueId("a.b", taken), "a.b");
-  assert.equal(uniqueId("a.b", taken), "a.b-2");
-  assert.equal(uniqueId("a.b", taken), "a.b-3");
 });

@@ -14,6 +14,7 @@
 
 import { distinctSources } from "../build/assemble.js";
 import { explainConfidence, promoteWithEvidence, type ConfidenceTrace } from "../model/confidence.js";
+import { indexById } from "../model/ids.js";
 import type {
   Capability,
   Command,
@@ -71,7 +72,7 @@ function findCapability(surface: Surface, id: string): Capability | undefined {
 }
 
 function explainCapability(surface: Surface, c: Capability): ClaimExplanation {
-  const byId = new Map(surface.evidence.map((e) => [e.id, e]));
+  const byId = indexById(surface.evidence);
   const evidence: ExplainedEvidence[] = c.evidence.map((ref) => {
     const entry = byId.get(ref.id);
     return {

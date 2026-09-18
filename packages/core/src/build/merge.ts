@@ -69,10 +69,6 @@ function uniqueStrings(values: string[]): string[] {
   return [...new Set(values)].sort();
 }
 
-function uniqueRefs(refs: SourceRef[]): SourceRef[] {
-  return dedupeSources(refs);
-}
-
 function uniqueEvidence(refs: EvidenceRef[]): EvidenceRef[] {
   const linkStrength: Record<EvidenceRef["link"], number> = {
     declared: 4,
@@ -114,8 +110,8 @@ export function mergeCapabilities(items: DraftCapability[]): DraftCapability[] {
     return {
       ...base,
       provenance: mergeProvenance(a.provenance, b.provenance),
-      owners: uniqueRefs([...a.owners, ...b.owners]),
-      contracts: uniqueRefs([...a.contracts, ...b.contracts]),
+      owners: dedupeSources([...a.owners, ...b.owners]),
+      contracts: dedupeSources([...a.contracts, ...b.contracts]),
       evidence: uniqueEvidence([...a.evidence, ...b.evidence]),
       environment: uniqueStrings([...a.environment, ...b.environment]),
       tags: uniqueStrings([...a.tags, ...b.tags]),
@@ -211,7 +207,7 @@ export function mergeEnvironment(items: DraftEnvironmentVariable[]): DraftEnviro
     byName.set(item.name, {
       ...(bWins(existing.provenance, item.provenance) ? item : existing),
       provenance: mergeProvenance(existing.provenance, item.provenance),
-      usedBy: uniqueRefs([...existing.usedBy, ...item.usedBy]),
+      usedBy: dedupeSources([...existing.usedBy, ...item.usedBy]),
       required: existing.required || item.required,
       secret: existing.secret || item.secret,
     });

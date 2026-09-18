@@ -6,7 +6,7 @@
  * one file five times.
  */
 
-import { existsSafe, readFileSafe, readJsonSafe } from "../fs/walk.js";
+import { existsSafe, readFileSafe } from "../fs/walk.js";
 import type { AdapterContext } from "../adapter.js";
 import type { GitInfo, Timestamp } from "../schema/types.js";
 
@@ -22,6 +22,7 @@ export function createAdapterContext(options: CreateContextOptions): AdapterCont
   const { root, files, git, now } = options;
   const fileCache = new Map<string, string | null>();
   const matchCache = new Map<string, string[]>();
+  const jsonCache = new Map<string, unknown>();
   const fileSet = new Set(files);
 
   return {
@@ -35,8 +36,22 @@ export function createAdapterContext(options: CreateContextOptions): AdapterCont
       return fileCache.get(relPath) ?? null;
     },
 
+    /* Parsed once per path: the TypeScript adapter asks for the root manifest
+       once per package, and every ask used to be a fresh read and parse. */
     readJson<T>(relPath: string): T | null {
-      return readJsonSafe<T>(root, relPath);
+      if (!jsonCache.has(relPath)) {
+        const raw = this.readFile(relPath);
+        let parsed: unknown = null;
+        if (raw !== null) {
+          try {
+            parsed = JSON.parse(raw);
+          } catch {
+            parsed = null;
+          }
+        }
+        jsonCache.set(relPath, parsed);
+      }
+      return (jsonCache.get(relPath) as T | null) ?? null;
     },
 
     exists(relPath: string): boolean {
@@ -47,7 +62,8 @@ export function createAdapterContext(options: CreateContextOptions): AdapterCont
       const key = `${pattern.source}\u0000${pattern.flags}`;
       const cached = matchCache.get(key);
       if (cached) return cached;
-      const stateless = new RegExp(pattern.source, pattern.flags.replace("g", ""));
+      /* `g` and `y` both make `.test` stateful; neither belongs in a filter. */
+      const stateless = new RegExp(pattern.source, pattern.flags.replace(/[gy]/g, ""));
       const result = files.filter((f) => stateless.test(f));
       matchCache.set(key, result);
       return result;

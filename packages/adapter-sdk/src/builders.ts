@@ -59,17 +59,3 @@ export function classifyCommand(name: string): import("@project-surface/core").C
   if (/(migrate|migration)/.test(n)) return "migrate";
   return "other";
 }
-
-/** Environment variable names referenced by a source file, in appearance order. */
-export function extractEnvNames(content: string, patterns: RegExp[]): string[] {
-  const found = new Set<string>();
-  for (const pattern of patterns) {
-    const re = new RegExp(pattern.source, pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`);
-    let match: RegExpExecArray | null;
-    while ((match = re.exec(content)) !== null) {
-      const name = match[1];
-      if (name && /^[A-Z][A-Z0-9_]*$/.test(name)) found.add(name);
-    }
-  }
-  return [...found].sort();
-}
