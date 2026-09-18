@@ -87,12 +87,13 @@ export interface EvidenceInput {
 export function buildEvidence(input: EvidenceInput): DraftEvidenceEntry[] {
   const { ctx, testPaths, packages, testCommands } = input;
 
+  /* A test belongs to its own package's test script, or to a root one. Another
+     package's script would not run it, so it is not claimed as its command. */
   const commandForPath = (path: string): string | undefined => {
     const packageId = packageFor(path, packages);
     return (
       testCommands.find((c) => c.packageId !== undefined && c.packageId === packageId)?.id ??
-      testCommands.find((c) => c.packageId === undefined)?.id ??
-      testCommands[0]?.id
+      testCommands.find((c) => c.packageId === undefined || c.packageId === "root")?.id
     );
   };
 
@@ -234,13 +235,26 @@ function commonPrefix(paths: string[]): string {
   return depth > 0 ? segments.slice(0, depth).join("/") : first;
 }
 
+/**
+ * The place a risk lives, for its id. The common prefix of the matches when
+ * that is a directory; the directory of the file when it is a file. Naming
+ * the file would make the id change as soon as a second migration or
+ * workflow appeared, which is exactly the churn stable ids exist to prevent.
+ */
+function riskLocation(matches: string[]): string {
+  const prefix = commonPrefix(matches);
+  if (!matches.includes(prefix)) return prefix;
+  const slash = prefix.lastIndexOf("/");
+  return slash === -1 ? "root" : prefix.slice(0, slash);
+}
+
 export function buildRisks(ctx: AdapterContext): DraftRisk[] {
   const risks: DraftRisk[] = [];
   for (const rule of RISK_RULES) {
     const matches = ctx.files.filter((f) => rule.pattern.test(f)).sort();
     if (matches.length === 0) continue;
     risks.push({
-      id: riskId(rule.type, commonPrefix(matches)),
+      id: riskId(rule.type, riskLocation(matches)),
       type: rule.type,
       paths: matches.slice(0, 20),
       approval: rule.approval,

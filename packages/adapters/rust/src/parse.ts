@@ -14,6 +14,8 @@
  * TypeScript and Python adapters do.
  */
 
+import { matchAll, stripLineComment } from "@project-surface/adapter-sdk";
+
 /** Column-zero `pub` items. `pub(crate)` and friends are not public API. */
 const ITEM =
   /^pub\s+(?:async\s+|unsafe\s+|const\s+|extern\s+"[^"]*"\s+)*(fn|struct|enum|trait|type|mod|const|static)\s+([A-Za-z_][A-Za-z0-9_]*)/;
@@ -23,8 +25,10 @@ const ENV = [
   /\b(?:option_)?env!\(\s*"([A-Z][A-Z0-9_]*)"/g,
 ];
 
-/** Route registrations across axum, actix-web and rocket. */
-const AXUM_ROUTE = /\.route\(\s*"([^"]+)"\s*,([^;]*)/g;
+/** Route registrations across axum, actix-web and rocket. The handler capture
+ *  stops at the next `.route(`, so two registrations on one line do not share
+ *  methods. */
+const AXUM_ROUTE = /\.route\(\s*"([^"]+)"\s*,((?:(?!\.route\()[^;])*)/g;
 const AXUM_METHOD = /\b(get|post|put|patch|delete|head|options)\s*\(/g;
 const ATTRIBUTE_ROUTE = /#\[\s*(?:[A-Za-z_][A-Za-z0-9_]*::)?(get|post|put|patch|delete|head|options)\s*\(\s*"([^"]+)"/g;
 const ACTIX_RESOURCE = /web::resource\(\s*"([^"]+)"\s*\)([^;]*)/g;
@@ -59,18 +63,9 @@ export interface ParsedRust {
   hasInlineTests: boolean;
 }
 
-function stripComment(line: string): string {
-  const i = line.indexOf("//");
-  return i === -1 ? line : line.slice(0, i);
-}
-
-function all(pattern: RegExp, text: string): RegExpExecArray[] {
-  const re = new RegExp(pattern.source, pattern.flags);
-  const out: RegExpExecArray[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) out.push(m);
-  return out;
-}
+/* Rust strings are double-quoted; a lone `'` opens a lifetime, not a string. */
+const stripComment = (line: string): string => stripLineComment(line, "//", '"');
+const all = matchAll;
 
 /** `a::b::{c, d::e}` -> [`a::b::c`, `a::b::d::e`]; `a::b` -> [`a::b`]. */
 function expandUse(path: string): string[] {
@@ -185,7 +180,8 @@ export function parseCargoToml(content: string): CargoManifest {
   let pendingArray: { section: string; key: string; items: string[] } | null = null;
 
   for (const raw of content.split("\n")) {
-    const line = raw.replace(/#.*$/, "").trim();
+    /* `#` starts a comment outside a string; `description = "Issue #12"` keeps its value. */
+    const line = stripLineComment(raw, "#", "\"'").trim();
     if (line.length === 0) continue;
 
     if (pendingArray) {
@@ -197,10 +193,13 @@ export function parseCargoToml(content: string): CargoManifest {
       continue;
     }
 
-    const header = /^\[\[?\s*([A-Za-z0-9_.-]+)\s*\]\]?$/.exec(line);
-    if (header?.[1]) {
-      section = header[1];
-      if (line.startsWith("[[bin]]")) manifest.bins.push("");
+    if (line.startsWith("[")) {
+      const header = /^(\[\[?)\s*([A-Za-z0-9_.-]+)\s*\]\]?$/.exec(line);
+      /* A header this parser does not read - a quoted key such as
+         `[target.'cfg(unix)'.dependencies]` - still closes the previous
+         section, or its keys would be credited to `[package]`. */
+      section = header?.[2] ?? "?";
+      if (header?.[1] === "[[" && section === "bin") manifest.bins.push("");
       const dotted = /^dependencies\.([A-Za-z0-9_-]+)$/.exec(section);
       if (dotted?.[1]) manifest.dependencies.push(dotted[1]);
       continue;

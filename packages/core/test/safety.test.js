@@ -7,6 +7,7 @@ import {
   existsSafe,
   isSafeRef,
   readFileSafe,
+  readJsonSafe,
   resolveAllowedCommand,
   runCommand,
   CommandNotAllowedError,
@@ -102,5 +103,16 @@ test("git refs that would be parsed as options are rejected", () => {
   }
   for (const bad of ["--output=/tmp/x", "-v", "", "HEAD..main", "a b", "main;rm", "HEAD@{1}"]) {
     assert.equal(isSafeRef(bad), false, bad);
+  }
+});
+
+test("a byte-order mark and CRLF line endings are normalised on read", () => {
+  const { base, root } = scratch();
+  try {
+    writeFileSync(join(root, "bom.json"), "﻿{\"name\":\"x\"}\r\n");
+    assert.equal(readFileSafe(root, "bom.json"), "{\"name\":\"x\"}\n");
+    assert.deepEqual(readJsonSafe(root, "bom.json"), { name: "x" });
+  } finally {
+    rmSync(base, { recursive: true, force: true });
   }
 });

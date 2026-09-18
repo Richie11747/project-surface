@@ -107,12 +107,19 @@ export function resolveInside(root: string, relPath: string): string | null {
   }
 }
 
-/** Read a project file, returning null rather than throwing on any failure. */
+/**
+ * Read a project file, returning null rather than throwing on any failure.
+ *
+ * Text is normalised on the way in: a UTF-8 byte-order mark is dropped and
+ * CRLF becomes LF. Every parser downstream splits on `\n` and anchors on
+ * `^`; a BOM made `JSON.parse` throw on a valid `package.json` and hid the
+ * first line of every manifest, and a stray `\r` made `line === "}"` false.
+ */
 export function readFileSafe(root: string, relPath: string): string | null {
   const target = resolveInside(root, relPath);
   if (target === null) return null;
   try {
-    return readFileSync(target, "utf8");
+    return readFileSync(target, "utf8").replace(/^﻿/, "").replace(/\r\n/g, "\n");
   } catch {
     return null;
   }

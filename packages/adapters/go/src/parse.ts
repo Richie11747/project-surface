@@ -11,6 +11,8 @@
  * downstream can mistake discovery for verification.
  */
 
+import { matchAll, stripLineComment } from "@project-surface/adapter-sdk";
+
 const FUNC = /^func\s+(?:\([^)]*\)\s*)?([A-Z][A-Za-z0-9_]*)\s*[(\[]/;
 const TYPE = /^type\s+([A-Z][A-Za-z0-9_]*)\s+(struct|interface|func|\[|map|chan|[A-Za-z])/;
 const PACKAGE = /^package\s+([A-Za-z_][A-Za-z0-9_]*)/;
@@ -45,9 +47,33 @@ export interface ParsedGo {
   envNames: string[];
 }
 
-function stripComment(line: string): string {
-  const i = line.indexOf("//");
-  return i === -1 ? line : line.slice(0, i);
+/** Go 1.22 `ServeMux` patterns carry the method in the string: `"GET /items/{id}"`. */
+const MUX_PATTERN = /^(?:(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+)?(\/\S*)$/;
+
+/**
+ * Remove comments from one line, carrying block-comment state between lines.
+ * A route registered inside `/* ... *\/` is not a route; a `//` inside a
+ * string literal (`"https://..."`) is not a comment.
+ */
+function stripComments(raw: string, state: { inBlock: boolean }): string {
+  let line = raw;
+  let out = "";
+  while (line.length > 0) {
+    if (state.inBlock) {
+      const end = line.indexOf("*/");
+      if (end === -1) return out;
+      state.inBlock = false;
+      line = line.slice(end + 2);
+      continue;
+    }
+    const code = stripLineComment(line, "//", "\"'`");
+    const start = code.indexOf("/*");
+    if (start === -1) return out + code;
+    out += code.slice(0, start);
+    state.inBlock = true;
+    line = code.slice(start + 2);
+  }
+  return out;
 }
 
 export function parseGo(content: string): ParsedGo {
@@ -56,10 +82,13 @@ export function parseGo(content: string): ParsedGo {
   const routes: GoRoute[] = [];
   const envNames = new Set<string>();
   let packageName: string | null = null;
+  const comments = { inBlock: false };
+  /* Inside `type ( ... )` every member is a declaration although indented. */
+  let inTypeGroup = false;
 
   lines.forEach((raw, index) => {
     const lineNumber = index + 1;
-    const line = stripComment(raw);
+    const line = stripComments(raw, comments);
     const trimmed = line.trim();
 
     if (packageName === null) {
@@ -67,8 +96,15 @@ export function parseGo(content: string): ParsedGo {
       if (pkg?.[1]) packageName = pkg[1];
     }
 
-    /* Only column-zero declarations are package-level exports. */
-    if (line.length > 0 && !/^\s/.test(line)) {
+    if (inTypeGroup) {
+      if (trimmed === ")") inTypeGroup = false;
+      else {
+        const member = TYPE.exec(`type ${trimmed}`);
+        if (member?.[1]) symbols.push({ name: member[1], kind: "type", line: lineNumber });
+      }
+    } else if (line.length > 0 && !/^\s/.test(line)) {
+      /* Only column-zero declarations are package-level exports. */
+      if (/^type\s*\($/.test(trimmed)) inTypeGroup = true;
       const fn = FUNC.exec(trimmed);
       if (fn?.[1]) symbols.push({ name: fn[1], kind: "function", line: lineNumber });
       const ty = TYPE.exec(trimmed);
@@ -76,20 +112,18 @@ export function parseGo(content: string): ParsedGo {
     }
 
     for (const pattern of ROUTE_PATTERNS) {
-      const re = new RegExp(pattern.source, pattern.flags);
-      let match: RegExpExecArray | null;
-      while ((match = re.exec(line)) !== null) {
+      for (const match of matchAll(pattern, line)) {
         const hasMethod = match.length > 2;
-        const method = hasMethod ? (match[1] ?? "GET").toUpperCase() : "GET";
-        const path = hasMethod ? match[2] : match[1];
-        if (path && path.startsWith("/")) routes.push({ method, path, line: lineNumber });
+        const target = hasMethod ? match[2] : match[1];
+        const mux = target ? MUX_PATTERN.exec(target) : null;
+        if (!mux?.[2]) continue;
+        const method = (mux[1] ?? (hasMethod ? match[1] : undefined) ?? "GET").toUpperCase();
+        routes.push({ method, path: mux[2], line: lineNumber });
       }
     }
 
     for (const pattern of ENV) {
-      const re = new RegExp(pattern.source, pattern.flags);
-      let match: RegExpExecArray | null;
-      while ((match = re.exec(line)) !== null) {
+      for (const match of matchAll(pattern, line)) {
         if (match[1]) envNames.add(match[1]);
       }
     }

@@ -146,6 +146,7 @@ export { expandDeclaredOwners, loadDeclarations, type Declarations } from "./dec
 
 // Filesystem and git
 export { expandGlob, globFilter, globToRegExp, isGlob, matchesAny, matchesGlob } from "./fs/glob.js";
+export { parseYamlSafe } from "./fs/yaml.js";
 export {
   existsSafe,
   readFileSafe,

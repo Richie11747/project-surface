@@ -123,6 +123,19 @@ export function parseSource(path: string, content: string): ParsedFile {
     if (ts.isPropertyAccessExpression(node) && isProcessEnv(node.expression)) {
       envNames.add(node.name.text);
     }
+    /* `const { DATABASE_URL, PORT = "3000" } = process.env` reads two variables. */
+    if (
+      ts.isVariableDeclaration(node) &&
+      node.initializer &&
+      isProcessEnv(node.initializer) &&
+      ts.isObjectBindingPattern(node.name)
+    ) {
+      for (const element of node.name.elements) {
+        const key = element.propertyName ?? element.name;
+        if (ts.isIdentifier(key)) envNames.add(key.text);
+        else if (ts.isStringLiteralLike(key)) envNames.add(key.text);
+      }
+    }
     if (
       ts.isElementAccessExpression(node) &&
       isProcessEnv(node.expression) &&

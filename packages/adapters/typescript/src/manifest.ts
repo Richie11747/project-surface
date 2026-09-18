@@ -8,7 +8,7 @@
  */
 
 import { classifyCommand, isSafeCommandToken, provenance, source } from "@project-surface/adapter-sdk";
-import { commandId, constraintId, packageIdFromPath } from "@project-surface/core";
+import { commandId, constraintId, matchesGlob, packageIdFromPath } from "@project-surface/core";
 import type {
   AdapterContext,
   DraftCommand,
@@ -54,14 +54,29 @@ export function detectPackageManager(ctx: AdapterContext): { name: string; evide
   return null;
 }
 
+/** The workspace globs a root manifest declares, in either accepted shape. */
+function workspaceGlobs(root: PackageJson | null): string[] | null {
+  const ws = root?.workspaces;
+  const list = Array.isArray(ws) ? ws : ws && Array.isArray(ws.packages) ? ws.packages : null;
+  return list ? list.filter((g): g is string => typeof g === "string") : null;
+}
+
 export function findPackages(ctx: AdapterContext): DiscoveredPackage[] {
   const manifests = ctx.match(/(^|\/)package\.json$/).filter((p) => !p.includes("node_modules/"));
   const out: DiscoveredPackage[] = [];
 
+  /* When the root manifest says which directories are packages, believe it:
+     an `examples/`, `docs/` or `fixtures/` manifest is not a package of the
+     project, and its scripts are not the project's commands. Without a
+     `workspaces` field every manifest counts, as before. */
+  const globs = workspaceGlobs(ctx.readJson<PackageJson>("package.json"));
+  const manager = detectPackageManager(ctx)?.name ?? "npm";
+
   for (const manifestPath of manifests) {
+    const dir = manifestPath === "package.json" ? "." : manifestPath.slice(0, -"/package.json".length);
+    if (globs && dir !== "." && !globs.some((g) => matchesGlob(dir, g))) continue;
     const json = ctx.readJson<PackageJson>(manifestPath);
     if (!json) continue;
-    const dir = manifestPath === "package.json" ? "." : manifestPath.slice(0, -"/package.json".length);
     out.push({
       manifestPath,
       json,
@@ -69,7 +84,7 @@ export function findPackages(ctx: AdapterContext): DiscoveredPackage[] {
         id: packageIdFromPath(dir),
         path: dir,
         ...(typeof json.name === "string" ? { name: json.name } : {}),
-        manager: detectPackageManager(ctx)?.name ?? "npm",
+        manager,
         ...(typeof json.private === "boolean" ? { private: json.private } : {}),
       },
     });

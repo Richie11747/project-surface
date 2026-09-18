@@ -49,28 +49,40 @@ interface PyProject {
   tool?: Record<string, unknown>;
 }
 
-function readPyProject(ctx: AdapterContext): PyProject | null {
+function readPyProject(ctx: AdapterContext, notes: string[]): PyProject | null {
   const raw = ctx.readFile("pyproject.toml");
   if (raw === null) return null;
   try {
     return parseToml(raw) as PyProject;
-  } catch {
+  } catch (error) {
+    /* A manifest that exists but does not parse is worth a line: the claims
+       it would have produced are missing, and silence would look like absence. */
+    notes.push(`pyproject.toml could not be parsed (${error instanceof Error ? error.message : String(error)}); its packaging claims are omitted.`);
     return null;
   }
 }
 
 /**
- * The test command. pytest is assumed only when something in the project points
- * at it; otherwise no test command is claimed rather than a wrong one.
+ * The file that configures pytest, if any - the test command is claimed only
+ * when something in the project points at pytest, or a test file exists. pytest itself reads, in order,
+ * `pytest.ini`, `pyproject.toml [tool.pytest.ini_options]`, `tox.ini [pytest]`
+ * and `setup.cfg [tool:pytest]`; the claim's source is the file that actually
+ * says so, not merely the first manifest that exists.
  */
-function testCommand(ctx: AdapterContext, pyproject: PyProject | null): DraftCommand | null {
-  const configFile = ["pyproject.toml", "pytest.ini", "tox.ini", "setup.cfg"].find((f) => ctx.exists(f));
-  const configured = Boolean(pyproject?.tool && "pytest" in pyproject.tool) || ctx.exists("pytest.ini");
-  const hasTests = ctx.match(/(^|\/)(test_[^/]*|[^/]*_test)\.py$/).length > 0;
-  if (!configured && !hasTests) return null;
+function pytestConfigFile(ctx: AdapterContext, pyproject: PyProject | null): string | null {
+  if (ctx.exists("pytest.ini")) return "pytest.ini";
+  if (pyproject?.tool && "pytest" in pyproject.tool) return "pyproject.toml";
+  for (const [file, section] of [["tox.ini", "[pytest]"], ["setup.cfg", "[tool:pytest]"]] as const) {
+    const text = ctx.readFile(file);
+    if (text !== null && text.split("\n").some((l) => l.trim() === section)) return file;
+  }
+  return null;
+}
 
-  const evidencePath = configured && configFile ? configFile : (ctx.match(/(^|\/)test_[^/]*\.py$/)[0] ?? configFile);
-  if (!evidencePath) return null;
+function testCommand(ctx: AdapterContext, pyproject: PyProject | null): DraftCommand | null {
+  const configFile = pytestConfigFile(ctx, pyproject);
+  const firstTest = ctx.match(/(^|\/)(test_[^/]*|[^/]*_test)\.py$/)[0];
+  if (configFile === null && firstTest === undefined) return null;
 
   return {
     id: commandId("test"),
@@ -79,10 +91,10 @@ function testCommand(ctx: AdapterContext, pyproject: PyProject | null): DraftCom
     kind: "test",
     description: "Run the Python test suite.",
     provenance: provenance({
-      tier: configured ? "derived" : "inferred",
+      tier: configFile !== null ? "derived" : "inferred",
       adapter: ADAPTER_ID,
       now: ctx.now,
-      sources: [source(evidencePath)],
+      sources: [source(configFile ?? (firstTest as string))],
     }),
   };
 }
@@ -96,7 +108,15 @@ function packagingClaims(
       id: packageIdFromPath("."),
       path: ".",
       ...(typeof pyproject?.project?.name === "string" ? { name: pyproject.project.name } : {}),
-      manager: ctx.exists("poetry.lock") ? "poetry" : ctx.exists("uv.lock") ? "uv" : "pip",
+      manager: ctx.exists("poetry.lock")
+        ? "poetry"
+        : ctx.exists("uv.lock")
+          ? "uv"
+          : ctx.exists("pdm.lock")
+            ? "pdm"
+            : ctx.exists("Pipfile.lock")
+              ? "pipenv"
+              : "pip",
     },
   ];
 
@@ -163,13 +183,14 @@ export const pythonAdapter: Adapter = {
       notes: [] as string[],
     };
 
-    const candidates = ctx.match(/\.py$/).filter((p) => !NOT_BEHAVIOUR.test(p));
+    /* conftest.py is pytest plumbing: neither behaviour nor a test of it. */
+    const candidates = ctx.match(/\.py$/).filter((p) => !NOT_BEHAVIOUR.test(p) && !/(^|\/)conftest\.py$/.test(p));
     if (candidates.length === 0) return emptyResult(stack);
     if (candidates.length > MAX_PARSED_FILES) {
       stack.notes.push(`Only the first ${MAX_PARSED_FILES} of ${candidates.length} files were parsed.`);
     }
 
-    const pyproject = readPyProject(ctx);
+    const pyproject = readPyProject(ctx, stack.notes);
     const { packages, commands, constraints } = packagingClaims(ctx, pyproject);
     const test = testCommand(ctx, pyproject);
     if (test) commands.push(test);
