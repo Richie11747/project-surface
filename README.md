@@ -2,8 +2,6 @@
 
 # project-surface
 
-[![CI](https://github.com/Richie11747/project-surface/actions/workflows/ci.yml/badge.svg)](https://github.com/Richie11747/project-surface/actions/workflows/ci.yml)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 **The missing semantic layer for AI-readable software projects.**
 
