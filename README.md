@@ -1,11 +1,15 @@
-
-
 # project-surface
 
+[![CI](https://github.com/Richie11747/project-surface/actions/workflows/ci.yml/badge.svg)](https://github.com/Richie11747/project-surface/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 **The missing semantic layer for AI-readable software projects.**
 
 Ask any AI agent what your project can do, where it lives, what proves it, and what a change will affect.
+
+[![project-surface in 26 seconds: a guess, init, one claim inspected, verified, then stale](docs/promo/promo.gif)](docs/promo/promo.mp4)
+
+<sub>26 seconds, silent. Click through for the MP4.</sub>
 
 ---
 
