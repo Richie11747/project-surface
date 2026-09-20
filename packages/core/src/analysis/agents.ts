@@ -72,13 +72,8 @@ function isTrustworthy(tier: string, includeInferred: boolean): boolean {
  */
 export function renderAgentsBody(surface: Surface, options: AgentsOptions = {}): string {
   const includeInferred = options.includeInferred ?? false;
-<<<<<<< HEAD
   const max = options.maxCapabilities ?? DEFAULT_MAX_CAPABILITIES;
-  const evidenceById = new Map(surface.evidence.map((e) => [e.id, e]));
-=======
-  const max = options.maxCapabilities ?? 40;
   const evidenceById = indexById(surface.evidence);
->>>>>>> origin/refactor/core-perf-cleanup
   const lines: string[] = [];
 
   lines.push(`# ${surface.project.name} - what is known, and how`);
