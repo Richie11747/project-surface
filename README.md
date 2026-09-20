@@ -425,7 +425,7 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 ## Status
 
-`0.2.0` is on npm - `npx project-surface init` installs it. What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
+`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, and a trust label on every file of a context pack - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
 [`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`](https://richie11747.github.io/project-surface/spec/v1/surface.schema.json)
 is its `$id`. A generator in any language can target it; [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md)
 says what that takes.
