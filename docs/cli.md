@@ -71,19 +71,26 @@ $ surface why checkout.create
 One row per capability: owner, contract, evidence, tier, confidence, freshness. Good for a first look at a
 foreign repo, and for checking that what was verified is still verified.
 
-### `surface verify`
+### `surface verify [paths...]`
 
 Run project commands and record the result as evidence. Only commands already present in the document can
-run - there is no way to pass a shell string.
+run - there is no way to pass a shell string. The document knows which commands prove which capabilities,
+so the selection can be made by *claim* rather than by command id; that is what lets `doctor` report a
+stale claim and one command re-prove it.
 
 | Option | |
 |---|---|
 | `--command <id>` | Run this command. Repeatable. |
 | `--capability <id>` | Run the commands that exercise this capability. |
-| `--all` | Run every command. |
+| `--stale` | Run exactly the commands that re-prove every capability whose freshness is `stale`, then report how many are fresh again. Nothing stale is a clean exit `0`, so CI can run it unconditionally. |
+| `--since <ref>` / `--staged` / `paths...` | Run what `surface impact` would list for that change set: the commands bound to affected evidence and the test command of each affected package. When no capability is known to depend on the paths, every test command runs, and the output says so. |
+| `--all` | Run every test, build and typecheck command. |
 | `--timeout <seconds>` | Per-command timeout. |
 
-Output is redacted for secret-shaped strings and truncated before it is stored.
+Every record carries the commit the working tree was at and whether the tree was dirty (the regenerated
+`.project/surface.json` itself does not count), so `inspect` and `why` can say *which code* a claim was
+proven against. Output is redacted for secret-shaped strings and truncated before it is stored. Exit `2`
+when any command failed.
 
 ### `surface impact <paths...>`
 
@@ -98,7 +105,10 @@ commands to run.
 ### `surface context "<task>"`
 
 A token-bounded context pack for a task: the capabilities most relevant to the wording, their owners,
-contracts and tests, each with a one-line reason for inclusion.
+contracts and tests, each with a one-line reason for inclusion and the provenance tier and freshness of
+the claim it belongs to - so `declared·fresh` and `inferred·stale` are visible on every line. This is not
+retrieval: it matches words against capability names, not against code. Without `--content` it sizes
+files by `stat` and opens none of them.
 
 | Option | |
 |---|---|

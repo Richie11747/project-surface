@@ -62,7 +62,12 @@ content hashes outside one).
 | `fresh` | Verified, and the owner files are unchanged since. |
 | `stale` | Verified, but an owner file changed since, or the backstop TTL (`staleAfterDays`, default 14) expired. |
 
-The anchor moves only when the claim is re-verified. Rescanning does not clear staleness.
+The anchor moves only when the claim is re-verified. Rescanning does not clear staleness. What does is
+`surface verify --stale`: the document knows which commands its evidence was recorded from, so it runs
+exactly those for every stale claim and reports how many came back `fresh`. Each verification record
+also names the commit the tree was at (`commit`) and whether it had uncommitted changes (`dirty`), so a
+claim can say not only *that* it was proven but *against which code* - `surface inspect` shows it as
+`Proven at <commit>`, and `surface why` on the evidence line.
 
 ## Human labels
 

@@ -96,10 +96,14 @@ Note `unverified`. Nothing has been run yet, so nothing claims to be proven. Run
 ```console
 $ surface verify --command test
 running test  npm run test
-  passed 936 ms
+  passed 859 ms
+
+Recorded
+  passed test  at 5484f6b
 
 $ surface inspect checkout.create
   Trust  0.95 high | derived | fresh
+         Proven at 5484f6b
 ```
 
 Now change the implementation and rescan:
@@ -108,14 +112,29 @@ Now change the implementation and rescan:
 $ surface doctor
   warn  STALE_CLAIM [checkout.create]
       Capability "checkout.create" was verified earlier but its files have changed since.
-      Run: surface verify --capability checkout.create
+      Run: surface verify --stale (or --capability checkout.create for this one alone)
 
 $ surface inspect checkout.create
   Trust  0.56 low | derived | stale
          Owner files changed since verification.
 ```
 
-That is the whole product. **A claim that was proven, and then stopped being proven, says so.** It stays stale across rescans until something actually re-verifies it.
+That is the whole product. **A claim that was proven, and then stopped being proven, says so.** It stays stale across rescans until something actually re-verifies it - and the document knows what that takes:
+
+```console
+$ surface verify --stale
+Re-proving 5 stale capabilities via 1 command
+
+running test  npm run test
+  passed 859 ms
+
+Recorded
+  passed test  at 5484f6b (dirty tree)
+
+  5 of 5 capabilities are fresh again
+```
+
+Five claims went stale; one command proves all five; the record says which commit it ran against and that the tree had uncommitted changes. `surface verify --since main` does the same for whatever a branch touched.
 
 ---
 
@@ -253,9 +272,9 @@ Three things are worth noticing.
 | `surface why <id>` | How a confidence score was derived, step by step, recomputed from the document |
 | `surface agents [--write file]` | Agent instructions generated from evidence, with provenance per line and a staleness fingerprint |
 | `surface map` | Ownership table: owner, contract, evidence, confidence |
-| `surface verify` | Run project commands and record the result as evidence |
+| `surface verify` | Run project commands and record the result as evidence; `--stale` re-proves what went stale, `--since <ref>` what a change touched |
 | `surface impact <paths>` | What a change affects, and what to run |
-| `surface context "<task>"` | Token-bounded context pack, with a reason per file |
+| `surface context "<task>"` | Token-bounded context pack, with a reason and a trust label per file |
 | `surface diff --since <ref>` | What changed about the project surface |
 | `surface doctor` | Drift, stale claims, unproven behaviour |
 | `surface report` | Self-contained HTML report |
@@ -321,7 +340,9 @@ What conforming means for a document, a generator in any language, a consumer, o
 
 ## What this is not
 
-Not a multi-agent swarm, a hosted vector database, a chat UI, or an automatic code modifier. It does not require an account. It will not tell you it is AGI for your repository. How it relates to CLAUDE.md, Cursor rules, repomix, aider, Cody and Continue - including where each of them is better - is in [docs/comparison.md](docs/comparison.md).
+Not a multi-agent swarm, a hosted vector database, a chat UI, or an automatic code modifier. It does not require an account. It will not tell you it is AGI for your repository.
+
+**Not a context engine.** [sigmap](https://github.com/manojmallick/sigmap) and [ripwire](https://github.com/redhat-et/ripwire) index signatures and call graphs and rank files or symbols for a query; they are better at that than `surface context` is, and this project does not compete on it. A surface is the thing to check a retrieved file against: it records what the project claims, what proved it, at which commit, and whether that proof still holds. How it relates to those two, and to CLAUDE.md, Cursor rules, repomix, aider, Cody and Continue - including where each of them is better - is in [docs/comparison.md](docs/comparison.md).
 
 It is a small, fast, inspectable artifact that is honest about what it does not know.
 

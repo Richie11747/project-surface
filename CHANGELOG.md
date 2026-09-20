@@ -4,6 +4,43 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **`surface verify` selects by claim, not only by command id.** `--stale` runs exactly the commands that
+  re-prove every capability whose owner files changed since it was verified, then reports how many are
+  fresh again; nothing stale is a clean exit `0`, so CI can run it unconditionally. `--since <ref>`,
+  `--staged` and explicit paths run what `surface impact` would list for that change set. The rule that
+  maps a capability to the commands proving it lives once, in `commandsProving` / `commandsForStale`
+  (`@project-surface/core`), and `STALE_CLAIM` now points at `verify --stale`.
+- **`surface_verify` over MCP accepts `stale: true`** under the same two gates - it resolves only to
+  command ids the document already binds to its stale claims. Served through `surface mcp`, the tool now
+  rebuilds the document after the run (the CLI owns the adapters), so freshness is re-anchored in the
+  same call; the standalone binary records the result and says `surface init` folds it in.
+- **Every verification record names the commit it ran against** (`commit`, `dirty`), and `surface inspect`
+  shows `Proven at <commit>` while `surface why` carries it on the evidence line. A tree whose only
+  change is the regenerated `.project/surface.json` is not dirty.
+- **The context pack labels every file with the trust of its claim.** Each capability and each item
+  carries the provenance tier and freshness (`declared·fresh`, `inferred·stale`); an evidence item says how
+  its test last went; between equally relevant claims a proven one outranks an unproven one, which
+  outranks a stale one. `surface_context` over MCP shows the same.
+- `docs/comparison.md` now covers sigmap and ripwire - where they win (retrieval, symbol granularity,
+  languages, speed) and what a surface does that they do not attempt (executed evidence, checked rules,
+  a commit-anchored freshness loop) - with a section on why project-surface is not a context engine.
+
+### Changed
+
+- **`surface context` no longer reads file bodies unless `--content` is given.** The packer takes a
+  `FileAccess` with a size probe and sizes files by `stat`; `createGuardedAccess` applies the same
+  allow-list and credential-file refusal to sizes as to reads. A bare reader still works. Token estimates
+  agree with the content-based ones on ASCII sources and err slightly high on multi-byte or CRLF files.
+
+### Specification
+
+- `verificationRecord` gains two optional fields, additive within `project-surface/v1`: `commit`
+  (7-40 hex characters, the commit the working tree was at) and `dirty` (`true` when the tree had
+  uncommitted changes, so the result describes the tree rather than the commit alone). Both are absent
+  outside a git repository.
+
 ### Fixed
 
 - **`npm run typecheck` was a no-op.** `tsc --build --dry` only reports which projects would be built; it
