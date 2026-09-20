@@ -20,7 +20,7 @@
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
     "rebuild": "tsc --build --force",
-    "typecheck": "tsc --build --dry",
+    "typecheck": "tsc --build --force",
     "test": "npm run build && node scripts/run-tests.mjs",
     "surface": "node packages/cli/dist/index.js",
     "fixtures:update": "npm run build && node scripts/update-fixtures.mjs",
@@ -30,7 +30,7 @@
     "bench:check": "node bench/score.mjs --check"
   },
   "devDependencies": {
-    "@types/node": "^26.5.1",
+    "@types/node": "^20.19.0",
     "typescript": "^5.7.2"
   }
 }
