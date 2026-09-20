@@ -8,6 +8,7 @@
  * impact list without reasons is just a longer file list.
  */
 
+import { indexById } from "../model/ids.js";
 import type {
   Capability,
   Command,
@@ -67,8 +68,13 @@ const RELATION_ORDER: Record<ImpactRelation, number> = {
 };
 
 export function analyzeImpact(surface: Surface, changedPaths: string[]): ImpactReport {
+<<<<<<< HEAD
   const changed = [...new Set(changedPaths.map(normalizeChanged).filter((p) => p.length > 0))].sort();
   const evidenceById = new Map(surface.evidence.map((e) => [e.id, e]));
+=======
+  const changed = [...new Set(changedPaths)].sort();
+  const evidenceById = indexById(surface.evidence);
+>>>>>>> origin/refactor/core-perf-cleanup
 
   const impacted = new Map<string, ImpactedCapability>();
   const record = (

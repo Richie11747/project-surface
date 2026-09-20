@@ -180,8 +180,10 @@ function recentChanges(root: string): GitRecentChange[] {
 export function readGitInfo(root: string): GitInfo {
   if (!isRepository(root)) return { available: false };
 
-  const head = runGit(root, ["rev-parse", "HEAD"]).stdout.trim();
-  const branch = runGit(root, ["rev-parse", "--abbrev-ref", "HEAD"]).stdout.trim();
+  /* One spawn for both: rev-parse prints each answer on its own line. */
+  const [head = "", branch = ""] = runGit(root, ["rev-parse", "HEAD", "--abbrev-ref", "HEAD"])
+    .stdout.split("\n")
+    .map((l) => l.trim());
   const status = runGit(root, ["status", "--porcelain"]);
 
   return {

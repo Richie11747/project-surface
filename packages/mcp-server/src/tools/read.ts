@@ -5,7 +5,7 @@
  */
 
 import { z } from "zod";
-import { explainClaim } from "@project-surface/core";
+import { explainClaim, indexById } from "@project-surface/core";
 import { describeCapability, json, loadSurface, repoData, text, trustNote } from "../support.js";
 import type { ToolContext, ToolResult } from "../support.js";
 
@@ -93,7 +93,7 @@ export const findCapabilityTool = {
       );
     }
 
-    const evidenceById = new Map(surface.evidence.map((e) => [e.id, e]));
+    const evidenceById = indexById(surface.evidence);
     const blocks = scored.map(({ c }) => {
       const evidence = c.evidence
         .map((ref) => {

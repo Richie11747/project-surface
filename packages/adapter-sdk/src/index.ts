@@ -31,7 +31,6 @@ export { emptyResult } from "@project-surface/core";
 
 export {
   classifyCommand,
-  extractEnvNames,
   isSafeCommandToken,
   matchAll,
   provenance,
@@ -41,7 +40,7 @@ export {
 } from "./builders.js";
 
 export { findContracts } from "./contracts.js";
-export { firstOnPath, isOnPath } from "./toolchain.js";
+export { isOnPath } from "./toolchain.js";
 
 export {
   assertConformance,

@@ -102,16 +102,3 @@ export function stripLineComment(line: string, marker: string = "//", quotes: st
   }
   return line;
 }
-
-/** Environment variable names referenced by a source file, in appearance order. */
-export function extractEnvNames(content: string, patterns: RegExp[]): string[] {
-  const found = new Set<string>();
-  for (const pattern of patterns) {
-    const re = new RegExp(pattern.source, pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`);
-    for (const match of matchAll(re, content)) {
-      const name = match[1];
-      if (name && /^[A-Z][A-Z0-9_]*$/.test(name)) found.add(name);
-    }
-  }
-  return [...found].sort();
-}

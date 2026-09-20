@@ -289,8 +289,3 @@ export function usePathToFiles(usePath: string, crateRoot: string, crateName: st
   candidates.push(`${src}/lib.rs`);
   return candidates;
 }
-
-/** The first segment of an external `use`: `axum::Router` -> `axum`. */
-export function crateOf(usePath: string): string {
-  return usePath.split("::")[0] ?? usePath;
-}

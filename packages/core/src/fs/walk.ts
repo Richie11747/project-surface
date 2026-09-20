@@ -25,6 +25,8 @@ export const DEFAULT_IGNORES: readonly string[] = Object.freeze([
   ".gradle", ".idea", ".vscode", ".cache", ".DS_Store",
 ]);
 
+const IGNORED_DIRS: ReadonlySet<string> = new Set(DEFAULT_IGNORES);
+
 /** Guard against pathological trees; exceeded counts are reported, not hidden. */
 export const MAX_FILES = 20_000;
 
@@ -48,10 +50,20 @@ export function toPosix(p: string): string {
   return p.split(sep).join("/").replace(/\\/g, "/");
 }
 
-export function walkProject(root: string, maxFiles: number = MAX_FILES): WalkResult {
+/**
+ * `exclude` is applied before the `maxFiles` cap, so a declared `ignore:` -
+ * a vendored tree, a fixture corpus - does not spend the budget that the
+ * project's own files then run out of. (The cap truncates the sorted list, so
+ * without this an ignored `assets/` could push all of `src/` past the limit.)
+ */
+export function walkProject(
+  root: string,
+  maxFiles: number = MAX_FILES,
+  exclude: (relPath: string) => boolean = () => false
+): WalkResult {
   const fromGit = listFiles(root);
   if (fromGit) {
-    const files = fromGit.map(toPosix).sort();
+    const files = fromGit.map(toPosix).filter((f) => !exclude(f)).sort();
     return {
       files: files.slice(0, maxFiles),
       truncated: files.length > maxFiles,
@@ -78,18 +90,34 @@ export function walkProject(root: string, maxFiles: number = MAX_FILES): WalkRes
         truncated = true;
         return;
       }
-      if (DEFAULT_IGNORES.includes(entry.name)) continue;
       const full = join(dir, entry.name);
       if (entry.isDirectory()) {
-        visit(full);
+        /* The ignore list names directories; a file called `build` or `env` is a file. */
+        if (!IGNORED_DIRS.has(entry.name)) visit(full);
       } else if (entry.isFile()) {
-        collected.push(toPosix(relative(root, full)));
+        const rel = toPosix(relative(root, full));
+        if (!exclude(rel)) collected.push(rel);
       }
     }
   };
 
   visit(root);
   return { files: collected.sort(), truncated, source: "filesystem" };
+}
+
+/**
+ * The real path of a root does not change during a scan, and `resolveInside`
+ * runs once per file read - thousands of times. Resolved once per root.
+ */
+const REAL_ROOTS = new Map<string, string>();
+
+function realRootOf(root: string): string {
+  let real = REAL_ROOTS.get(root);
+  if (real === undefined) {
+    real = realpathSync(root);
+    REAL_ROOTS.set(root, real);
+  }
+  return real;
 }
 
 /**
@@ -106,7 +134,7 @@ export function resolveInside(root: string, relPath: string): string | null {
   const full = join(root, relPath);
   try {
     if (lstatSync(full).isSymbolicLink()) return null;
-    const realRoot = realpathSync(root);
+    const realRoot = realRootOf(root);
     const real = realpathSync(full);
     if (real !== realRoot && !real.startsWith(realRoot + sep)) return null;
     return full;

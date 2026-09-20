@@ -16,5 +16,3 @@ export const SURFACE_FILE = ".project/surface.json";
 /** Human declarations. Always wins over inference. */
 export const DECLARATIONS_FILE = ".project/surface.declare.yaml";
 
-/** Machine-local state that must never be committed. */
-export const CACHE_DIR = ".project/cache";

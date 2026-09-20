@@ -11,6 +11,7 @@
  * worse than no context pack, because the caller cannot tell what is missing.
  */
 
+import { indexById } from "../model/ids.js";
 import type { Command, Constraint, Surface } from "../schema/types.js";
 
 /** Rough but stable: about four characters per token for source text. */
@@ -83,19 +84,20 @@ function scoreCapability(
 ): { score: number; matched: string[] } {
   if (terms.length === 0) return { score: capability.confidence, matched: [] };
 
+  /* Lower-cased once here, not once per term per field. */
   const haystacks: Array<[string, number]> = [
-    [capability.id, 3],
-    [capability.title, 3],
-    [capability.description ?? "", 1],
-    [capability.tags.join(" "), 2],
-    [capability.owners.map((o) => o.path).join(" "), 2],
+    [capability.id.toLowerCase(), 3],
+    [capability.title.toLowerCase(), 3],
+    [(capability.description ?? "").toLowerCase(), 1],
+    [capability.tags.join(" ").toLowerCase(), 2],
+    [capability.owners.map((o) => o.path).join(" ").toLowerCase(), 2],
   ];
 
   let score = 0;
   const matched: string[] = [];
   for (const term of terms) {
     for (const [text, weight] of haystacks) {
-      if (text.toLowerCase().includes(term)) {
+      if (text.includes(term)) {
         score += weight;
         matched.push(term);
         break;
@@ -133,7 +135,7 @@ export function packContext(
     .sort((a, b) => b.score - a.score || a.capability.id.localeCompare(b.capability.id))
     .slice(0, maxCapabilities);
 
-  const evidenceById = new Map(surface.evidence.map((e) => [e.id, e]));
+  const evidenceById = indexById(surface.evidence);
   const items: ContextItem[] = [];
   const omitted: OmittedItem[] = [];
   const seen = new Set<string>();

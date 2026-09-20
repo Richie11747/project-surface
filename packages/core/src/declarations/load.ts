@@ -13,7 +13,7 @@
 import { parse } from "yaml";
 import { expandGlob, isGlob } from "../fs/glob.js";
 import { readFileSafe } from "../fs/walk.js";
-import { commandId, constraintId, riskId, slug } from "../model/ids.js";
+import { commandId, constraintId, evidenceId, riskId, slug } from "../model/ids.js";
 import { looksSecretName } from "../redact.js";
 import { DECLARATIONS_FILE } from "../version.js";
 import type {
@@ -45,7 +45,6 @@ export interface Declarations {
   ignore: string[];
   /** Problems with the declaration file itself, surfaced as health findings. */
   errors: string[];
-  present: boolean;
 }
 
 function empty(): Declarations {
@@ -57,7 +56,6 @@ function empty(): Declarations {
     environment: [],
     ignore: [],
     errors: [],
-    present: false,
   };
 }
 
@@ -134,7 +132,6 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
   if (raw === null) return empty();
 
   const out = empty();
-  out.present = true;
 
   let doc: unknown;
   try {
@@ -172,7 +169,7 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
       kind: "module",
       owners,
       contracts: toSourceRefs(entry.contracts, `${at}.contracts`, out.errors),
-      evidence: declaredPaths(entry.evidence, `${at}.evidence`, out.errors).map((p) => ({ id: `evidence:${slug(p)}`, link: "declared" as const })),
+      evidence: declaredPaths(entry.evidence, `${at}.evidence`, out.errors).map((p) => ({ id: evidenceId(p), link: "declared" as const })),
       environment: asStringArray(entry.environment),
       tags: asStringArray(entry.tags),
       provenance: provenance(at, now),

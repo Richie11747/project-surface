@@ -72,14 +72,16 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
   const warnings: string[] = [];
 
   const git = readGitInfo(root);
-  const walk = walkProject(root, options.maxFiles ?? MAX_FILES);
 
   /* Declarations come first because they can narrow what the adapters see:
      a vendored example or a fixture project is not part of this project's
-     surface, and the only party who can say so is the human. */
+     surface, and the only party who can say so is the human. The ignore list
+     is applied inside the walk, before the file cap, so what is ignored does
+     not count against what is kept. */
   const declarations = loadDeclarations(root, now);
-  const ignored = globFilter(declarations.ignore);
-  const files = declarations.ignore.length > 0 ? walk.files.filter((f) => !ignored(f)) : walk.files;
+  const ignored = declarations.ignore.length > 0 ? globFilter(declarations.ignore) : () => false;
+  const walk = walkProject(root, options.maxFiles ?? MAX_FILES, ignored);
+  const files = walk.files;
   expandDeclaredOwners(declarations, files);
 
   const fileSet = new Set(files);

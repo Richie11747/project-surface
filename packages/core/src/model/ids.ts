@@ -163,20 +163,7 @@ export function riskId(type: string, path: string): string {
   return bounded(`risk:${slug(type)}:${slug(path)}`);
 }
 
-/**
- * Resolve a collision deterministically by suffixing an ordinal. Mutates the
- * `taken` set so repeated calls stay consistent within one build.
- */
-export function uniqueId(base: string, taken: Set<string>): string {
-  if (!taken.has(base)) {
-    taken.add(base);
-    return base;
-  }
-  for (let n = 2; ; n++) {
-    const candidate = `${base}-${n}`;
-    if (!taken.has(candidate)) {
-      taken.add(candidate);
-      return candidate;
-    }
-  }
+/** Items keyed by id. The same lookup is needed wherever evidence references are resolved. */
+export function indexById<T extends { id: string }>(items: readonly T[]): Map<string, T> {
+  return new Map(items.map((item) => [item.id, item]));
 }

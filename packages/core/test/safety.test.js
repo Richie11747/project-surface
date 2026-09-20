@@ -10,6 +10,7 @@ import {
   readJsonSafe,
   resolveAllowedCommand,
   runCommand,
+  walkProject,
   CommandNotAllowedError,
   UnsafeWorkingDirectoryError,
   MAX_FILE_BYTES,
@@ -147,6 +148,30 @@ test("a byte-order mark and CRLF line endings are normalised on read", () => {
     writeFileSync(join(root, "bom.json"), "﻿{\"name\":\"x\"}\r\n");
     assert.equal(readFileSafe(root, "bom.json"), "{\"name\":\"x\"}\n");
     assert.deepEqual(readJsonSafe(root, "bom.json"), { name: "x" });
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test("the walk skips ignored directories only, and excluded files do not spend the cap", () => {
+  const { base, root } = scratch();
+  try {
+    writeFileSync(join(root, "build"), "a file, not the build directory");
+    mkdirSync(join(root, "node_modules", "dep"), { recursive: true });
+    writeFileSync(join(root, "node_modules", "dep", "index.js"), "");
+    mkdirSync(join(root, "assets"));
+    for (let i = 0; i < 5; i++) writeFileSync(join(root, "assets", `${i}.bin`), "");
+
+    const all = walkProject(root);
+    assert.equal(all.source, "filesystem");
+    assert.ok(all.files.includes("build"), all.files.join(", "));
+    assert.ok(!all.files.some((f) => f.startsWith("node_modules/")), all.files.join(", "));
+
+    /* Five ignored assets plus two real files, capped at three: the ignore
+       must be applied first or the cap would fall on `assets/`. */
+    const capped = walkProject(root, 3, (p) => p.startsWith("assets/"));
+    assert.deepEqual(capped.files, ["build", "inside.txt"]);
+    assert.equal(capped.truncated, false);
   } finally {
     rmSync(base, { recursive: true, force: true });
   }

@@ -7,8 +7,6 @@
  * every emitted document against the schema, so a mismatch fails loudly.
  */
 
-export const SCHEMA_ID = "project-surface/v1";
-
 /** ISO-8601 UTC, always Z-suffixed. */
 export type Timestamp = string;
 

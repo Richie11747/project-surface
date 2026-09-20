@@ -52,11 +52,11 @@ export {
   commandId,
   constraintId,
   evidenceId,
+  indexById,
   moduleNamespace,
   packageIdFromPath,
   riskId,
   slug,
-  uniqueId,
 } from "./model/ids.js";
 
 // Building
@@ -151,7 +151,7 @@ export {
 } from "./declarations/load.js";
 
 // Filesystem and git
-export { expandGlob, globFilter, globToRegExp, isGlob, matchesAny, matchesGlob } from "./fs/glob.js";
+export { expandGlob, globFilter, globToRegExp, isGlob, matchesGlob } from "./fs/glob.js";
 export { parseYamlSafe } from "./fs/yaml.js";
 export {
   existsSafe,
@@ -204,7 +204,6 @@ export {
   type ReadSurfaceResult,
 } from "./io.js";
 export {
-  CACHE_DIR,
   DECLARATIONS_FILE,
   GENERATOR_NAME,
   GENERATOR_VERSION,

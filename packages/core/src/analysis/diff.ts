@@ -9,6 +9,8 @@
  * every run and mean nothing to a reviewer.
  */
 
+import { hashContent } from "../model/freshness.js";
+import { indexById } from "../model/ids.js";
 import type { Capability, Command, Constraint, HealthFinding, Surface } from "../schema/types.js";
 
 export interface FieldChange {
@@ -37,17 +39,14 @@ export interface SurfaceDiff {
   empty: boolean;
 }
 
-function byId<T extends { id: string }>(items: T[]): Map<string, T> {
-  return new Map(items.map((i) => [i.id, i]));
-}
 
 function diffEntries<T extends { id: string }>(
   before: T[],
   after: T[],
   compare: (a: T, b: T) => FieldChange[]
 ): EntryDiff {
-  const beforeMap = byId(before);
-  const afterMap = byId(after);
+  const beforeMap = indexById(before);
+  const afterMap = indexById(after);
 
   const added = [...afterMap.keys()].filter((id) => !beforeMap.has(id)).sort();
   const removed = [...beforeMap.keys()].filter((id) => !afterMap.has(id)).sort();
@@ -112,8 +111,14 @@ function compareConstraints(before: Constraint, after: Constraint): FieldChange[
   ]);
 }
 
+/**
+ * Findings are compared by code and subject. Every DECLARATION_INVALID shares
+ * the subject `declarations`, so those carry their message too - otherwise a
+ * fixed error and a new one on the same scan cancel out to "no change".
+ */
 function healthKey(f: HealthFinding): string {
-  return `${f.code}\u0000${f.subject?.kind ?? ""}\u0000${f.subject?.id ?? ""}`;
+  const message = f.code === "DECLARATION_INVALID" ? hashContent(f.message).slice(0, 12) : "";
+  return `${f.code}\u0000${f.subject?.kind ?? ""}\u0000${f.subject?.id ?? ""}\u0000${message}`;
 }
 
 export function diffSurfaces(before: Surface, after: Surface): SurfaceDiff {
