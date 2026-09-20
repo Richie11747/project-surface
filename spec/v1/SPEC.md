@@ -107,7 +107,9 @@ A thing the project can run: `npm run test`, `pytest`, `go build ./...`.
 | `verification` | `VerificationRecord` | optional; present only after the command was actually executed. |
 
 `VerificationRecord`: `status` (`passed` `failed` `unknown` `skipped`), `exitCode`, `durationMs`,
-`observedAt`, `summary` (redacted, truncated output), `reason`.
+`observedAt`, `summary` (redacted, truncated output), `reason`, and optionally `commit` (the commit the
+working tree was at, 7-40 hex characters) with `dirty` (`true` when the tree had uncommitted changes, so
+the result describes the tree rather than the commit alone). Both are absent outside a git repository.
 
 A verification result describes the command line that produced it. If `run` changes, the old result
 MUST be discarded rather than carried forward.

@@ -85,6 +85,14 @@ export {
   DEFAULT_TIMEOUT_MS,
   type RunOptions,
 } from "./evidence/runner.js";
+export {
+  commandsForStale,
+  commandsProving,
+  packageTestCommands,
+  staleCapabilities,
+  type CommandSelection,
+  type SelectedCapability,
+} from "./evidence/select.js";
 
 // Analysis
 export { detectHealth, hasBlockingFindings, sortFindings, type HealthInput } from "./analysis/health.js";
@@ -170,6 +178,8 @@ export {
 export {
   changedSince,
   hashObjects,
+  headState,
+  type HeadState,
   isRepository,
   isSafeRef,
   listFiles,

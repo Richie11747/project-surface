@@ -126,6 +126,108 @@ test("verify runs a recorded command and promotes the capability it proves", () 
   }
 });
 
+test("verify --stale re-proves exactly the stale claims, and is a no-op when nothing is stale", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    assert.equal(surface(root, "verify", "--command", "test").code, 0);
+
+    /* Nothing is stale yet: a clean result, exit 0, nothing run. CI runs this
+       unconditionally and must not fail on a quiet day. */
+    const quiet = surface(root, "verify", "--stale", "--json");
+    assert.equal(quiet.code, 0, quiet.stderr);
+    assert.deepEqual(JSON.parse(quiet.stdout).results, []);
+
+    const owner = join(root, "src", "checkout", "create.ts");
+    writeFileSync(owner, `${readFileSync(owner, "utf8")}\n// touched\n`);
+    assert.equal(surface(root, "init").code, 0);
+    const doctor = JSON.parse(surface(root, "doctor", "--json").stdout);
+    const stale = doctor.findings.filter((f) => f.code === "STALE_CLAIM").map((f) => f.subject.id);
+    assert.ok(stale.includes("checkout.create"), stale.join(", "));
+    assert.match(doctor.findings.find((f) => f.code === "STALE_CLAIM").remediation, /verify --stale/);
+
+    const verify = surface(root, "verify", "--stale", "--json");
+    assert.equal(verify.code, 0, verify.stderr);
+    const report = JSON.parse(verify.stdout);
+    assert.equal(report.selection.mode, "stale");
+    /* Every stale claim is named, they all resolve to the one test command,
+       and none falls back to a package guess: the fixture binds its evidence. */
+    assert.deepEqual(report.selection.capabilities.map((c) => c.id).sort(), stale.sort());
+    assert.ok(report.selection.capabilities.every((c) => c.commandIds.length === 1 && c.fallback === false));
+    assert.deepEqual(report.selection.commandIds, ["test"]);
+    assert.equal(report.results.length, 1);
+    assert.deepEqual(report.refreshed.sort(), stale.sort());
+    assert.deepEqual(report.stillStale, []);
+
+    const inspect = JSON.parse(surface(root, "inspect", "checkout.create", "--json").stdout);
+    assert.equal((inspect.capability ?? inspect).freshness.status, "fresh");
+    const after = JSON.parse(surface(root, "doctor", "--json").stdout);
+    assert.ok(!after.findings.some((f) => f.code === "STALE_CLAIM"), "no claim should remain stale");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("verify by change set runs what impact would, and the record names the commit it ran against", () => {
+  const root = freshCopy();
+  const git = (...args) => {
+    const r = spawnSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], {
+      cwd: root,
+      encoding: "utf8",
+      windowsHide: true,
+    });
+    return r.error ? null : r.status;
+  };
+  try {
+    if (git("init", "-q", "-b", "main") === null) {
+      /* No git on this machine: the selection still works from explicit paths,
+         but there is no commit to anchor to, and the record must say nothing
+         rather than something made up. */
+      assert.equal(surface(root, "init").code, 0);
+      const report = JSON.parse(surface(root, "verify", "src/auth/verifyToken.ts", "--json").stdout);
+      assert.equal(report.results[0].commit, undefined);
+      return;
+    }
+    assert.equal(git("add", "."), 0);
+    assert.equal(git("commit", "-q", "-m", "one"), 0);
+    assert.equal(surface(root, "init").code, 0);
+
+    /* Explicit paths: only the capability owning them, only its command. The
+       tree is clean apart from the regenerated document, which does not count. */
+    const byPath = surface(root, "verify", "src/auth/verifyToken.ts", "--json");
+    assert.equal(byPath.code, 0, byPath.stderr);
+    const report = JSON.parse(byPath.stdout);
+    assert.equal(report.selection.mode, "change");
+    assert.deepEqual(report.selection.paths, ["src/auth/verifyToken.ts"]);
+    assert.deepEqual(report.selection.capabilities.map((c) => c.id), ["auth.verify-token"]);
+    assert.match(report.results[0].commit, /^[0-9a-f]{40}$/);
+    assert.equal(report.results[0].dirty, false);
+    assert.deepEqual(report.refreshed, ["auth.verify-token"]);
+
+    const stored = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8"));
+    assert.equal(stored.commands.find((c) => c.id === "test").verification.commit, report.results[0].commit);
+    const why = JSON.parse(surface(root, "why", "auth.verify-token", "--json").stdout);
+    assert.equal(why.evidence.find((e) => e.status === "passed").commit, report.results[0].commit);
+
+    /* A commit later, `--since` finds the committed change and the uncommitted
+       one alike - everything that differs from the ref - and the uncommitted
+       edit marks the tree dirty. */
+    const owner = join(root, "src", "checkout", "create.ts");
+    writeFileSync(owner, `${readFileSync(owner, "utf8")}\n// touched\n`);
+    assert.equal(git("commit", "-q", "-am", "two"), 0);
+    writeFileSync(join(root, "README.md"), "scratch\n");
+    const since = JSON.parse(surface(root, "verify", "--since", "HEAD~1", "--json").stdout);
+    assert.deepEqual(since.selection.paths, ["README.md", "src/checkout/create.ts"]);
+    assert.ok(since.selection.capabilities.some((c) => c.id === "checkout.create"));
+    assert.equal(since.results[0].dirty, true);
+
+    const bad = surface(root, "verify", "--since", "no-such-ref-zzz");
+    assert.equal(bad.code, 1);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("why explains every kind of claim and reproduces the recorded score", () => {
   const root = freshCopy();
   try {

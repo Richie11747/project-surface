@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { changedSince, hashObjects, readGitInfo, stagedPaths } from "../dist/index.js";
+import { changedSince, hashObjects, headState, readGitInfo, stagedPaths } from "../dist/index.js";
 
 /*
  * The git queries on a throwaway repository: non-ASCII names, a scan rooted in
@@ -83,6 +83,29 @@ test("one missing path does not cost the rest of its batch their git hashes", (t
     assert.equal(hashes.has("nope.txt"), false);
     assert.match(hashes.get("top.txt"), /^[0-9a-f]{40}$/);
     assert.match(hashes.get("pkg/src/plain.ts"), /^[0-9a-f]{40}$/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("headState names the commit, treats a regenerated surface document as clean and anything else as dirty", (t) => {
+  const root = repo();
+  if (root === null) return t.skip("git is not installed");
+  try {
+    const clean = headState(root);
+    assert.match(clean.commit, /^[0-9a-f]{40}$/);
+    assert.equal(clean.dirty, false);
+
+    /* `init` rewrites the document right before `verify` runs; that must not
+       make every verification look like it ran on a dirty tree. */
+    mkdirSync(join(root, ".project"), { recursive: true });
+    writeFileSync(join(root, ".project", "surface.json"), "{}\n");
+    assert.equal(headState(root).dirty, false);
+
+    writeFileSync(join(root, "top.txt"), "changed\n");
+    assert.equal(headState(root).dirty, true);
+
+    assert.equal(headState(mkdtempSync(join(tmpdir(), "project-surface-nogit-"))), null);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

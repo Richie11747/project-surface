@@ -112,7 +112,7 @@ export function detectHealth(input: HealthInput): HealthFinding[] {
         severity: "warn",
         message: `Capability "${capability.id}" was verified earlier but its files have changed since. ${capability.freshness.reason ?? ""}`.trim(),
         subject: { kind: "capability", id: capability.id },
-        remediation: `Run: surface verify --capability ${capability.id}`,
+        remediation: `Run: surface verify --stale (or --capability ${capability.id} for this one alone)`,
       });
     }
 

@@ -27,6 +27,7 @@ import type {
   Risk,
   SourceRef,
   Surface,
+  VerificationRecord,
 } from "../schema/types.js";
 
 export type ExplainedKind = "capability" | "command" | "constraint" | "risk" | "environment";
@@ -38,6 +39,9 @@ export interface ExplainedEvidence {
   link?: string;
   commandId?: string;
   observedAt?: string;
+  /** The commit the proving command ran against, when it was recorded. */
+  commit?: string;
+  dirty?: boolean;
 }
 
 export interface ClaimExplanation {
@@ -74,8 +78,10 @@ function findCapability(surface: Surface, id: string): Capability | undefined {
 
 function explainCapability(surface: Surface, c: Capability): ClaimExplanation {
   const byId = indexById(surface.evidence);
+  const commandById = indexById(surface.commands);
   const evidence: ExplainedEvidence[] = c.evidence.map((ref) => {
     const entry = byId.get(ref.id);
+    const verification = entry?.commandId ? commandById.get(entry.commandId)?.verification : undefined;
     return {
       id: ref.id,
       link: ref.link,
@@ -83,6 +89,7 @@ function explainCapability(surface: Surface, c: Capability): ClaimExplanation {
       ...(entry?.path ? { path: entry.path } : {}),
       ...(entry?.commandId ? { commandId: entry.commandId } : {}),
       ...(entry?.observedAt ? { observedAt: entry.observedAt } : {}),
+      ...anchorOf(verification),
     };
   });
 
@@ -161,6 +168,7 @@ function explainCommand(cmd: Command): ClaimExplanation {
             status: cmd.verification.status === "passed" ? "passed" : cmd.verification.status === "failed" ? "failed" : "unknown",
             commandId: cmd.id,
             ...(cmd.verification.observedAt ? { observedAt: cmd.verification.observedAt } : {}),
+            ...anchorOf(cmd.verification),
           },
         ]
       : [],
@@ -227,4 +235,10 @@ export function explainClaim(surface: Surface, id: string): ClaimExplanation | n
   if (env) return explainScored("environment", env);
 
   return null;
+}
+
+/** The commit a verification record was taken at, when the runner was inside a repository. */
+function anchorOf(record: VerificationRecord | undefined): { commit?: string; dirty?: boolean } {
+  if (!record?.commit) return {};
+  return { commit: record.commit, ...(record.dirty !== undefined ? { dirty: record.dirty } : {}) };
 }

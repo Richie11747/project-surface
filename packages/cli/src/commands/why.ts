@@ -73,7 +73,12 @@ function printExplanation(e: ClaimExplanation): void {
   }
   for (const ev of e.evidence) {
     const status = ev.status === "passed" ? style.green("passed") : ev.status === "failed" ? style.red("failed") : style.dim(ev.status);
-    const via = [ev.link ? `linked by ${ev.link}` : null, ev.commandId ? `command ${ev.commandId}` : null, ev.observedAt ? `observed ${ev.observedAt}` : null]
+    const via = [
+      ev.link ? `linked by ${ev.link}` : null,
+      ev.commandId ? `command ${ev.commandId}` : null,
+      ev.observedAt ? `observed ${ev.observedAt}` : null,
+      ev.commit ? `at ${ev.commit.slice(0, 7)}${ev.dirty ? " (dirty tree)" : ""}` : null,
+    ]
       .filter(Boolean)
       .join(", ");
     print(`    ${status}  ${ev.path ?? ev.id}${via ? style.dim(`  (${via})`) : ""}`);

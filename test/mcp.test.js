@@ -8,7 +8,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { appendFileSync, cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,10 +40,15 @@ function preparedFixture() {
   return root;
 }
 
-async function connect(root, env = {}) {
+/**
+ * `via: "cli"` starts the server through `surface mcp`, the documented way to
+ * install it, which is also the one that owns the adapters and can rebuild the
+ * document after a verification. The standalone binary cannot, and says so.
+ */
+async function connect(root, env = {}, via = "bin") {
   const transport = new StdioClientTransport({
     command: process.execPath,
-    args: [BIN, "--root", root],
+    args: via === "cli" ? [CLI, "mcp", "--root", root] : [BIN, "--root", root],
     env: { ...process.env, ...env },
     stderr: "pipe",
   });
@@ -135,6 +140,40 @@ test("surface_verify with execution enabled runs only a recorded command id", as
 
     const ran = await client.callTool({ name: "surface_verify", arguments: { commandId: "test", timeoutSeconds: 120 } });
     assert.match(textOf(ran), /passed/);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("surface_verify with stale: true re-proves stale claims and, through the CLI, re-anchors freshness", async () => {
+  const root = preparedFixture();
+  const verified = spawnSync(process.execPath, [CLI, "verify", "--root", root, "--command", "test"], { encoding: "utf8" });
+  assert.equal(verified.status, 0, verified.stderr);
+  const client = await connect(root, { PROJECT_SURFACE_ALLOW_EXEC: "1" }, "cli");
+  try {
+    const quiet = await client.callTool({ name: "surface_verify", arguments: { stale: true } });
+    assert.match(textOf(quiet), /Nothing is stale/);
+
+    /* Neither selector: refused with guidance, nothing run. */
+    const neither = await client.callTool({ name: "surface_verify", arguments: {} });
+    assert.equal(neither.isError, true);
+    assert.match(textOf(neither), /commandId .* or stale: true/);
+
+    const owner = join(root, "src", "checkout", "create.ts");
+    writeFileSync(owner, `${readFileSync(owner, "utf8")}\n// touched\n`);
+    const rescan = spawnSync(process.execPath, [CLI, "init", "--root", root], { encoding: "utf8" });
+    assert.equal(rescan.status, 0, rescan.stderr);
+    const before = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8"));
+    assert.equal(before.capabilities.find((c) => c.id === "checkout.create").freshness.status, "stale");
+
+    const ran = await client.callTool({ name: "surface_verify", arguments: { stale: true, timeoutSeconds: 120 } });
+    assert.notEqual(ran.isError, true, textOf(ran));
+    assert.match(textOf(ran), /Command: test/);
+    assert.match(textOf(ran), /Stale capabilities re-proved: .*checkout\.create/);
+    assert.match(textOf(ran), /The surface was rebuilt/);
+    const after = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8"));
+    assert.equal(after.capabilities.find((c) => c.id === "checkout.create").freshness.status, "fresh");
   } finally {
     await client.close();
     rmSync(root, { recursive: true, force: true });

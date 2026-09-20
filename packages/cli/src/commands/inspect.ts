@@ -240,4 +240,16 @@ function printDetail(surface: Surface, c: Capability): void {
     )
   );
   if (c.freshness?.reason) print(style.dim(`         ${c.freshness.reason}`));
+  /* Where the proof was taken. A claim that says "verified" without saying
+     against which code is only half a claim; the commit is the other half. */
+  const anchors = [
+    ...new Set(
+      c.evidence
+        .map((ref) => surface.evidence.find((e) => e.id === ref.id)?.commandId)
+        .map((id) => (id ? surface.commands.find((cmd) => cmd.id === id)?.verification : undefined))
+        .filter((v) => v?.status === "passed" && v.commit)
+        .map((v) => `${v!.commit!.slice(0, 7)}${v!.dirty ? " (dirty tree)" : ""}`)
+    ),
+  ];
+  if (anchors.length > 0) print(style.dim(`         Proven at ${anchors.join(", ")}`));
 }
