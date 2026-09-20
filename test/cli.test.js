@@ -255,6 +255,82 @@ test("context labels every file with the trust of its claim, and does not read b
   }
 });
 
+test("gate judges a change by proof at the commit under review, proves it on demand, and tightens under --strict", (t) => {
+  const root = freshCopy();
+  const git = (...args) => {
+    const r = spawnSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], {
+      cwd: root,
+      encoding: "utf8",
+      windowsHide: true,
+    });
+    return r.error ? null : r.status;
+  };
+  try {
+    if (git("init", "-q", "-b", "main") === null) return t.skip("git is not installed");
+    assert.equal(git("add", "."), 0);
+    assert.equal(git("commit", "-q", "-m", "base"), 0);
+    assert.equal(git("checkout", "-q", "-b", "feature"), 0);
+    const owner = join(root, "src", "checkout", "create.ts");
+    writeFileSync(owner, `${readFileSync(owner, "utf8")}\n// status field\n`);
+    assert.equal(git("commit", "-q", "-am", "checkout: status field"), 0);
+    assert.equal(surface(root, "init").code, 0);
+
+    /* Nothing has ever run: every touched capability is unproven and the gate says no. */
+    const before = surface(root, "gate", "--since", "main", "--json");
+    assert.equal(before.code, 2, before.stderr);
+    const first = JSON.parse(before.stdout);
+    assert.equal(first.pass, false);
+    assert.match(first.head, /^[0-9a-f]{40}$/);
+    assert.ok(first.capabilities.length >= 1);
+    assert.ok(first.capabilities.every((g) => g.verdict === "unproven"), JSON.stringify(first.capabilities.map((g) => [g.id, g.verdict])));
+    assert.ok(first.capabilities.some((g) => g.id === "checkout.create" && g.relation === "owner"));
+    assert.ok(first.notes.some((n) => /docs\/contracts\/checkout\.md did not change/.test(n)));
+
+    /* --verify proves exactly the touched capabilities at this commit and judges again. */
+    const proved = surface(root, "gate", "--since", "main", "--verify", "--json");
+    assert.equal(proved.code, 0, proved.stderr);
+    const second = JSON.parse(proved.stdout);
+    assert.equal(second.pass, true);
+    assert.deepEqual(second.ran, ["test"]);
+    assert.ok(second.capabilities.every((g) => g.verdict === "proven"));
+    assert.match(second.capabilities[0].reasons.at(-1), /this commit/);
+    assert.equal(second.capabilities[0].proofs[0].commit, second.head);
+
+    /* The fixture ships one violated warn-level rule: a note by default, a block under --strict. */
+    assert.ok(second.notes.some((n) => /is violated/.test(n)));
+    const strict = surface(root, "gate", "--since", "main", "--strict", "--json");
+    assert.equal(strict.code, 2);
+    assert.ok(JSON.parse(strict.stdout).blocking.some((b) => /is violated/.test(b)));
+
+    const md = surface(root, "gate", "--since", "main", "--format", "markdown");
+    assert.equal(md.code, 0, md.stderr);
+    assert.ok(md.stdout.startsWith("<!-- project-surface:gate -->"));
+    assert.match(md.stdout, /\*\*Passes\.\*\*/);
+    assert.match(md.stdout, /`checkout\.create` \| owner \| ✅ proven/);
+
+    /* One commit later that touches no owner, the proof carries: the owner
+       files are byte-identical to what the run saw. Strict wants it re-run. */
+    assert.equal(git("commit", "-q", "--allow-empty", "-m", "unrelated"), 0);
+    const carried = JSON.parse(surface(root, "gate", "--since", "main", "--json").stdout);
+    assert.equal(carried.pass, true);
+    assert.ok(carried.capabilities.every((g) => g.verdict === "carried"), JSON.stringify(carried.counts));
+    const strictCarried = surface(root, "gate", "--since", "main", "--strict", "--json");
+    assert.equal(strictCarried.code, 2);
+    assert.ok(JSON.parse(strictCarried.stdout).blocking.some((b) => /is carried/.test(b)));
+
+    /* A change outside the surface has nothing to judge and passes. */
+    writeFileSync(join(root, "README.md"), "scratch\n");
+    const outside = JSON.parse(surface(root, "gate", "README.md", "--json").stdout);
+    assert.deepEqual(outside.capabilities, []);
+    assert.equal(outside.pass, true);
+
+    const bad = surface(root, "gate", "--since", "no-such-ref-zzz");
+    assert.equal(bad.code, 1);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("why explains every kind of claim and reproduces the recorded score", () => {
   const root = freshCopy();
   try {
@@ -408,7 +484,7 @@ test("verify refuses a command that is not in the document", () => {
 });
 
 test("every command answers --help and unknown commands fail", () => {
-  for (const cmd of ["init", "inspect", "why", "map", "agents", "verify", "impact", "context", "diff", "doctor", "report", "mcp"]) {
+  for (const cmd of ["init", "inspect", "why", "map", "agents", "verify", "impact", "gate", "context", "diff", "doctor", "report", "mcp"]) {
     const help = surface(".", cmd, "--help");
     assert.equal(help.code, 0, `${cmd} --help exited ${help.code}`);
     assert.ok(help.stdout.length > 20, `${cmd} --help printed nothing`);

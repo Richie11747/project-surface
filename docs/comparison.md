@@ -9,6 +9,7 @@ is best. Claims about other tools link to their own documentation; if one is out
 | What it produces | A committed JSON document: capabilities, commands, rules, risks, evidence, each with provenance, confidence, freshness | A signature index and context files (`.context/`, generated CLAUDE.md, an Evidence Pack JSON of ranked files with line anchors) | A ranked, minified XML map of symbols for a query, streamed to stdout, plus quality panels | Hand-written instructions | Hand-written rules, scoped by glob | The repository packed into one LLM-friendly file | A ranked symbol map, rebuilt per chat | Search results and snippets from an index | Snippets from context providers (codebase index, docs, ...) |
 | **Provenance per claim** | Yes - `declared` / `verified` / `derived` / `inferred`, with source file and locator | Line anchors per symbol; an extraction tier per language (AST / anchored regex / pattern) | Parse health per file, uncertain edges labelled, counts marked as floors | No - prose | No - prose | No - raw source | No - symbols, ranked | No | No |
 | **Evidence linking** | Yes - test ↔ implementation via import graph; `path-proximity` is labelled as a guess | Test conventions extracted; tests to run implied | `--test-gate` names tests to run | No | No | No | Indirect - references count toward rank | No | No |
+| **Proof bound to the commit under review** | Yes - `surface gate` judges every touched capability as proven at HEAD, carried, stale, unproven or failing, and CI recomputes the receipt | No - `review-pr` audits the diff for scope and missing tests | No - `--pr-context` and `--edit-check` describe the diff | No | No | No | No | No | No |
 | **Evidence executed** | Yes - `surface verify` runs the test and records pass/fail, duration, output and the commit it ran against | No | No | n/a | n/a | n/a | No | No | No |
 | **Symbol index / retrieval ranking** | **No** - `surface context` matches task words against capability names | Yes - TF-IDF over signatures; 78.6% hit@5 on its own benchmark | Yes - four evidence lanes; 58.3% strict file@10 on LocBench per its own evals | No | No | No | Yes - ranked symbol map | Yes - index | Yes - codebase index |
 | **Call-graph blast radius** | **No** - `surface impact` follows declared owners, contracts, evidence and packages, not calls | Yes - per symbol and per file | Yes - `--impact`, `--affected`, `--blast-radius` | No | No | No | No | No | No |
@@ -43,6 +44,9 @@ that neither of them attempts:
   anchors; the ripwire `--test-gate` says which tests to run and leaves the running to you.
 - **Rules are checked, not recited.** A constraint with a `check` fails `doctor --strict` and CI; a
   `declared` claim from a maintainer overrides inference at confidence 1.0.
+- **A change carries proof.** `surface gate` says, per capability a pull request touches, whether its
+  evidence was produced against the commit under review - and the receipt is recomputed by CI, so a
+  contributor (or an agent) cannot claim more than the runner reproduces.
 
 They compose. Let ripwire or sigmap find the file; ask the surface whether what it implements is proven,
 by which test, at which commit, and what must not be broken. A surface is what a retrieved file gets

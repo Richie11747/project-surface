@@ -107,6 +107,14 @@ capabilities:
     evidence: [test/cli.test.js]
     tags: [analysis]
 
+  - id: analysis.gate
+    title: The proof gate - per touched capability, proven at the commit under review or not, and the receipt
+    description: Judges a change from the document and git alone; nothing is executed here.
+    owners: [packages/core/src/analysis/gate.ts]
+    contracts: [docs/cli.md]
+    evidence: [packages/core/test/gate.test.js]
+    tags: [analysis, trust]
+
   - id: analysis.context
     title: Token-bounded context pack with a reason per file
     owners: [packages/core/src/analysis/context.ts]
@@ -219,7 +227,13 @@ capabilities:
     tags: [cli]
   - id: cli.verify
     title: surface verify
-    owners: [packages/cli/src/commands/verify.ts]
+    owners: [packages/cli/src/commands/verify.ts, packages/cli/src/verification.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.gate
+    title: surface gate
+    owners: [packages/cli/src/commands/gate.ts]
     contracts: [docs/cli.md]
     evidence: [test/cli.test.js]
     tags: [cli]
@@ -268,7 +282,7 @@ capabilities:
     evidence: [test/mcp.test.js]
     tags: [mcp]
   - id: mcp.analyze-tools
-    title: Read-only MCP tools - impact, context, diff
+    title: Read-only MCP tools - impact, gate, context, diff
     owners: [packages/mcp-server/src/tools/analyze.ts]
     contracts: [docs/mcp.md]
     evidence: [test/mcp.test.js]

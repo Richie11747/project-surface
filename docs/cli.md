@@ -102,6 +102,37 @@ commands to run.
 | `--staged` | Use the git staged set instead of explicit paths. |
 | `--since <ref>` | Use everything changed since a git ref. |
 
+### `surface gate [--since <ref>] [--staged] [paths...]`
+
+Does this change carry proof? For every capability the change touches, the gate says what its evidence
+describes - from the document and git alone, nothing is executed:
+
+| Verdict | Meaning |
+|---|---|
+| `proven` | Passing evidence recorded at this very commit, owner files unchanged since. |
+| `carried` | Passing evidence from an earlier commit, but the owner files are byte-identical to what that run saw (fingerprint), so it still describes them. |
+| `stale` | There is a passing proof, but it does not describe this code: owners changed since, or the record carries no commit. |
+| `unproven` | Nothing has ever exercised this capability. |
+| `failing` | The last run of its evidence failed. |
+
+It also lists violated constraints, unchecked ones, risks whose paths the change touches, and every contract
+document that did *not* change while capabilities it specifies did. Exit `2` unless every touched capability
+is `proven` or `carried` and no error-level rule is violated.
+
+| Option | |
+|---|---|
+| `--since <ref>` | The change set, everything that differs from the ref, uncommitted edits included. Default `main`. |
+| `--staged` / `paths...` | The staged set, or explicit paths. |
+| `--verify` | Prove what is not yet proven at this commit first - the same execution path as `surface verify` - then judge. |
+| `--strict` | Only `proven` passes; warn-level violations and approval-required risks block too. |
+| `--format text\|json\|markdown` | `markdown` is the receipt the GitHub Action posts; it carries a marker and is deterministic for a given document. |
+| `--timeout <seconds>` | Per-command timeout for `--verify`. |
+
+The receipt is meant to travel: an agent that made a change can paste it into the pull request, and CI
+recomputes it, so it cannot say more than the runner reproduces. A proof counts only when the run that
+produced it is recorded against the commit under review, or its owner files are byte-identical to what
+that run saw.
+
 ### `surface context "<task>"`
 
 A token-bounded context pack for a task: the capabilities most relevant to the wording, their owners,
@@ -166,6 +197,7 @@ Serve the surface over MCP on stdio. See [mcp.md](mcp.md).
 ```yaml
 - run: npx project-surface init
 - run: npx project-surface doctor --strict
+- run: npx project-surface gate --since "origin/${{ github.base_ref }}" --verify   # pull requests
 ```
 
 Or use the composite action in [`integrations/github-action`](../integrations/github-action/README.md).

@@ -103,6 +103,16 @@ export {
   type ImpactReport,
 } from "./analysis/impact.js";
 export {
+  gateChange,
+  renderGateMarkdown,
+  GATE_COMMENT_MARKER,
+  type GateOptions,
+  type GateProof,
+  type GateReport,
+  type GateVerdict,
+  type GatedCapability,
+} from "./analysis/gate.js";
+export {
   diffSurfaces,
   renderDiffMarkdown,
   DIFF_COMMENT_MARKER,

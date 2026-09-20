@@ -57,6 +57,17 @@ moment. If the files change, the claim goes stale - and it stays stale on every 
 the anchor only moves when something re-verifies the claim. A tool that quietly re-anchored on every scan
 would make "stale" impossible to observe.
 
+## A change carries proof
+
+The anchor gives every verification record two more facts: the commit the tree was at, and whether it had
+uncommitted changes. That is enough to judge a pull request from the document alone. `surface gate` takes
+the set of changed paths, finds the capabilities they touch, and says of each whether passing evidence was
+recorded against this commit (`proven`), against an earlier one over byte-identical owner files
+(`carried`), or is `stale`, `unproven` or `failing`. It also names the contract that did not move while
+the behaviour did. Nothing is executed unless `--verify` is asked for, and the receipt it prints is
+recomputed by CI, so a contributor cannot claim more than the runner reproduces. Guessed (`inferred`)
+capabilities are reported and never gated.
+
 ## What it is not
 
 Not a multi-agent system, a vector database, a chat interface or a code modifier. It makes no network

@@ -18,6 +18,7 @@ not on the list. Items link to issues where one exists; a checked box means it i
 - [x] Release pipeline with SBOM and a reviewer-gated npm publish
 - [x] The loop closes: `verify --stale` re-proves exactly what `doctor` reported stale, `verify --since` what a change touched; every record names the commit it ran against
 - [x] Context packs carry a trust label per file and are sized without reading bodies
+- [x] `surface gate` - proof-carrying pull requests: per touched capability, proven at the commit under review or not; the GitHub Action posts the receipt and can fail on it
 
 ## Next
 

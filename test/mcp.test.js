@@ -26,6 +26,7 @@ const EXPECTED_TOOLS = [
   "surface_constraints",
   "surface_health",
   "surface_impact",
+  "surface_gate",
   "surface_context",
   "surface_diff",
   "surface_verify",
@@ -112,6 +113,23 @@ test("read-only tools answer from the document", async () => {
 
     const constraints = textOf(await client.callTool({ name: "surface_constraints", arguments: {} }));
     assert.ok(constraints.length > 0);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("surface_gate judges from the document without running anything", async () => {
+  const root = preparedFixture();
+  const client = await connect(root);
+  try {
+    const result = await client.callTool({ name: "surface_gate", arguments: { paths: ["src/checkout/create.ts"] } });
+    assert.notEqual(result.isError, true, textOf(result));
+    assert.match(textOf(result), /DOES NOT PASS/);
+    assert.match(textOf(result), /unproven +checkout\.create \[owner\]/);
+    assert.match(textOf(result), /docs\/contracts\/checkout\.md did not change/);
+    const doc = JSON.parse(readFileSync(join(root, ".project", "surface.json"), "utf8"));
+    assert.ok(doc.commands.every((c) => !c.verification), "the gate must not execute or record anything");
   } finally {
     await client.close();
     rmSync(root, { recursive: true, force: true });

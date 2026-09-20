@@ -8,6 +8,8 @@ import {
   changedSince,
   diffSurfaces,
   createGuardedAccess,
+  gateChange,
+  headState,
   packContext,
   showFileAtRef,
   stagedPaths,
@@ -17,6 +19,64 @@ import {
 import type { Surface } from "@project-surface/core";
 import { loadSurface, text, trustNote } from "../support.js";
 import type { ToolContext, ToolResult } from "../support.js";
+
+export const gateTool = {
+  name: "surface_gate",
+  title: "Proof of change",
+  description:
+    "Judge a change the way the pull-request gate will: for every capability it touches, whether passing " +
+    "evidence was recorded at this very commit (proven), carried over byte-identical owner files (carried), " +
+    "or is stale, unproven or failing; plus violated rules and touched risks. Nothing is executed. " +
+    "Call it before opening a pull request; if it does not pass, ask the user to run surface gate --verify " +
+    "(or surface_verify with stale: true), which proves the missing capabilities at this commit.",
+  inputSchema: {
+    paths: z.array(z.string()).optional().describe("Repository-relative paths. Omit to use --since or the staged set."),
+    since: z.string().optional().describe("A git ref; everything changed since it is judged. Defaults to main when no paths are given."),
+    strict: z.boolean().optional().describe("Require evidence at this exact commit; carried proofs, warn-level violations and approval-required risks block."),
+  },
+  handler(args: { paths?: string[]; since?: string; strict?: boolean }, ctx: ToolContext): ToolResult {
+    const surface = loadSurface(ctx);
+    const head = headState(ctx.root);
+
+    let paths = args.paths ?? [];
+    let base = "paths";
+    if (paths.length === 0) {
+      const ref = args.since ?? "main";
+      const changed = changedSince(ctx.root, ref);
+      if (changed !== null) {
+        paths = changed;
+        base = ref;
+      } else {
+        paths = stagedPaths(ctx.root);
+        base = "staged";
+      }
+    }
+
+    const report = gateChange(surface, paths, base, {
+      ...(head?.commit ? { head: head.commit } : {}),
+      ...(head ? { dirty: head.dirty } : {}),
+      strict: args.strict === true,
+    });
+    const lines = [
+      `Proof of change since ${report.base}${report.head ? ` at ${report.head.slice(0, 7)}${report.dirty ? " (dirty tree)" : ""}` : ""}: ${report.pass ? "PASSES" : "DOES NOT PASS"}`,
+      `Changed paths (${report.changedPaths.length}): ${report.changedPaths.slice(0, 20).join(", ") || "none"}`,
+      "",
+    ];
+    for (const g of report.capabilities) {
+      lines.push(`  ${g.verdict.padEnd(8)} ${g.id} [${g.relation}] - ${g.reasons[g.reasons.length - 1] ?? ""}`);
+    }
+    if (report.blocking.length > 0) {
+      lines.push("", "Blocking:");
+      for (const b of report.blocking) lines.push(`  ${b}`);
+    }
+    if (report.notes.length > 0) {
+      lines.push("", "Worth a look:");
+      for (const x of report.notes) lines.push(`  ${x}`);
+    }
+    lines.push("", trustNote());
+    return text(lines.join("\n"));
+  },
+};
 
 export const impactTool = {
   name: "surface_impact",

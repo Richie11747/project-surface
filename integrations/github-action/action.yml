@@ -22,6 +22,24 @@ inputs:
       `pull-requests: write` permission. Never posts on pushes.
     required: false
     default: "false"
+  gate:
+    description: >-
+      On pull requests, judge the change with `surface gate`: for every capability it touches, whether passing
+      evidence was recorded at the commit under review. The receipt is appended to the comment when `comment`
+      is on. Recomputed here, so a receipt pasted into the description cannot say more than CI can reproduce.
+    required: false
+    default: "true"
+  verify:
+    description: >-
+      Let the gate run the project commands recorded in the surface (the test suite, typically) so that the
+      receipt says `proven` at this commit rather than `carried` or `unproven`. Executes only commands already
+      present in `.project/surface.json`; nothing else can be run through this input.
+    required: false
+    default: "false"
+  fail-on-gate:
+    description: Fail the job when the gate does not pass.
+    required: false
+    default: "false"
   working-directory:
     description: Project root, relative to the repository root.
     required: false
@@ -70,6 +88,34 @@ runs:
         ${{ steps.cli.outputs.cmd }} diff --since "origin/${{ github.base_ref }}" --format markdown > "$RUNNER_TEMP/surface-diff.md" \
           || echo "_project-surface could not compute a diff: the base branch has no committed surface yet._" > "$RUNNER_TEMP/surface-diff.md"
 
+    - name: Fetch the base branch for the gate
+      if: inputs.gate == 'true' && inputs.comment != 'true' && github.event_name == 'pull_request'
+      shell: bash
+      run: git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+
+    # The receipt: per touched capability, proven at this commit or not. With
+    # `verify` on, the missing proofs are run first through the surface's own
+    # execution path - only commands the document already records.
+    - name: Judge the change
+      id: gate
+      if: inputs.gate == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        set +e
+        if [ "${{ inputs.verify }}" = "true" ]; then
+          ${{ steps.cli.outputs.cmd }} gate --since "origin/${{ github.base_ref }}" --verify --format markdown > "$RUNNER_TEMP/surface-gate.md"
+        else
+          ${{ steps.cli.outputs.cmd }} gate --since "origin/${{ github.base_ref }}" --format markdown > "$RUNNER_TEMP/surface-gate.md"
+        fi
+        code=$?
+        set -e
+        if [ "$code" -ne 0 ] && [ "$code" -ne 2 ]; then
+          echo "_project-surface could not judge this change (exit $code)._" > "$RUNNER_TEMP/surface-gate.md"
+        fi
+        echo "code=$code" >> "$GITHUB_OUTPUT"
+        cat "$RUNNER_TEMP/surface-gate.md"
+
     # One comment per pull request, updated in place. The marker on the first
     # line is how the action finds its own earlier comment.
     - name: Comment on the pull request
@@ -81,6 +127,10 @@ runs:
         REPO: ${{ github.repository }}
       run: |
         body="$RUNNER_TEMP/surface-diff.md"
+        if [ -f "$RUNNER_TEMP/surface-gate.md" ]; then
+          printf "\n\n" >> "$body"
+          cat "$RUNNER_TEMP/surface-gate.md" >> "$body"
+        fi
         existing=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
           --jq '.[] | select(.body | startswith("<!-- project-surface:diff -->")) | .id' | head -n1)
         if [ -n "$existing" ]; then
@@ -90,6 +140,13 @@ runs:
           gh api --method POST "repos/$REPO/issues/$PR/comments" -F body=@"$body" > /dev/null
           echo "posted a new comment"
         fi
+
+    - name: Require proof
+      if: inputs.fail-on-gate == 'true' && github.event_name == 'pull_request' && steps.gate.outputs.code != '0'
+      shell: bash
+      run: |
+        echo "The change does not carry proof for every capability it touches (surface gate exit ${{ steps.gate.outputs.code }})."
+        exit 1
 
     - name: Report changes to the surface
       if: inputs.fail-on-change == 'true'

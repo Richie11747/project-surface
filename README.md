@@ -156,11 +156,56 @@ with the provenance on every line and inferred guesses left out. The block carri
 `surface doctor` reports it as stale the moment the surface changes underneath it. A hand-written CLAUDE.md
 cannot do that. This repository's own [CLAUDE.md](CLAUDE.md) is generated this way and checked in CI.
 
-Nine tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_context`, `surface_diff`, and `surface_verify`.
+Ten tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_gate`, `surface_context`, `surface_diff`, and `surface_verify`.
 
-Eight of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the ninth, and
+Nine of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the ninth, and
 [docs/mcp.md](docs/mcp.md) for the full tool reference. A Claude Code plugin and a GitHub Action live in
 [integrations/](integrations/README.md).
+
+---
+
+## Proof-carrying pull requests
+
+"Tests pass" is a statement about a run. It does not say which behaviours a change touched, nor whether the
+evidence for each of them was produced against the code under review. `surface gate` does:
+
+```console
+$ surface gate --since main
+Proof of change since main at c02ee9e
+  1 changed path(s), 5 capabilities touched
+
+  stale     checkout.complete (owner)
+  stale     checkout.create (owner)
+  ...
+
+Blocking
+  - checkout.create is stale: Owner files changed since verification.
+
+  does not pass  5 stale
+  Run with --verify to prove what is missing at this commit.
+
+$ surface gate --since main --verify
+Proving 5 capabilities via 1 command(s)
+running test  npm run test
+  passed 1960 ms
+
+  proven    checkout.complete (owner)
+  proven    checkout.create (owner)
+  ...
+
+Worth a look
+  - docs/contracts/checkout.md did not change while 5 capabilities it specifies did. Confirm the behaviour still matches the document.
+
+  passes  5 proven
+```
+
+Five verdicts, each from one fact in the document: `proven` (evidence recorded at this commit), `carried`
+(an earlier run, but the owner files are byte-identical to what it saw), `stale`, `unproven`, `failing`. The
+gate also names the contract that did not move while the behaviour did, the rule that is broken, and the
+path that needs approval. `--format markdown` is a receipt: an agent that made the change pastes it into
+the pull request, the [GitHub Action](integrations/github-action/README.md) recomputes it on the runner, and
+the two either agree or the difference is the review. No retrieval tool can produce this, because none of
+them runs anything or remembers at which commit it did.
 
 ---
 
@@ -274,6 +319,7 @@ Three things are worth noticing.
 | `surface map` | Ownership table: owner, contract, evidence, confidence |
 | `surface verify` | Run project commands and record the result as evidence; `--stale` re-proves what went stale, `--since <ref>` what a change touched |
 | `surface impact <paths>` | What a change affects, and what to run |
+| `surface gate --since <ref>` | Does the change carry proof? Per touched capability: proven at this commit, or not; `--verify` proves it first |
 | `surface context "<task>"` | Token-bounded context pack, with a reason and a trust label per file |
 | `surface diff --since <ref>` | What changed about the project surface |
 | `surface doctor` | Drift, stale claims, unproven behaviour |

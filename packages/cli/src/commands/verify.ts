@@ -16,21 +16,16 @@
 import { parseArgs } from "node:util";
 import {
   analyzeImpact,
-  buildSurface,
   changedSince,
   commandsForStale,
   commandsProving,
-  headState,
-  nowIso,
   resolveAllowedCommand,
-  runCommand,
   stagedPaths,
-  writeSurface,
 } from "@project-surface/core";
 import type { Command, CommandSelection, Surface, VerificationRecord } from "@project-surface/core";
-import { builtinAdapters } from "../adapters.js";
 import { GLOBAL_OPTIONS, requireSurface, CliError, type GlobalOptions } from "../context.js";
 import { bullet, heading, print, printJson, style } from "../output.js";
+import { recordRuns } from "../verification.js";
 
 type SelectionMode = "command" | "all" | "capability" | "stale" | "change";
 
@@ -84,66 +79,16 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
 
   if (!options.json) announce(selection);
 
-  const now = nowIso();
   const timeoutMs = typeof values.timeout === "string" ? Number(values.timeout) * 1000 : undefined;
-  /* Read once, before anything runs: a command that touches the tree must not
-     change what the record says the tree was. */
-  const head = headState(options.root);
-  const results: Array<{ command: Command; record: VerificationRecord }> = [];
-
-  for (const command of selection.commands) {
-    if (!options.json) print(`${style.dim("running")} ${style.bold(command.id)}  ${command.run}`);
-    const observed = runCommand(options.root, command, {
-      now,
-      ...(timeoutMs && Number.isFinite(timeoutMs) ? { timeoutMs } : {}),
-    });
-    const record: VerificationRecord = head
-      ? { ...observed, ...(head.commit ? { commit: head.commit } : {}), dirty: head.dirty }
-      : observed;
-    results.push({ command, record });
-    if (!options.json) print(`  ${label(record.status)} ${style.dim(`${record.durationMs ?? 0} ms`)}`);
-  }
-
-  const updated: Surface = {
-    ...surface,
-    commands: surface.commands.map((c) => {
-      const result = results.find((r) => r.command.id === c.id);
-      return result ? { ...c, verification: result.record } : c;
-    }),
-    evidence: surface.evidence.map((e) => {
-      const result = results.find((r) => r.command.id === e.commandId);
-      if (!result) return e;
-      return {
-        ...e,
-        status: result.record.status === "passed" ? "passed" : result.record.status === "failed" ? "failed" : e.status,
-        observedAt: result.record.observedAt,
-        ...(result.record.summary ? { summary: result.record.summary } : {}),
-      };
-    }),
-  };
-  /* Recording a result is only half the job. The pipeline is what turns a
-     passing test into capability confidence and anchors the freshness
-     fingerprint, so rebuild from the updated document rather than leaving that
-     to the next `init`. If the rebuild fails, the raw results are still saved. */
-  writeSurface(options.root, updated);
-  const warnings: string[] = [];
-  let rebuilt: Surface | undefined;
-  try {
-    const rebuild = await buildSurface({
-      root: options.root,
-      adapters: builtinAdapters,
-      previous: updated,
-      now,
-    });
-    warnings.push(...rebuild.warnings);
-    writeSurface(options.root, rebuild.surface);
-    rebuilt = rebuild.surface;
-  } catch (error) {
-    warnings.push(
-      `Results were recorded, but the surface could not be rebuilt: ${(error as Error).message}. ` +
-        `Run surface init to propagate them.`
-    );
-  }
+  const { results, rebuilt, warnings } = await recordRuns(options.root, surface, selection.commands, {
+    ...(timeoutMs && Number.isFinite(timeoutMs) ? { timeoutMs } : {}),
+    onStart: (command) => {
+      if (!options.json) print(`${style.dim("running")} ${style.bold(command.id)}  ${command.run}`);
+    },
+    onDone: ({ record }) => {
+      if (!options.json) print(`  ${label(record.status)} ${style.dim(`${record.durationMs ?? 0} ms`)}`);
+    },
+  });
 
   /* Which of the claims we set out to re-prove are fresh now. Only meaningful
      for a selection made by claim; `--command` names no claim to report on. */

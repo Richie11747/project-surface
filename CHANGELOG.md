@@ -6,6 +6,20 @@ All notable changes to this project are documented here. This project adheres to
 
 ### Added
 
+- **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
+  `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),
+  `carried` (an earlier run over byte-identical owner files), `stale`, `unproven` or `failing`; it lists
+  violated and unchecked constraints, risks the change touches, and every contract document that did not
+  change while capabilities it specifies did. Exit `2` unless every touched capability is proven or carried
+  and no error-level rule is violated; `--strict` accepts only `proven` and blocks on warn-level violations
+  and approval-required risks. `--verify` proves the missing capabilities first through the same path as
+  `surface verify`; `--format markdown` is a deterministic receipt. Core: `gateChange`, `renderGateMarkdown`.
+- **`surface_gate` over MCP** - the same verdicts, read-only, for an agent to check its own change before
+  opening a pull request. Ten tools now; nine are read-only.
+- **The GitHub Action posts the receipt.** New inputs `gate` (default on), `verify` (let the gate run the
+  recorded commands so the receipt says proven at the pull request head) and `fail-on-gate`. The comment
+  carries the semantic diff and the proof of change; this repository uses `verify: "true"` on its own pull
+  requests.
 - **`surface verify` selects by claim, not only by command id.** `--stale` runs exactly the commands that
   re-prove every capability whose owner files changed since it was verified, then reports how many are
   fresh again; nothing stale is a clean exit `0`, so CI can run it unconditionally. `--since <ref>`,
