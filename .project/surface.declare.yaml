@@ -77,6 +77,14 @@ capabilities:
     evidence: [packages/core/test/safety.test.js]
     tags: [safety]
 
+  - id: evidence.select
+    title: Which commands prove which claims - the rule behind verify --stale and the MCP stale re-proof
+    description: Maps capabilities to the commands their evidence was recorded from, falling back to the package test command and saying so.
+    owners: [packages/core/src/evidence/select.ts]
+    contracts: [docs/cli.md]
+    evidence: [packages/core/test/select.test.js]
+    tags: [evidence]
+
   - id: safety.redaction
     title: Secret redaction for every captured command output
     owners: [packages/core/src/redact.ts]
