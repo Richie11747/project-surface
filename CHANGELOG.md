@@ -56,6 +56,41 @@ All notable changes to this project are documented here. This project adheres to
   trust note says what that means; `surface_verify` warns when a *declared* command contains shell
   metacharacters (`; | & $ \` < >`). Execution is not blocked - `SECURITY.md` and `docs/mcp.md` describe
   the boundary.
+- **A non-ASCII filename in recent history aborted the build.** `git log --name-only` C-quotes such names
+  (`"caf\303\251.ts"`) and the quotes then failed the schema's `relPath` rule. Every path-listing git
+  query (`recentChanges`, `changedSince`, `stagedPaths`) now uses `-z`, and `--relative`, so a package
+  scanned inside a monorepo gets paths relative to itself rather than to the repository top level.
+- **Verifying a declared command lowered its confidence and let it decay.** A passing run rewrote the
+  tier to `verified` (floor 0.95), after which the 14-day TTL applied - a `declared` command dropped to
+  0.56 with no human involved, contradicting "declared never decays". The run now only ever raises a tier
+  (`strongerTier`), in the pipeline and in `surface why`.
+- `git hash-object` retries a batch path by path when one entry fails, so an absent owner no longer pushes
+  its eighty neighbours into a different hash space - which made `ownersFingerprint` depend on how many
+  capabilities existed, and produced `STALE_CLAIM` with no edit to the files.
+- `AGENTS_MD_STALE` is reported for every stale file: a current `AGENTS.md` no longer hides a stale
+  `CLAUDE.md`. A block written with `--max-capabilities N` records `max=N` in its marker and is compared
+  against a render with the same cap, instead of being stale on every scan.
+- `surface impact` normalises the paths it is given (backslashes, `./`, trailing `/`) and matches owners,
+  evidence, contracts, packages and risks with one directory-aware rule in both directions - `docs` now
+  touches `docs/cli.md`, and `db/migrations/002.sql` touches a `db/migrations` risk.
+- A plain directory in `owners:` expands to the files under it, as `glob.ts` always documented; before,
+  only globs were expanded and `owners: [src/model]` was an orphan.
+- `mergeEnvironment` takes `required` from the stronger tier, so a maintainer's `required: false` is not
+  overridden by an adapter that assumed every read is mandatory. `secret` stays sticky.
+- Identifiers are capped at the schema's 200 characters: a slug longer than 180 keeps its head and gains
+  an 8-character content hash, composite ids (`pkg:cmd`, `risk:type:path`) are bounded as a whole. A deep
+  test path used to yield an id that failed validation and aborted the build.
+- A carried verification is discarded when the command's `cwd` changed, not only its `run`. An adapter
+  that throws a non-`Error` value is reported with its string, not `undefined`.
+- The runner distinguishes a command that printed more than the 8 MiB capture buffer (`ENOBUFS`) from one
+  that could not be started. Known limitation, now stated in the code: on Windows the timeout stops the
+  shell, not necessarily every process it spawned.
+
+### Added
+
+- Health finding `DANGLING_EVIDENCE` (warn): a capability links an evidence id that no entry carries -
+  typically a misspelt or deleted `evidence:` path. Such a link used to satisfy `require-test` silently;
+  the check now counts only references that resolve.
 
 ## [0.2.0] - 2026-09-15
 

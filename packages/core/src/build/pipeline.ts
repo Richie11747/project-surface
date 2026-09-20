@@ -40,6 +40,7 @@ import {
   mergeEnvironment,
   mergeEvidence,
   mergeRisks,
+  strongerTier,
 } from "./merge.js";
 import type { Capability, Command, EvidenceEntry, StackInfo, Surface, Timestamp } from "../schema/types.js";
 
@@ -104,7 +105,7 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
       results.push(result);
       if (!adapter.fallback && result.environment !== undefined) environmentAvailable = true;
     } catch (e) {
-      warnings.push(`Adapter "${adapter.id}" failed and was skipped: ${(e as Error).message}`);
+      warnings.push(`Adapter "${adapter.id}" failed and was skipped: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
   for (const adapter of options.adapters) if (!adapter.fallback) await run(adapter, false);
@@ -160,8 +161,10 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
   const finalCommands: Command[] = commands.map((draft) => {
     const previous = previousCommands.get(draft.id);
     /* A recorded result only describes the command that produced it. If the
-       command line changed, the old verdict is discarded rather than reused. */
-    const carried = previous && previous.run === draft.run ? previous.verification : undefined;
+       command line or its working directory changed, the old verdict is
+       discarded rather than reused. */
+    const carried =
+      previous && previous.run === draft.run && previous.cwd === draft.cwd ? previous.verification : undefined;
     const verification = draft.verification ?? carried;
     const freshness = evaluateFreshness({
       now,
@@ -171,8 +174,10 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
       ...draft,
       ...(verification ? { verification } : {}),
       freshness,
+      /* A passing run raises a derived command to verified. It never lowers a
+         declared one: a human owns that statement, and declared does not decay. */
       confidence: computeConfidence({
-        tier: verification?.status === "passed" ? "verified" : draft.provenance.tier,
+        tier: verification?.status === "passed" ? strongerTier(draft.provenance.tier, "verified") : draft.provenance.tier,
         sourceCount: distinctSources(draft.provenance.sources),
         freshness: freshness.status,
       }),
@@ -233,6 +238,7 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
   const checked = evaluateConstraintChecks({
     constraints,
     capabilities: finalCapabilities,
+    evidence: finalEvidence,
     files: fileSet,
     imports: results.flatMap((r) => r.imports ?? []),
     importsAvailable,
@@ -283,7 +289,7 @@ export async function buildSurface(options: BuildOptions): Promise<BuildResult> 
   /* The generated agent instructions, if committed, are a claim about the
      surface too, and go stale like any other. */
   const agentsDrift = detectAgentsDrift(fileSet, ctx.readFile, surface);
-  if (agentsDrift) surface.health = sortFindings([...surface.health, agentsDrift]);
+  if (agentsDrift.length > 0) surface.health = sortFindings([...surface.health, ...agentsDrift]);
 
   assertValidSurface(surface);
   return { surface, warnings };

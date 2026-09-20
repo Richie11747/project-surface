@@ -25,6 +25,7 @@ import type {
   ConstraintOutcome,
   DraftConstraint,
   DraftEnvironmentVariable,
+  EvidenceEntry,
   ImportEdge,
   RelPath,
 } from "../schema/types.js";
@@ -42,6 +43,8 @@ export interface CheckInput {
   imports: ImportEdge[];
   /** Whether any adapter in this build is able to report imports at all. */
   importsAvailable: boolean;
+  /** Evidence entries that exist, so a dangling reference does not count as proof. */
+  evidence?: EvidenceEntry[];
   /** Environment variables with the files that read them, as merged by the pipeline. */
   environment: DraftEnvironmentVariable[];
   /**
@@ -81,10 +84,15 @@ function checkForbidFile(id: string, check: ConstraintCheck, input: CheckInput):
 
 function checkRequireTest(id: string, check: ConstraintCheck, input: CheckInput): ConstraintViolation[] {
   const match = globFilter(check.paths ?? []);
+  /* A link to evidence that no entry carries is not a test; only references
+     that resolve count. Without the evidence list, every reference is taken
+     at face value, as before. */
+  const known = input.evidence ? new Set(input.evidence.map((e) => e.id)) : null;
   const out: ConstraintViolation[] = [];
   for (const capability of input.capabilities) {
     const owned = capability.owners.map((o) => o.path).filter(match);
-    if (owned.length === 0 || capability.evidence.length > 0) continue;
+    const proven = capability.evidence.some((ref) => known === null || known.has(ref.id));
+    if (owned.length === 0 || proven) continue;
     out.push({
       constraintId: id,
       path: owned[0]!,

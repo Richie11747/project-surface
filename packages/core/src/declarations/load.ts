@@ -254,11 +254,18 @@ export function loadDeclarations(root: string, now: Timestamp): Declarations {
  * is an error: a claim about no files is not a claim.
  */
 export function expandDeclaredOwners(declarations: Declarations, files: readonly string[]): void {
+  const fileSet = new Set(files);
   declarations.capabilities.forEach((capability, i) => {
     const expanded: SourceRef[] = [];
     for (const owner of capability.owners) {
       if (!isGlob(owner.path)) {
-        expanded.push(owner);
+        /* A plain path names a file or a tree (see glob.ts). A file is kept as
+           written; a directory expands to the files under it, like a glob would.
+           A path that matches nothing is kept too, so the orphan is reported
+           against the name the maintainer wrote. */
+        const tree = fileSet.has(owner.path) ? [] : expandGlob(owner.path, files);
+        if (tree.length > 0) expanded.push(...tree.map((path) => ({ path })));
+        else expanded.push(owner);
         continue;
       }
       const matched = expandGlob(owner.path, files);

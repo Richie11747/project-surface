@@ -91,6 +91,7 @@ export function detectHealth(input: HealthInput): HealthFinding[] {
     }
   }
 
+  const knownEvidence = new Set(input.evidence.map((e) => e.id));
   for (const capability of input.capabilities) {
     const missing = capability.owners.map((o) => o.path).filter((p) => !input.files.has(p));
     if (missing.length > 0) {
@@ -111,6 +112,20 @@ export function detectHealth(input: HealthInput): HealthFinding[] {
         message: `Capability "${capability.id}" was verified earlier but its files have changed since. ${capability.freshness.reason ?? ""}`.trim(),
         subject: { kind: "capability", id: capability.id },
         remediation: `Run: surface verify --capability ${capability.id}`,
+      });
+    }
+
+    /* A reference to evidence that no entry carries is not proof of anything -
+       typically a declared `evidence:` path that is misspelt or was deleted.
+       Left unreported, it silently satisfies every "has evidence" check. */
+    const dangling = capability.evidence.filter((ref) => !knownEvidence.has(ref.id)).map((ref) => ref.id);
+    if (dangling.length > 0) {
+      findings.push({
+        code: "DANGLING_EVIDENCE",
+        severity: "warn",
+        message: `Capability "${capability.id}" links evidence that does not exist: ${dangling.join(", ")}.`,
+        subject: { kind: "capability", id: capability.id },
+        remediation: "Fix the evidence path in .project/surface.declare.yaml, or remove the link.",
       });
     }
 

@@ -13,6 +13,7 @@
  */
 
 import { distinctSources } from "../build/assemble.js";
+import { strongerTier } from "../build/merge.js";
 import { explainConfidence, promoteWithEvidence, type ConfidenceTrace } from "../model/confidence.js";
 import type {
   Capability,
@@ -134,7 +135,7 @@ function explainCapability(surface: Surface, c: Capability): ClaimExplanation {
 
 function explainCommand(cmd: Command): ClaimExplanation {
   const passed = cmd.verification?.status === "passed";
-  const tier: ProvenanceTier = passed ? "verified" : cmd.provenance.tier;
+  const tier: ProvenanceTier = passed ? strongerTier(cmd.provenance.tier, "verified") : cmd.provenance.tier;
   const trace = explainConfidence({
     tier,
     sourceCount: distinctSources(cmd.provenance.sources),
