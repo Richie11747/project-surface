@@ -121,10 +121,20 @@ const NUL_LIST = (stdout: string): string[] => stdout.split("\0").filter((p) => 
 /** `%cI` (strict ISO 8601 with offset), optionally followed by the commit's first path. */
 const COMMIT_HEADER = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2}))(?:\n([^]*))?$/;
 
-/** Paths changed between `ref` and the working tree, relative to `root`. */
+/**
+ * Paths changed between `ref` and the working tree, relative to `root`.
+ *
+ * `ref...HEAD` diffs from the merge base, which is what a reviewer means by
+ * "since main". A shallow clone - every CI runner by default - may not hold
+ * the merge base; then the two-dot form compares the two trees directly.
+ * That over-reports (commits that landed on `ref` after the branch point
+ * show up as changes) and never under-reports, which is the safe direction
+ * for anything that gates on the result.
+ */
 export function changedSince(root: string, ref: string): string[] | null {
   if (!isSafeRef(ref)) return null;
-  const r = runGit(root, ["diff", "--name-only", "-z", "--relative", `${ref}...HEAD`]);
+  let r = runGit(root, ["diff", "--name-only", "-z", "--relative", `${ref}...HEAD`]);
+  if (!r.ok) r = runGit(root, ["diff", "--name-only", "-z", "--relative", ref, "HEAD"]);
   if (!r.ok) return null;
   const working = runGit(root, ["diff", "--name-only", "-z", "--relative", "HEAD"]);
   const dirty = working.ok ? NUL_LIST(working.stdout) : [];

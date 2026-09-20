@@ -48,6 +48,13 @@ All notable changes to this project are documented here. This project adheres to
   allow-list and credential-file refusal to sizes as to reads. A bare reader still works. Token estimates
   agree with the content-based ones on ASCII sources and err slightly high on multi-byte or CRLF files.
 
+### Fixed
+
+- **`--since <ref>` works in a shallow clone.** `changedSince` diffs from the merge base (`ref...HEAD`);
+  when a CI checkout holds no merge base it now falls back to a direct tree diff, which over-reports and
+  never under-reports - the safe direction for `verify`, `impact` and `gate`. Previously the gate on a
+  default `actions/checkout` could not judge anything.
+
 ### Specification
 
 - `verificationRecord` gains two optional fields, additive within `project-surface/v1`: `commit`

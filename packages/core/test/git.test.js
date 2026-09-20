@@ -75,6 +75,25 @@ test("changed and staged paths are root-relative and unquoted", (t) => {
   }
 });
 
+test("changedSince falls back to a tree diff when the merge base is missing, as in a shallow clone", (t) => {
+  const root = repo();
+  if (root === null) return t.skip("git is not installed");
+  const shallow = mkdtempSync(join(tmpdir(), "project-surface-shallow-"));
+  try {
+    /* A one-commit clone of the tip and a one-commit fetch of an older ref
+       share no merge base; the three-dot form fails and the two-dot form
+       still names the file that differs between the two trees. */
+    git(shallow, "clone", "-q", "--depth", "1", root, ".");
+    const older = git(root, "rev-parse", "HEAD~2").trim();
+    git(shallow, "fetch", "-q", "--depth", "1", "origin", older);
+    assert.deepEqual(changedSince(shallow, older), ["pkg/src/café.ts"]);
+    assert.equal(changedSince(shallow, "no-such-ref-zzz"), null);
+  } finally {
+    rmSync(shallow, { recursive: true, force: true });
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("one missing path does not cost the rest of its batch their git hashes", (t) => {
   const root = repo();
   if (root === null) return t.skip("git is not installed");
