@@ -144,7 +144,7 @@ export function packContext(
     seen.add(path);
     const content = readFile(path);
     if (content === null) {
-      omitted.push({ path, reason: "File could not be read." });
+      omitted.push({ path, reason: "File is missing, unreadable, or not one the project lists." });
       return;
     }
     const estimatedTokens = estimateTokens(content);

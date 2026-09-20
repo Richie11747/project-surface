@@ -9,10 +9,10 @@
 
 import { parseArgs } from "node:util";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 import { confidenceLabel } from "@project-surface/core";
 import type { Surface } from "@project-surface/core";
-import { GLOBAL_OPTIONS, requireSurface, type GlobalOptions } from "../context.js";
+import { GLOBAL_OPTIONS, requireSurface, resolveWriteTarget, type GlobalOptions } from "../context.js";
 import { print, printJson, style } from "../output.js";
 import { renderHtml } from "./report-template.js";
 
@@ -20,8 +20,8 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   const { values } = parseArgs({ args, strict: true, allowPositionals: true, options: { ...GLOBAL_OPTIONS, out: { type: "string" } } });
 
   const surface = requireSurface(options);
-  const relative = typeof values.out === "string" ? values.out : ".project/surface.html";
-  const target = join(options.root, relative);
+  const requested = typeof values.out === "string" ? values.out : ".project/surface.html";
+  const { full: target, rel: relative } = resolveWriteTarget(options.root, requested);
 
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, renderHtml(surface), "utf8");

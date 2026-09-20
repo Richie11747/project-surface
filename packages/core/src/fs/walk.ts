@@ -12,6 +12,7 @@
 import { lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { listFiles } from "../git/git.js";
+import { redactText } from "../redact.js";
 
 /** Directories never worth walking. Build output, caches, dependency trees. */
 export const DEFAULT_IGNORES: readonly string[] = Object.freeze([
@@ -26,6 +27,13 @@ export const DEFAULT_IGNORES: readonly string[] = Object.freeze([
 
 /** Guard against pathological trees; exceeded counts are reported, not hidden. */
 export const MAX_FILES = 20_000;
+
+/**
+ * Largest file `readFileSafe` will load. Adapters parse source, not archives;
+ * a repository can commit anything, and one multi-hundred-megabyte file must
+ * not be what a scan spends its memory on.
+ */
+export const MAX_FILE_BYTES = 2 * 1024 * 1024;
 
 export type WalkSource = "git" | "filesystem";
 
@@ -112,6 +120,7 @@ export function readFileSafe(root: string, relPath: string): string | null {
   const target = resolveInside(root, relPath);
   if (target === null) return null;
   try {
+    if (lstatSync(target).size > MAX_FILE_BYTES) return null;
     return readFileSync(target, "utf8");
   } catch {
     return null;
@@ -130,4 +139,36 @@ export function readJsonSafe<T>(root: string, relPath: string): T | null {
 
 export function existsSafe(root: string, relPath: string): boolean {
   return resolveInside(root, relPath) !== null;
+}
+
+export type FileReader = (relPath: string) => string | null;
+
+/**
+ * Paths whose content is never handed out, whatever a surface document says.
+ * The document is repository-authored: a declaration can name any path as an
+ * owner, and an orphaned owner is a health finding, not a refusal to read.
+ */
+const NEVER_SERVED: readonly RegExp[] = [
+  /^\.git(?:\/|$)/,
+  /(?:^|\/)\.env(?!\.(?:example|sample|template)$)(?:\..*)?$/,
+  /(?:^|\/)\.(?:npmrc|netrc|pypirc|git-credentials)$/,
+  /(?:^|\/)id_(?:rsa|dsa|ecdsa|ed25519)$/,
+  /\.(?:pem|key|p12|pfx|jks|keystore|kdbx)$/i,
+];
+
+/**
+ * A reader for content that leaves the process - `surface context --content`
+ * and the MCP `surface_context` tool. `readFileSafe` keeps reads inside the
+ * root; this additionally serves only files the project itself lists (tracked
+ * or untracked-but-not-ignored, so a gitignored `.env` is invisible), refuses
+ * the credential files above, and redacts what it returns.
+ */
+export function createGuardedReader(root: string, files?: readonly string[]): FileReader {
+  const allowed = new Set(files ?? walkProject(root).files);
+  return (relPath) => {
+    const path = toPosix(relPath);
+    if (!allowed.has(path) || NEVER_SERVED.some((re) => re.test(path))) return null;
+    const content = readFileSafe(root, path);
+    return content === null ? null : redactText(content);
+  };
 }

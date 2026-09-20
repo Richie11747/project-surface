@@ -50,7 +50,14 @@ Seven tools are strictly read-only. `surface_verify` can execute a process, so i
    which a caller can supply a shell string - only an id to look up.
 
 The worst an adversarial prompt can achieve is running a command the project already declares (its own
-test suite, say), with output redacted and truncated before storage.
+test suite, say), with output redacted and truncated before storage. A *declared* command (one written in
+`.project/surface.declare.yaml`) that contains shell metacharacters is flagged in the tool result, because
+that file is repository content rather than something the user typed.
+
+Repository-authored text in tool output - constraint rules, rationales, health messages - is wrapped in
+`<repo-data>` tags, and every response that carries claims says so, so a model can treat it as a
+description of the project rather than as an instruction. `surface_context` with `includeContent` serves
+only files the project lists and never `.git/`, dotenv or key files; what it returns is redacted.
 
 ## A useful first prompt
 

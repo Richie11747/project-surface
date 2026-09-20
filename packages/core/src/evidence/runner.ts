@@ -21,7 +21,7 @@
 import { spawnSync } from "node:child_process";
 import { realpathSync } from "node:fs";
 import { isAbsolute, relative, resolve } from "node:path";
-import { sanitizeOutput } from "../redact.js";
+import { sanitizeOutput, secretEnvValues } from "../redact.js";
 import type { Command, Surface, Timestamp, VerificationRecord } from "../schema/types.js";
 
 export const DEFAULT_TIMEOUT_MS = 120_000;
@@ -107,8 +107,11 @@ export function runCommand(
   });
   const durationMs = Date.now() - started;
 
+  /* The child inherited this environment, so any credential it prints is one
+     whose exact value is known here. Remove those before pattern matching. */
+  const secrets = secretEnvValues(process.env);
   const combined = `${result.stdout ?? ""}${result.stderr ?? ""}`;
-  const summary = sanitizeOutput(combined, { root });
+  const summary = sanitizeOutput(combined, { root, secrets });
 
   if (result.error) {
     const timedOut = (result.error as NodeJS.ErrnoException).code === "ETIMEDOUT";
@@ -120,7 +123,7 @@ export function runCommand(
       ...(summary ? { summary } : {}),
       reason: timedOut
         ? `Command exceeded the ${timeout} ms timeout.`
-        : `Command could not be started: ${sanitizeOutput(String(result.error), { root })}`,
+        : `Command could not be started: ${sanitizeOutput(String(result.error), { root, secrets })}`,
     };
   }
 

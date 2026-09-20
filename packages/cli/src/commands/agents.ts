@@ -10,9 +10,8 @@
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { parseArgs } from "node:util";
-import { isAbsolute, join, relative } from "node:path";
 import { renderAgentsBlock, upsertAgentsBlock } from "@project-surface/core";
-import { GLOBAL_OPTIONS, requireSurface, CliError, type GlobalOptions } from "../context.js";
+import { GLOBAL_OPTIONS, requireSurface, resolveWriteTarget, type GlobalOptions } from "../context.js";
 import { print, printJson, style } from "../output.js";
 
 export async function run(args: string[], options: GlobalOptions): Promise<number> {
@@ -46,18 +45,14 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
 
   /* The file must stay inside the project: this command writes, and the one
      place it may write is the repository it describes. */
-  const rel = isAbsolute(target) ? relative(options.root, target) : target;
-  if (rel.startsWith("..") || isAbsolute(rel)) {
-    throw new CliError(`Refusing to write outside the project root: ${target}`);
-  }
-  const full = join(options.root, rel);
+  const { full, rel } = resolveWriteTarget(options.root, target);
   const existing = existsSync(full) ? readFileSync(full, "utf8") : null;
   const updated = upsertAgentsBlock(existing, block);
   const changed = updated !== existing;
   if (changed) writeFileSync(full, updated);
 
   if (options.json) {
-    printJson({ path: rel.replace(/\\/g, "/"), changed, created: existing === null });
+    printJson({ path: rel, changed, created: existing === null });
     return 0;
   }
   print(

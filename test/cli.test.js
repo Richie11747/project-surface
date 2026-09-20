@@ -238,6 +238,29 @@ test("agents renders evidence-backed instructions, preserves hand-written text, 
     assert.equal(JSON.parse(surface(root, "doctor", "--json").stdout).findings.some((f) => f.code === "AGENTS_MD_STALE"), false);
 
     assert.equal(surface(root, "agents", "--write", "../outside.md").code, 1);
+    /* A `..` in the middle used to pass a check that only looked at the first segment. */
+    const sneaky = surface(root, "agents", "--write", "docs/../../outside.md");
+    assert.equal(sneaky.code, 1);
+    assert.match(sneaky.stderr, /outside the project root/);
+    assert.equal(existsSync(join(root, "..", "outside.md")), false);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("report --out stays inside the project like every other write", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    for (const out of ["../escaped.html", "docs/../../escaped.html", join(root, "..", "escaped.html")]) {
+      const result = surface(root, "report", "--out", out);
+      assert.equal(result.code, 1, out);
+      assert.match(result.stderr, /outside the project root/);
+    }
+    assert.equal(existsSync(join(root, "..", "escaped.html")), false);
+    const ok = JSON.parse(surface(root, "report", "--out", "docs/../build/report.html", "--json").stdout);
+    assert.equal(ok.written, "build/report.html");
+    assert.equal(existsSync(join(root, "build", "report.html")), true);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

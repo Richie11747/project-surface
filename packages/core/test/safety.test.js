@@ -11,6 +11,7 @@ import {
   runCommand,
   CommandNotAllowedError,
   UnsafeWorkingDirectoryError,
+  MAX_FILE_BYTES,
 } from "../dist/index.js";
 
 /**
@@ -89,6 +90,28 @@ test("a working directory outside the project is refused", () => {
   }
 });
 
+test("a credential inherited from the environment never reaches the recorded summary", () => {
+  const { base, root } = scratch();
+  const value = "hunter2-value-" + Date.now();
+  process.env.PROJECT_SURFACE_TEST_API_KEY = value;
+  try {
+    const run = process.platform === "win32"
+      ? "echo leak=%PROJECT_SURFACE_TEST_API_KEY% && echo %PROJECT_SURFACE_TEST_API_KEY%"
+      : "echo leak=$PROJECT_SURFACE_TEST_API_KEY && echo $PROJECT_SURFACE_TEST_API_KEY";
+    const record = runCommand(
+      root,
+      { id: "x", run, cwd: ".", kind: "other", provenance: {} },
+      { now: "2026-01-01T00:00:00Z" }
+    );
+    assert.equal(record.status, "passed");
+    assert.ok(record.summary, "the command printed something");
+    assert.ok(!record.summary.includes(value), record.summary);
+  } finally {
+    delete process.env.PROJECT_SURFACE_TEST_API_KEY;
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
 test("only commands present in the document can be resolved", () => {
   const surface = { commands: [{ id: "test", run: "npm test", cwd: ".", kind: "test" }] };
   assert.equal(resolveAllowedCommand(surface, "test").run, "npm test");
@@ -102,5 +125,17 @@ test("git refs that would be parsed as options are rejected", () => {
   }
   for (const bad of ["--output=/tmp/x", "-v", "", "HEAD..main", "a b", "main;rm", "HEAD@{1}"]) {
     assert.equal(isSafeRef(bad), false, bad);
+  }
+});
+
+test("a file over the size cap is not read, a normal one is", () => {
+  const { base, root } = scratch();
+  try {
+    writeFileSync(join(root, "huge.txt"), Buffer.alloc(MAX_FILE_BYTES + 1, 0x61));
+    assert.equal(readFileSafe(root, "huge.txt"), null);
+    assert.equal(existsSafe(root, "huge.txt"), true);
+    assert.equal(readFileSafe(root, "inside.txt"), "fine");
+  } finally {
+    rmSync(base, { recursive: true, force: true });
   }
 });

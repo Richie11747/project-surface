@@ -7,8 +7,8 @@ import {
   analyzeImpact,
   changedSince,
   diffSurfaces,
+  createGuardedReader,
   packContext,
-  readFileSafe,
   showFileAtRef,
   stagedPaths,
   validateSurface,
@@ -88,7 +88,7 @@ export const contextTool = {
     ctx: ToolContext
   ): ToolResult {
     const surface = loadSurface(ctx);
-    const pack = packContext(surface, args.task, (p) => readFileSafe(ctx.root, p), {
+    const pack = packContext(surface, args.task, createGuardedReader(ctx.root), {
       ...(args.budgetTokens ? { budgetTokens: args.budgetTokens } : {}),
       includeContent: args.includeContent === true,
     });

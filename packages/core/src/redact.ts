@@ -31,8 +31,11 @@ const PATTERNS: readonly Pattern[] = Object.freeze([
     replace: REDACTION,
   },
   {
+    /* Every quantifier here is bounded. An unbounded `[a-z0-9_.-]*` before the
+       keyword made the match quadratic in the length of any long dash- or
+       dot-separated token, and captured output is attacker-shaped. */
     name: "assignment",
-    re: /\b([a-z0-9_.-]*(?:api[_-]?key|secret|token|password|passwd|pwd|credential|authorization|access[_-]?key)[a-z0-9_.-]*)\s*[:=]\s*["]?[^\s",;]{6,}/gi,
+    re: /\b([a-z0-9_.-]{0,128}?(?:api[_-]?key|secret|token|password|passwd|pwd|credential|authorization|access[_-]?key|private[_-]?key)[a-z0-9_.-]{0,128})\s*[:=]\s*["]?[^\s",;]{6,}/gi,
     replace: `$1=${REDACTION}`,
   },
   { name: "bearer", re: /\b(Bearer|Basic)\s+[A-Za-z0-9._~+/=-]{12,}/gi, replace: `$1 ${REDACTION}` },
@@ -49,11 +52,21 @@ const PATTERNS: readonly Pattern[] = Object.freeze([
     replace: REDACTION,
   },
   {
+    /* Bounded for the same reason: an unbounded password class ran to the end
+       of the text looking for `@` once per `://`. */
     name: "connection-string",
-    re: /\b([a-z][a-z0-9+.-]*:\/\/)[^:/\s]+:[^@\s]+@/gi,
+    re: /\b([a-z][a-z0-9+.-]{0,32}:\/\/)[^:/\s@]{1,128}:[^@\s]{1,256}@/gi,
     replace: `$1${REDACTION}@`,
   },
 ]);
+
+/**
+ * Redaction is regular-expression work, and the caller hands it whatever a
+ * project command printed. Only the part that can survive the length cap is
+ * scanned, plus this much headroom so a credential straddling the cut is
+ * still matched whole rather than half-kept.
+ */
+const REDACTION_HEADROOM = 4096;
 
 /** Variable names that imply the value is a credential. */
 const SECRET_NAME = /(SECRET|TOKEN|PASSWORD|PASSWD|CREDENTIAL|PRIVATE_KEY|API_KEY|APIKEY|ACCESS_KEY|AUTH)/i;
@@ -100,9 +113,34 @@ export function truncate(input: string, max: number = MAX_SUMMARY_LENGTH): strin
   return `${input.slice(0, max)}\n... [truncated ${input.length - max} chars]`;
 }
 
+/**
+ * Replace known secret values verbatim. Pattern matching guesses at what a
+ * credential looks like; when the exact value is known - the runner inherits
+ * the operator's environment - there is no reason to guess.
+ */
+export function redactValues(input: string, values: readonly string[]): string {
+  let out = input;
+  /* Longest first, so a value that contains another is replaced whole. */
+  for (const v of [...new Set(values)].filter((v) => v.length >= 6).sort((a, b) => b.length - a.length)) {
+    out = out.split(v).join(REDACTION);
+  }
+  return out;
+}
+
+/** The values of every variable whose name says it holds a credential. */
+export function secretEnvValues(env: NodeJS.ProcessEnv): string[] {
+  const out: string[] = [];
+  for (const [name, value] of Object.entries(env)) {
+    if (typeof value === "string" && value.length >= 6 && looksSecretName(name)) out.push(value);
+  }
+  return out;
+}
+
 export interface SanitizeOptions {
   root?: string;
   maxLength?: number;
+  /** Exact values to remove wherever they appear, before any pattern runs. */
+  secrets?: readonly string[];
 }
 
 /**
@@ -110,9 +148,20 @@ export interface SanitizeOptions {
  * before it can be written to the surface document.
  */
 export function sanitizeOutput(input: string, options: SanitizeOptions = {}): string {
+  const max = options.maxLength ?? MAX_SUMMARY_LENGTH;
   const normalized = input.replace(/\r\n/g, "\n").trim();
-  const redacted = redactText(redactPaths(normalized, options.root));
-  return truncate(redacted, options.maxLength ?? MAX_SUMMARY_LENGTH);
+  const window = normalized.length > max + REDACTION_HEADROOM
+    ? normalized.slice(0, max + REDACTION_HEADROOM)
+    : normalized;
+  const dropped = normalized.length - window.length;
+
+  const scrubbed = options.secrets?.length ? redactValues(window, options.secrets) : window;
+  const redacted = redactText(redactPaths(scrubbed, options.root));
+
+  if (redacted.length <= max) {
+    return dropped > 0 ? `${redacted}\n... [truncated ${dropped} chars]` : redacted;
+  }
+  return `${redacted.slice(0, max)}\n... [truncated ${redacted.length - max + dropped} chars]`;
 }
 
 /** Exposed so the test suite can assert coverage of each pattern by name. */
