@@ -59,7 +59,7 @@ export function justRecipes(content: string): JustRecipe[] {
     const m = JUST_RECIPE.exec(raw);
     const name = m?.[1];
     if (!name || name.startsWith("_")) continue;
-    const parameters = (m[2] ?? "").trim().split(/\s+/).filter(Boolean);
+    const parameters = (m[2] ?? "").trim().split(/\s+/).filter(Boolean).map((parameter) => parameter.split("=", 1)[0] ?? parameter);
     if (!out.some((recipe) => recipe.name === name)) out.push({ name, parameters });
   }
   return out;
@@ -133,7 +133,7 @@ export const genericAdapter: Adapter = {
     const result = emptyResult(stack);
 
     const commands: DraftCommand[] = [];
-    const add = (file: string | null, runner: string, targets: (c: string) => string[]): void => {
+    const add = (file: string | null, runner: string, targets: (c: string) => Array<string | JustRecipe>): void => {
       if (!file) return;
       const content = ctx.readFile(file);
       if (content === null) return;

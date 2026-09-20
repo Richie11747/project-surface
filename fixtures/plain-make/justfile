@@ -1,0 +1,8 @@
+build target="debug":
+    ./scripts/build.sh {{target}}
+
+deploy env version: build
+    ./scripts/deploy.sh {{env}} {{version}}
+
+serve url="http://localhost":
+    ./scripts/serve.sh {{url}}

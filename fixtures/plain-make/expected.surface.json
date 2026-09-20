@@ -28,6 +28,78 @@
   },
   "commands": [
     {
+      "id": "just-build",
+      "run": "just build",
+      "cwd": ".",
+      "kind": "build",
+      "description": "build target in justfile. Parameters: target.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "justfile",
+            "locator": "build"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "just-deploy",
+      "run": "just deploy",
+      "cwd": ".",
+      "kind": "other",
+      "description": "deploy target in justfile. Parameters: env, version.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "justfile",
+            "locator": "deploy"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "just-serve",
+      "run": "just serve",
+      "cwd": ".",
+      "kind": "dev",
+      "description": "serve target in justfile. Parameters: url.",
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "justfile",
+            "locator": "serve"
+          }
+        ],
+        "adapter": "generic",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
       "id": "make-build",
       "run": "make build",
       "cwd": ".",
@@ -209,6 +281,36 @@
         "id": "capabilities"
       },
       "remediation": "Declare capabilities in .project/surface.declare.yaml, or install a matching adapter."
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"just-build\" (just build) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "just-build"
+      },
+      "remediation": "Run: surface verify --command just-build"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"just-deploy\" (just deploy) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "just-deploy"
+      },
+      "remediation": "Run: surface verify --command just-deploy"
+    },
+    {
+      "code": "UNVERIFIED_COMMAND",
+      "severity": "info",
+      "message": "Command \"just-serve\" (just serve) has never been run, so it is not known to work.",
+      "subject": {
+        "kind": "command",
+        "id": "just-serve"
+      },
+      "remediation": "Run: surface verify --command just-serve"
     },
     {
       "code": "UNVERIFIED_COMMAND",

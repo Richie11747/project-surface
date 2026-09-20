@@ -4,6 +4,8 @@ All notable changes to this project are documented here. This project adheres to
 
 ## [Unreleased]
 
+- Fix generic adapter build typing and report just recipe parameter names.
+
 ## [0.2.0] - 2026-09-13
 
 First release on npm: `npx project-surface init` works as written. The schema is unchanged apart from its
