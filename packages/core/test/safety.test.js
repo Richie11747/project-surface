@@ -7,6 +7,7 @@ import {
   existsSafe,
   isSafeRef,
   readFileSafe,
+  readJsonSafe,
   resolveAllowedCommand,
   runCommand,
   CommandNotAllowedError,
@@ -135,6 +136,17 @@ test("a file over the size cap is not read, a normal one is", () => {
     assert.equal(readFileSafe(root, "huge.txt"), null);
     assert.equal(existsSafe(root, "huge.txt"), true);
     assert.equal(readFileSafe(root, "inside.txt"), "fine");
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test("a byte-order mark and CRLF line endings are normalised on read", () => {
+  const { base, root } = scratch();
+  try {
+    writeFileSync(join(root, "bom.json"), "﻿{\"name\":\"x\"}\r\n");
+    assert.equal(readFileSafe(root, "bom.json"), "{\"name\":\"x\"}\n");
+    assert.deepEqual(readJsonSafe(root, "bom.json"), { name: "x" });
   } finally {
     rmSync(base, { recursive: true, force: true });
   }

@@ -807,7 +807,7 @@
   ],
   "risks": [
     {
-      "id": "risk:migration:db/migrations/2026-08-18-add-checkout-status.sql",
+      "id": "risk:migration:db/migrations",
       "type": "migration",
       "paths": [
         "db/migrations/2026-08-18-add-checkout-status.sql"

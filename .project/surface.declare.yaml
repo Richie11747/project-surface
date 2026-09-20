@@ -56,7 +56,7 @@ capabilities:
 
   - id: build.declarations
     title: Human declarations that override inference, scope the scan and set granularity
-    owners: [packages/core/src/declarations/**, packages/core/src/fs/glob.ts]
+    owners: [packages/core/src/declarations/**, packages/core/src/fs/glob.ts, packages/core/src/fs/yaml.ts]
     contracts: [docs/declarations.md]
     evidence: [packages/core/test/declarations.test.js]
     tags: [core]
@@ -147,35 +147,35 @@ capabilities:
     title: TypeScript and JavaScript adapter with import-graph evidence linking
     owners: [packages/adapters/typescript/src/**]
     contracts: [docs/adapters.md]
-    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    evidence: [test/conformance.test.js, test/fixtures.test.js, packages/adapters/typescript/test/parse.test.js]
     tags: [adapters]
 
   - id: adapter.python
     title: Python adapter
     owners: [packages/adapters/python/src/**]
     contracts: [docs/adapters.md]
-    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    evidence: [test/conformance.test.js, test/fixtures.test.js, packages/adapters/python/test/parse.test.js]
     tags: [adapters]
 
   - id: adapter.go
     title: Go adapter, structural and honest about a missing toolchain
     owners: [packages/adapters/go/src/**]
     contracts: [docs/adapters.md]
-    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    evidence: [test/conformance.test.js, test/fixtures.test.js, packages/adapters/go/test/parse.test.js]
     tags: [adapters]
 
   - id: adapter.rust
     title: Rust adapter, structural, with use-statement test linking
     owners: [packages/adapters/rust/src/**]
     contracts: [docs/adapters.md]
-    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    evidence: [test/conformance.test.js, test/fixtures.test.js, packages/adapters/rust/test/parse.test.js]
     tags: [adapters]
 
   - id: adapter.generic
     title: Fallback adapter - build-tool targets and .env.example, never a guessed capability
     owners: [packages/adapters/generic/src/**]
     contracts: [docs/adapters.md]
-    evidence: [test/conformance.test.js, test/fixtures.test.js]
+    evidence: [test/conformance.test.js, test/fixtures.test.js, packages/adapters/generic/test/parse.test.js]
     tags: [adapters]
 
   # ---- The CLI -------------------------------------------------------------

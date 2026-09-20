@@ -60,13 +60,55 @@ export function classifyCommand(name: string): import("@project-surface/core").C
   return "other";
 }
 
+/**
+ * Every match of a global pattern in `text`. The pattern's `lastIndex` is
+ * reset first and left at zero, so one module-level `/g` regex can be shared
+ * across lines and files without the state leaking between calls - and
+ * without allocating a fresh `RegExp` per line, which the line-based parsers
+ * used to do.
+ */
+export function matchAll(pattern: RegExp, text: string): RegExpExecArray[] {
+  if (!pattern.global) throw new Error(`matchAll needs a global pattern: ${pattern}`);
+  pattern.lastIndex = 0;
+  const out: RegExpExecArray[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(text)) !== null) {
+    out.push(match);
+    if (match[0].length === 0) pattern.lastIndex += 1;
+  }
+  pattern.lastIndex = 0;
+  return out;
+}
+
+/**
+ * Drop a `//` line comment - but not the `//` inside a string literal, so a
+ * route registered as `"https://..."` keeps its path. `marker` is `//`
+ * for C-family sources and `#` for TOML, Python or shell; `quotes` lists the
+ * string delimiters (Rust passes `"` alone, since `'` opens a lifetime there).
+ * Good enough for the structural parsers here; block comments are the
+ * caller's business.
+ */
+export function stripLineComment(line: string, marker: string = "//", quotes: string = "\"'`"): string {
+  let quote: string | null = null;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (quote !== null) {
+      if (ch === "\\") i += 1;
+      else if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch !== undefined && quotes.includes(ch)) quote = ch;
+    else if (line.startsWith(marker, i)) return line.slice(0, i);
+  }
+  return line;
+}
+
 /** Environment variable names referenced by a source file, in appearance order. */
 export function extractEnvNames(content: string, patterns: RegExp[]): string[] {
   const found = new Set<string>();
   for (const pattern of patterns) {
     const re = new RegExp(pattern.source, pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`);
-    let match: RegExpExecArray | null;
-    while ((match = re.exec(content)) !== null) {
+    for (const match of matchAll(re, content)) {
       const name = match[1];
       if (name && /^[A-Z][A-Z0-9_]*$/.test(name)) found.add(name);
     }

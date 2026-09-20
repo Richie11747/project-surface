@@ -152,6 +152,7 @@ export {
 
 // Filesystem and git
 export { expandGlob, globFilter, globToRegExp, isGlob, matchesAny, matchesGlob } from "./fs/glob.js";
+export { parseYamlSafe } from "./fs/yaml.js";
 export {
   existsSafe,
   createGuardedReader,

@@ -91,6 +91,41 @@ All notable changes to this project are documented here. This project adheres to
 - Health finding `DANGLING_EVIDENCE` (warn): a capability links an evidence id that no entry carries -
   typically a misspelt or deleted `evidence:` path. Such a link used to satisfy `require-test` silently;
   the check now counts only references that resolve.
+- **A UTF-8 byte-order mark or CRLF line endings broke every line-based parser.** `readFileSafe` now
+  drops a leading BOM and normalises CRLF to LF, once, for every reader: a BOM-prefixed `package.json`
+  was silently skipped (`JSON.parse` threw), the first line of `go.mod`, `Cargo.toml` and a Makefile was
+  invisible, and in a CRLF Rust file everything after a `#[cfg(test)] mod tests {` block vanished because
+  its closing brace read as `"}\r"`.
+- **Rust:** two `.route("/a", get(a)).route("/b", post(b))` registrations on one line no longer share
+  methods; `[[ bin ]]` with spaces is a binary target; a section header the parser does not read (a quoted
+  key such as `[target.'cfg(unix)'.dependencies]`) closes the previous section instead of leaving its keys
+  credited to `[package]`; a `#` inside a TOML string and a `//` inside a Rust string are not comments.
+- **Go:** Go 1.22 `ServeMux` patterns (`"GET /items/{id}"`) are routes, with the method taken from the
+  pattern; members of a `type ( ... )` group are declarations; block comments and `//` inside string
+  literals no longer produce or hide routes.
+- **Python:** the `test` command's source is the file that actually configures pytest (`pytest.ini`,
+  `pyproject.toml [tool.pytest]`, `tox.ini [pytest]`, `setup.cfg [tool:pytest]`), not the first manifest
+  that exists; `from . import reserve` resolves to `reserve.py`, not `__init__.py`; absolute imports are
+  also tried under `src/`, so a `src/` layout links its tests; `conftest.py` is neither behaviour nor a
+  test; `pdm.lock` and `Pipfile.lock` name their managers; a `pyproject.toml` that does not parse is
+  reported in the stack notes instead of vanishing.
+- **TypeScript:** when the root `package.json` declares `workspaces`, only those directories are packages -
+  an `examples/` or `docs/` manifest no longer contributes commands; a risk id names the directory of its
+  matches (`risk:migration:db/migrations`), so adding a second migration does not rename the risk; a test
+  file in a package without a `test` script is no longer attributed to an arbitrary other package's test
+  command; `const { DATABASE_URL } = process.env` counts as reading `DATABASE_URL`.
+- **Generic:** `FOO ::= x` is an assignment, not a target; `install uninstall: deps` names two targets;
+  `clean::` is one; Taskfiles are parsed as YAML, so four-space indentation, quoted keys and trailing
+  comments work; `.env.example` names follow the same rule as core's health check, so a lowercase name
+  is not "documented" yet absent from the environment.
+- `findContracts` computes its candidate list once per scan instead of twice per capability.
+
+### Added
+
+- `@project-surface/adapter-sdk`: `matchAll(pattern, text)` and `stripLineComment(line, marker?, quotes?)`,
+  the two helpers every line-based parser had reimplemented. `@project-surface/core`: `parseYamlSafe`.
+- Unit tests for the Go, Python, TypeScript and generic parsers, which previously had only fixture
+  snapshots.
 
 ## [0.2.0] - 2026-09-15
 

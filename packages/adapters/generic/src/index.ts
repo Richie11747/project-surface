@@ -18,7 +18,7 @@
 
 import { classifyCommand, emptyResult, isOnPath, isSafeCommandToken, provenance, source } from "@project-surface/adapter-sdk";
 import type { Adapter, AdapterContext, AdapterResult, DraftCommand, DraftEnvironmentVariable } from "@project-surface/adapter-sdk";
-import { commandId, looksSecretName } from "@project-surface/core";
+import { commandId, looksSecretName, parseYamlSafe } from "@project-surface/core";
 
 export const ADAPTER_ID = "generic";
 export const ADAPTER_VERSION = "0.2.0";
@@ -28,9 +28,14 @@ const JUSTFILES = ["justfile", "Justfile", ".justfile"];
 const TASKFILES = ["Taskfile.yml", "Taskfile.yaml", "taskfile.yml"];
 const ENV_EXAMPLES = [".env.example", ".env.sample", ".env.template"];
 
-const MAKE_TARGET = /^([A-Za-z0-9][A-Za-z0-9_.-]*)\s*:(?!=)/;
+/* The names before the colon of a rule. `a b: deps` names two targets;
+   `a:: deps` is a double-colon rule and still a target; `FOO := x`,
+   `FOO ::= x` and `FOO :::= x` are assignments and not. */
+const MAKE_RULE = /^([A-Za-z0-9][A-Za-z0-9_. %$()-]*?)\s*:(?!:*=)/;
 const JUST_RECIPE = /^(?:@)?([A-Za-z_][A-Za-z0-9_-]*)(?:\s+[^:]*)?\s*:(?!=)/;
-const ENV_LINE = /^\s*(?:export\s+)?([A-Z][A-Z0-9_]*)\s*=/;
+/* Same shape as core's `.env.example` reader, so a lowercase name is not
+   "documented" for the health check and yet absent from the environment. */
+const ENV_LINE = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/;
 
 function first(ctx: AdapterContext, names: string[]): string | null {
   return names.find((n) => ctx.exists(n)) ?? null;
@@ -41,10 +46,12 @@ export function makeTargets(content: string): string[] {
   const out: string[] = [];
   for (const raw of content.split("\n")) {
     if (/^\s/.test(raw) || raw.startsWith("#")) continue;
-    const m = MAKE_TARGET.exec(raw);
-    const name = m?.[1];
-    if (!name || name.startsWith(".") || name.includes("%") || name.includes("$")) continue;
-    if (!out.includes(name)) out.push(name);
+    const names = MAKE_RULE.exec(raw)?.[1]?.split(/\s+/) ?? [];
+    for (const name of names) {
+      if (!name || name.startsWith(".") || name.includes("%") || name.includes("$")) continue;
+      if (!isSafeCommandToken(name)) continue;
+      if (!out.includes(name)) out.push(name);
+    }
   }
   return out;
 }
@@ -62,21 +69,17 @@ export function justRecipes(content: string): string[] {
   return out;
 }
 
-/** Top-level keys under `tasks:` in a Taskfile. */
+/**
+ * The keys under `tasks:` in a Taskfile. Parsed as YAML, so indentation
+ * width, quoted keys, trailing comments and flow style all read the same; a
+ * two-space regex used to return nothing for a four-space file, silently.
+ */
 export function taskfileTasks(content: string): string[] {
-  const out: string[] = [];
-  let inTasks = false;
-  for (const raw of content.split("\n")) {
-    if (/^tasks:\s*$/.test(raw)) {
-      inTasks = true;
-      continue;
-    }
-    if (inTasks && /^\S/.test(raw)) inTasks = false;
-    if (!inTasks) continue;
-    const m = /^  ([A-Za-z0-9_:.-]+):\s*$/.exec(raw);
-    if (m?.[1] && !out.includes(m[1])) out.push(m[1]);
-  }
-  return out;
+  const doc = parseYamlSafe(content);
+  if (typeof doc !== "object" || doc === null) return [];
+  const tasks = (doc as { tasks?: unknown }).tasks;
+  if (typeof tasks !== "object" || tasks === null || Array.isArray(tasks)) return [];
+  return Object.keys(tasks).filter((name) => /^[A-Za-z0-9_:.-]+$/.test(name));
 }
 
 export function envExampleNames(content: string): string[] {

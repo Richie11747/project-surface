@@ -33,8 +33,10 @@ export {
   classifyCommand,
   extractEnvNames,
   isSafeCommandToken,
+  matchAll,
   provenance,
   source,
+  stripLineComment,
   type ProvenanceInput,
 } from "./builders.js";
 
