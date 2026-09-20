@@ -7,7 +7,7 @@ import {
   analyzeImpact,
   changedSince,
   diffSurfaces,
-  createGuardedReader,
+  createGuardedAccess,
   packContext,
   showFileAtRef,
   stagedPaths,
@@ -88,7 +88,7 @@ export const contextTool = {
     ctx: ToolContext
   ): ToolResult {
     const surface = loadSurface(ctx);
-    const pack = packContext(surface, args.task, createGuardedReader(ctx.root), {
+    const pack = packContext(surface, args.task, createGuardedAccess(ctx.root), {
       ...(args.budgetTokens ? { budgetTokens: args.budgetTokens } : {}),
       includeContent: args.includeContent === true,
     });
@@ -105,10 +105,12 @@ export const contextTool = {
     }
 
     lines.push("Relevant capabilities:");
-    for (const c of pack.capabilities) lines.push(`  ${c.id} - ${c.title} (${c.reason})`);
+    for (const c of pack.capabilities) lines.push(`  ${c.id} - ${c.title} [${c.tier}/${c.freshness}] (${c.reason})`);
 
     lines.push("", "Files to read:");
-    for (const i of pack.items) lines.push(`  ${i.path} [${i.role}, ~${i.estimatedTokens} tokens] - ${i.reason}`);
+    for (const i of pack.items) {
+      lines.push(`  ${i.path} [${i.role}, ${i.trust.tier}/${i.trust.freshness}, ~${i.estimatedTokens} tokens] - ${i.reason}`);
+    }
 
     if (pack.constraints.length > 0) {
       lines.push("", "Constraints:");

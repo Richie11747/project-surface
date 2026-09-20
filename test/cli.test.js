@@ -228,6 +228,33 @@ test("verify by change set runs what impact would, and the record names the comm
   }
 });
 
+test("context labels every file with the trust of its claim, and does not read bodies unless asked", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    const paths = surface(root, "context", "add a status field to checkout", "--json");
+    assert.equal(paths.code, 0, paths.stderr);
+    const pack = JSON.parse(paths.stdout);
+    assert.ok(pack.items.length > 0);
+    for (const item of pack.items) {
+      assert.match(item.trust.tier, /^(declared|verified|derived|inferred)$/);
+      assert.match(item.trust.freshness, /^(fresh|stale|unknown)$/);
+      assert.equal(item.content, undefined);
+    }
+    for (const c of pack.capabilities) assert.equal(typeof c.tier, "string");
+
+    /* The byte-based estimate agrees with the content-based one on ASCII sources. */
+    const bodies = JSON.parse(surface(root, "context", "add a status field to checkout", "--json", "--content").stdout);
+    for (const item of bodies.items) {
+      const twin = pack.items.find((i) => i.path === item.path);
+      assert.ok(twin, item.path);
+      assert.ok(Math.abs(twin.estimatedTokens - item.estimatedTokens) <= 1, `${item.path}: ${twin.estimatedTokens} vs ${item.estimatedTokens}`);
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("why explains every kind of claim and reproduces the recorded score", () => {
   const root = freshCopy();
   try {

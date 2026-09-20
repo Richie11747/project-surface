@@ -113,12 +113,14 @@ export {
 } from "./analysis/diff.js";
 export {
   estimateTokens,
+  estimateTokensFromBytes,
   keywords,
   packContext,
   DEFAULT_BUDGET_TOKENS,
   type ContextItem,
   type ContextPack,
   type ContextRole,
+  type ContextTrust,
   type PackOptions,
   type ScoredCapability,
 } from "./analysis/context.js";
@@ -163,7 +165,9 @@ export { expandGlob, globFilter, globToRegExp, isGlob, matchesGlob } from "./fs/
 export { parseYamlSafe } from "./fs/yaml.js";
 export {
   existsSafe,
+  createGuardedAccess,
   createGuardedReader,
+  fileSizeSafe,
   readFileSafe,
   readJsonSafe,
   toPosix,
@@ -171,6 +175,7 @@ export {
   DEFAULT_IGNORES,
   MAX_FILES,
   MAX_FILE_BYTES,
+  type FileAccess,
   type FileReader,
   type WalkResult,
   type WalkSource,
