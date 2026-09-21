@@ -6,7 +6,7 @@ append-only, and interested precisely in repetition. It lives in `.project/sessi
 generated `.gitignore` pattern `.project/*.local.json` already excludes, and it is never part of the
 document. Delete it at any time; `surface session --reset` does.
 
-What is recorded, what follows from it, and what is deliberately left out.
+Two things write to it, and two things read from it.
 
 ## What is recorded
 
@@ -21,6 +21,10 @@ whether the tree was dirty, the exit status, and two fingerprints:
 - the **failure signature** - a hash of the captured output after durations, timestamps, hashes and
   `line:column` pairs are removed, plus the exit code. Two failures with the same signature are the same
   failure; `null` when the command passed.
+
+**Context packs.** Every `surface context --delta` (and every MCP `surface_context` call, where delta is the
+default) is appended as a *pack*: the task, the working-tree fingerprint, and for every whole file served
+its path, a change key (`size:mtime`), and its token estimate. A slice is not recorded as the file.
 
 Nothing else is recorded. In particular a command run any other way - `npm test` in a shell, a test
 runner in an editor - is invisible to the session. The signals below are about runs that went through the
@@ -48,6 +52,27 @@ appear:
   one-line session summary.
 - `surface session` lists every attempt, the signals that currently hold, and the packs; `--reset` forgets
   everything. Over MCP the same summary is the `surface://session` resource.
+
+## Delta packs
+
+A context pack sized against a budget spends most of it on files the caller was already handed two calls
+ago. With the session, a file whose change key is unchanged since it was served is still listed - path,
+role, trust label, reason, and which pack served it - but not charged to the budget and not repeated in
+`--content` output. The pack reports `repeated` and `savedTokens`, so the saving is visible rather than
+silent. A file that changed, even by a byte, is served again in full.
+
+The CLI opts in with `--delta`, because a person running `surface context` twice expects the whole pack
+both times. The MCP tool defaults to delta, because its caller is an agent; `mode: "full"` turns it off.
+
+Two more things keep a pack small without hiding anything, and neither needs the session:
+
+- **Slices.** A file that does not fit the remaining budget is not dropped when the document holds a
+  locator for it (`L74`, `export:createCheckout`): the region from that line to the next top-level
+  declaration, at most 120 lines, is served instead, and the item says `partial` with the line range and
+  the whole file's token count. A locator that names a declaration index or a manifest key is not sliced.
+- **Relevant rules.** Every active rule at error severity is always in the pack. Any other rule is included
+  when a glob of its check, or a file it was read from, covers a file in the pack; the number left out is
+  reported. `--all-constraints` (CLI) or `allConstraints: true` (MCP) lists them all.
 
 ## What this is not
 

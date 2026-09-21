@@ -10,6 +10,17 @@
  * for budget is listed explicitly. A context pack that silently truncates is
  * worse than no context pack, because the caller cannot tell what is missing.
  *
+ * Three things keep the pack small without hiding anything:
+ *
+ *   - A file the caller was already served in this session, and that has not
+ *     changed since, is listed but not repeated (`repeat`). The tokens it would
+ *     have cost are reported as saved, not spent.
+ *   - A file that does not fit the remaining budget is sliced around the
+ *     locator the document already holds for it (`L74`, `export:createCheckout`)
+ *     rather than dropped; the item says so (`partial`, `range`).
+ *   - Rules come filtered to the ones that can apply to the files in the pack,
+ *     plus every rule at error severity; the count left out is reported.
+ *
  * This is deliberately not a retrieval engine. A signature index or a call
  * graph ranks files better than keyword matching on capability titles, and
  * tools built for that exist. What they cannot say, and this pack does, is
@@ -19,8 +30,11 @@
  */
 
 import type { FileAccess, FileReader } from "../fs/walk.js";
+import { globFilter } from "../fs/glob.js";
 import { indexById } from "../model/ids.js";
-import type { Command, Constraint, Freshness, ProvenanceTier, Surface } from "../schema/types.js";
+import { hashContent } from "../model/freshness.js";
+import type { ServedEntry } from "../session/ledger.js";
+import type { Capability, Command, Constraint, Freshness, ProvenanceTier, SourceRef, Surface } from "../schema/types.js";
 
 /** Rough but stable: about four characters per token for source text. */
 export function estimateTokens(text: string): number {
@@ -38,6 +52,8 @@ export function estimateTokensFromBytes(bytes: number): number {
 }
 
 export const DEFAULT_BUDGET_TOKENS = 8000;
+/** A slice is never longer than this many lines, whatever the locator points at. */
+export const SLICE_MAX_LINES = 120;
 
 const STOPWORDS = new Set([
   "the", "a", "an", "and", "or", "but", "for", "with", "from", "into", "that", "this",
@@ -62,6 +78,12 @@ export interface ContextTrust {
   freshness: Freshness["status"];
 }
 
+export interface ContextRange {
+  /** 1-based, inclusive. */
+  start: number;
+  end: number;
+}
+
 export interface ContextItem {
   path: string;
   role: ContextRole;
@@ -69,6 +91,13 @@ export interface ContextItem {
   reason: string;
   estimatedTokens: number;
   trust: ContextTrust;
+  /** A change key for the file as served - size and mtime, or a content hash - so a later pack can tell whether it moved. */
+  key?: string;
+  /** Present when the item is a slice of the file rather than the whole of it. */
+  range?: ContextRange;
+  partial?: boolean;
+  /** Present when the file was served earlier in this session and has not changed: listed, not repeated. */
+  repeat?: { since: number };
   content?: string;
 }
 
@@ -91,9 +120,15 @@ export interface ContextPack {
   task: string;
   budgetTokens: number;
   usedTokens: number;
+  /** Tokens the pack would have cost had it repeated files the session already served. */
+  savedTokens: number;
+  /** How many items are repeats. */
+  repeated: number;
   capabilities: ScoredCapability[];
   items: ContextItem[];
   constraints: Constraint[];
+  /** Active rules left out because nothing in the pack can trigger them; `allConstraints` includes them. */
+  constraintsOmitted: number;
   commands: Command[];
   omitted: OmittedItem[];
 }
@@ -103,22 +138,36 @@ export interface PackOptions {
   maxCapabilities?: number;
   /** Include file contents. Off by default: most callers only need the paths. */
   includeContent?: boolean;
+  /** Files served earlier in the session; a file whose key is unchanged is listed, not repeated. */
+  served?: ReadonlyMap<string, ServedEntry>;
+  /** Every active rule, not only the ones that can apply to the pack. */
+  allConstraints?: boolean;
 }
 
 /**
  * What the packer needs from the file system. `size` is enough to fit a file
  * into the budget; `read` is called only when content was asked for, so a
  * pack of paths costs one `stat` per candidate rather than one full read.
- * A bare reader still works; it just pays for the read to learn the size.
+ * A bare reader still works; it just pays for the read to learn the size, and
+ * its change key is a content hash rather than a stat.
  */
 function toAccess(files: FileAccess | FileReader): FileAccess {
   if (typeof files === "function") {
+    const cache = new Map<string, string | null>();
+    const read = (p: string): string | null => {
+      if (!cache.has(p)) cache.set(p, files(p));
+      return cache.get(p) ?? null;
+    };
     return {
       size: (p) => {
-        const content = files(p);
+        const content = read(p);
         return content === null ? null : content.length;
       },
-      read: files,
+      read,
+      stat: (p) => {
+        const content = read(p);
+        return content === null ? null : { size: content.length, key: `h:${hashContent(content)}` };
+      },
     };
   }
   return files;
@@ -157,6 +206,87 @@ function scoreCapability(
   return { score: score + capability.confidence, matched: [...new Set(matched)] };
 }
 
+/* ---- Slicing ------------------------------------------------------------ */
+
+const LINE_LOCATOR = /^L(\d+)(?:-L?(\d+))?$/;
+const EXPORT_LOCATOR = /^export:([A-Za-z_$][\w$]*)$/;
+/** A line that starts a top-level declaration in the languages the adapters read. */
+const DECLARATION_START =
+  /^(?:export\b|function\b|async\s+function\b|class\b|const\b|let\b|var\b|interface\b|type\b|enum\b|def\b|async\s+def\b|func\b|pub\b|fn\b|impl\b|struct\b|mod\b|@\w|#\[)/;
+
+function declarationLine(lines: readonly string[], name: string): number {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const patterns = [
+    new RegExp(
+      `^\\s*export\\s+(?:default\\s+)?(?:async\\s+)?(?:function\\*?|class|const|let|var|interface|type|enum)\\s+${escaped}\\b`
+    ),
+    new RegExp(`^(?:async\\s+)?(?:def|class)\\s+${escaped}\\b`),
+    new RegExp(`^func\\s+(?:\\([^)]*\\)\\s*)?${escaped}\\b`),
+    new RegExp(`^\\s*pub(?:\\([^)]*\\))?\\s+(?:async\\s+)?(?:fn|struct|enum|trait|type)\\s+${escaped}\\b`),
+  ];
+  return lines.findIndex((line) => patterns.some((re) => re.test(line)));
+}
+
+/**
+ * The part of a file a locator points at: from that line to the next
+ * top-level declaration, capped. Null when the locator is not one that names
+ * a line or an export - a declaration index or a manifest key does not.
+ */
+export function sliceAround(content: string, locator: string): { text: string; range: ContextRange } | null {
+  const lines = content.split("\n");
+  let start: number;
+  let end: number | undefined;
+  const byLine = LINE_LOCATOR.exec(locator);
+  const byExport = EXPORT_LOCATOR.exec(locator);
+  if (byLine) {
+    start = Number(byLine[1]) - 1;
+    if (byLine[2]) end = Number(byLine[2]);
+  } else if (byExport?.[1]) {
+    start = declarationLine(lines, byExport[1]);
+  } else {
+    return null;
+  }
+  if (start < 0 || start >= lines.length) return null;
+  if (end === undefined) {
+    end = start + 1;
+    while (end < lines.length && end - start < SLICE_MAX_LINES && !DECLARATION_START.test(lines[end] ?? "")) end += 1;
+  }
+  end = Math.min(end, lines.length, start + SLICE_MAX_LINES);
+  return { text: lines.slice(start, end).join("\n"), range: { start: start + 1, end } };
+}
+
+/* ---- Constraints --------------------------------------------------------- */
+
+/**
+ * Which active rules can apply to a set of paths. A rule at error severity
+ * always can - it fails the build wherever it fires. Any other rule applies
+ * when a glob of its check, or a source it was read from, covers one of the
+ * paths; a rule scoped to `src/payments/**` is noise in a pack about docs.
+ */
+export function relevantConstraints(
+  surface: Surface,
+  paths: readonly string[]
+): { constraints: Constraint[]; omitted: number } {
+  const active = surface.constraints.filter((c) => c.status === "active");
+  const covers = (globs: readonly string[] | undefined): boolean => {
+    if (!globs || globs.length === 0) return false;
+    const match = globFilter(globs);
+    return paths.some((p) => match(p));
+  };
+  const kept = active.filter((c) => {
+    if (c.severity === "error") return true;
+    if (c.check && (covers(c.check.from) || covers(c.check.paths))) return true;
+    /* A rule with no scoped check applies wherever it was written about. */
+    if (!c.check?.from && !c.check?.paths) {
+      return c.provenance.sources.some((s) => paths.some((p) => p === s.path || p.startsWith(`${s.path}/`)));
+    }
+    return false;
+  });
+  return { constraints: kept, omitted: active.length - kept.length };
+}
+
+/* ---- The pack ------------------------------------------------------------ */
+
 export function packContext(
   surface: Surface,
   task: string,
@@ -166,8 +296,8 @@ export function packContext(
   const access = toAccess(files);
   const budgetTokens = options.budgetTokens ?? DEFAULT_BUDGET_TOKENS;
   const maxCapabilities = options.maxCapabilities ?? 8;
+  const freshnessOf = (c: Capability): Freshness["status"] => c.freshness?.status ?? "unknown";
   const terms = keywords(task);
-  const freshnessOf = (c: Surface["capabilities"][number]): Freshness["status"] => c.freshness?.status ?? "unknown";
 
   const ranked = surface.capabilities
     .map((capability) => {
@@ -197,16 +327,34 @@ export function packContext(
   const omitted: OmittedItem[] = [];
   const seen = new Set<string>();
   let usedTokens = 0;
+  let savedTokens = 0;
 
-  const consider = (
-    path: string,
-    role: ContextRole,
-    capability: Surface["capabilities"][number],
-    reason: string
-  ): void => {
+  const consider = (ref: SourceRef, role: ContextRole, capability: Capability, reason: string): void => {
+    const path = ref.path;
     if (seen.has(path)) return;
     seen.add(path);
     const trust: ContextTrust = { tier: capability.provenance.tier, freshness: freshnessOf(capability) };
+    const stat = access.stat?.(path) ?? null;
+    const key = stat?.key;
+
+    /* Already in the caller's hands and unchanged since: say so, charge nothing. */
+    const served = key ? options.served?.get(path) : undefined;
+    if (served && served.key === key) {
+      const estimatedTokens = estimateTokensFromBytes(stat?.size ?? 0);
+      savedTokens += estimatedTokens;
+      items.push({
+        path,
+        role,
+        capabilityId: capability.id,
+        reason: `${reason} Served in pack #${served.seq}; unchanged since, not repeated.`,
+        estimatedTokens,
+        trust,
+        key,
+        repeat: { since: served.seq },
+      });
+      return;
+    }
+
     /* With content requested the body is needed anyway and its length is the
        better estimate; without it, a stat is all this costs. */
     let content: string | null = null;
@@ -214,22 +362,46 @@ export function packContext(
     if (options.includeContent) {
       content = access.read(path);
       if (content === null) {
-        omitted.push({ path, reason: "File is missing, unreadable, or not one the project lists." });
+        omitted.push({ path, reason: unreadableReason(stat) });
         return;
       }
       estimatedTokens = estimateTokens(content);
     } else {
       const bytes = access.size(path);
       if (bytes === null) {
-        omitted.push({ path, reason: "File is missing, unreadable, or not one the project lists." });
+        omitted.push({ path, reason: unreadableReason(stat) });
         return;
       }
       estimatedTokens = estimateTokensFromBytes(bytes);
     }
+
     if (usedTokens + estimatedTokens > budgetTokens) {
+      /* Too big whole; the locator may still name the part that matters. */
+      const body = content ?? (ref.locator ? access.read(path) : null);
+      const slice = body !== null && ref.locator ? sliceAround(body, ref.locator) : null;
+      const sliceTokens = slice ? estimateTokens(slice.text) : Number.POSITIVE_INFINITY;
+      if (slice && usedTokens + sliceTokens <= budgetTokens) {
+        usedTokens += sliceTokens;
+        items.push({
+          path,
+          role,
+          capabilityId: capability.id,
+          reason:
+            `${reason} Sliced around ${ref.locator} (L${slice.range.start}-L${slice.range.end}): ` +
+            `the whole file (~${estimatedTokens} tokens) does not fit the remaining budget.`,
+          estimatedTokens: sliceTokens,
+          trust,
+          ...(key ? { key } : {}),
+          range: slice.range,
+          partial: true,
+          ...(options.includeContent ? { content: slice.text } : {}),
+        });
+        return;
+      }
       omitted.push({ path, reason: `Would exceed the ${budgetTokens} token budget.` });
       return;
     }
+
     usedTokens += estimatedTokens;
     items.push({
       path,
@@ -238,6 +410,7 @@ export function packContext(
       reason,
       estimatedTokens,
       trust,
+      ...(key ? { key } : {}),
       ...(content !== null ? { content } : {}),
     });
   };
@@ -245,28 +418,34 @@ export function packContext(
   /* Owners first, then contracts, then tests: if the budget runs out, it runs
      out on the least essential material. */
   for (const { capability } of ranked) {
-    for (const owner of capability.owners) consider(owner.path, "owner", capability, "Implements the capability.");
+    for (const owner of capability.owners) consider(owner, "owner", capability, "Implements the capability.");
   }
   for (const { capability } of ranked) {
-    for (const contract of capability.contracts) consider(contract.path, "contract", capability, "Specifies the capability.");
+    for (const contract of capability.contracts) consider(contract, "contract", capability, "Specifies the capability.");
   }
   for (const { capability } of ranked) {
     for (const ref of capability.evidence) {
       const entry = evidenceById.get(ref.id);
       if (!entry?.path) continue;
       const status = entry.status === "passed" || entry.status === "failed" ? `, last ${entry.status}` : "";
-      consider(entry.path, "evidence", capability, `Proves the capability (${ref.link}${status}).`);
+      consider({ path: entry.path }, "evidence", capability, `Proves the capability (${ref.link}${status}).`);
     }
   }
 
   const relevantPackages = new Set(
     ranked.map((r) => r.capability.packageId).filter((p): p is string => typeof p === "string")
   );
+  const packPaths = [...items.map((i) => i.path), ...ranked.flatMap((r) => r.capability.owners.map((o) => o.path))];
+  const rules = options.allConstraints
+    ? { constraints: surface.constraints.filter((c) => c.status === "active"), omitted: 0 }
+    : relevantConstraints(surface, packPaths);
 
   return {
     task,
     budgetTokens,
     usedTokens,
+    savedTokens,
+    repeated: items.filter((i) => i.repeat).length,
     capabilities: ranked.map((r) => ({
       id: r.capability.id,
       title: r.capability.title,
@@ -277,7 +456,8 @@ export function packContext(
       reason: r.reason,
     })),
     items,
-    constraints: surface.constraints.filter((c) => c.status === "active"),
+    constraints: rules.constraints,
+    constraintsOmitted: rules.omitted,
     commands: surface.commands.filter(
       (c) =>
         c.kind === "test" &&
@@ -285,4 +465,9 @@ export function packContext(
     ),
     omitted,
   };
+}
+
+function unreadableReason(stat: { size: number } | null): string {
+  if (stat && stat.size > 2 * 1024 * 1024) return "File is larger than 2 MiB; the reader does not serve files that size.";
+  return "File is missing, unreadable, or not one the project lists.";
 }

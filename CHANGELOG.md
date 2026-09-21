@@ -17,6 +17,17 @@ All notable changes to this project are documented here. This project adheres to
   run.`, not an error - unless `force: true`. New `surface session [--reset]` and the `surface://session`
   resource. Core: `assessAttempt`, `assessHistory`, `failureSignature`, `workingTreeFingerprint`,
   `readLedger` / `writeLedger`. What is and is not recorded: [docs/sessions.md](docs/sessions.md).
+- **Delta context packs.** `surface context --delta` and, by default, `surface_context` over MCP list a
+  file already served in this session and unchanged since - path, role, trust, which pack served it -
+  without repeating it or charging it to the budget; `repeated` and `savedTokens` make the saving visible.
+  `mode: "full"` turns it off over MCP. The pack now also carries a change `key` per item.
+- **Slices instead of drops.** A file that does not fit the remaining budget is served from the locator the
+  document already holds (`L74`, `export:createCheckout`) to the next top-level declaration, at most 120
+  lines, and the item says `partial` with its `range`; a file with no such locator is omitted as before.
+  Core: `sliceAround`.
+- **Relevant rules.** The pack's constraints are every active rule at error severity plus the ones whose
+  check globs or sources cover a file in the pack; `constraintsOmitted` counts the rest, and
+  `--all-constraints` / `allConstraints: true` lists them. Core: `relevantConstraints`.
 
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),
@@ -55,8 +66,15 @@ All notable changes to this project are documented here. This project adheres to
 
 ### Changed
 
+- The MCP server stats the document before every call and re-reads it only when its size or mtime changed;
+  the guarded file allow-list behind `surface_context` is reused while the document is unchanged (30 s
+  ceiling) instead of walking the tree on every call.
+- `surface_context` wraps constraint text in `<repo-data>` and ends with the trust note, like every other
+  tool that carries claims.
 - `headState` and the working-tree fingerprint ignore `.project/*.local.json`, so a session file that is not
   gitignored does not make every verification record `dirty`.
+- A context item larger than 2 MiB is reported as such rather than as "missing, unreadable, or not one the
+  project lists".
 
 - **`surface context` no longer reads file bodies unless `--content` is given.** The packer takes a
   `FileAccess` with a size probe and sizes files by `stat`; `createGuardedAccess` applies the same

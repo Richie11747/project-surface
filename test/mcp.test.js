@@ -279,3 +279,35 @@ test("surface_verify declines to repeat a failed run on an unchanged tree unless
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("the tool listing stays small: every turn pays for it", async () => {
+  const root = preparedFixture();
+  const client = await connect(root);
+  try {
+    const { tools } = await client.listTools();
+    const chars = JSON.stringify(tools).length;
+    assert.ok(chars / 4 < 2200, `tool listing is ~${Math.ceil(chars / 4)} tokens`);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("surface_context serves a file once per session and says so the second time", async () => {
+  const root = preparedFixture();
+  const client = await connect(root);
+  try {
+    const first = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout" } }));
+    assert.match(first, /src\/checkout\/create\.ts \[owner/);
+    assert.match(first, /Session: 0 runs, 1 context pack/);
+    const second = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout status" } }));
+    assert.match(second, /src\/checkout\/create\.ts \[already served/);
+    assert.match(second, /tokens not repeated/);
+    const full = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout", mode: "full" } }));
+    assert.match(full, /src\/checkout\/create\.ts \[owner/);
+    assert.match(full, /<repo-data>/);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
