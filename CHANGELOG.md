@@ -6,6 +6,44 @@ All notable changes to this project are documented here. This project adheres to
 
 ### Added
 
+- **Sessions - fewer tokens, no loops.** A machine-local, append-only ledger at
+  `.project/session.local.json` (already covered by the generated `.gitignore` pattern) records what the
+  tool ran and what it served, keyed to a working-tree fingerprint - the commit plus the content hash of
+  every path that differs from it. Three deterministic signals follow: `unchanged-rerun` (the last attempt
+  of this command failed on byte-identical code; running it again cannot come out differently),
+  `same-failure` (three attempts, the same failure signature, at least two different trees: the edits are
+  not reaching it) and `flapping` (pass and fail on the same tree: not proof). `surface verify` prints them
+  and `--if-changed` skips the pointless run with exit `0`; `surface_verify` over MCP declines it - `Not
+  run.`, not an error - unless `force: true`. New `surface session [--reset]` and the `surface://session`
+  resource. Core: `assessAttempt`, `assessHistory`, `failureSignature`, `workingTreeFingerprint`,
+  `readLedger` / `writeLedger`. What is and is not recorded: [docs/sessions.md](docs/sessions.md).
+- **Delta context packs.** `surface context --delta` and, by default, `surface_context` over MCP list a
+  file already served in this session and unchanged since - path, role, trust, which pack served it -
+  without repeating it or charging it to the budget; `repeated` and `savedTokens` make the saving visible.
+  `mode: "full"` turns it off over MCP. The pack now also carries a change `key` per item.
+- **Slices instead of drops.** A file that does not fit the remaining budget is served from the locator the
+  document already holds (`L74`, `export:createCheckout`) to the next top-level declaration, at most 120
+  lines, and the item says `partial` with its `range`; a file with no such locator is omitted as before.
+  Core: `sliceAround`.
+- **Relevant rules.** The pack's constraints are every active rule at error severity plus the ones whose
+  check globs or sources cover a file in the pack; `constraintsOmitted` counts the rest, and
+  `--all-constraints` / `allConstraints: true` lists them. Core: `relevantConstraints`.
+- **`surface brief`** - one screen of orientation: proven commands with their commit, error-severity rules
+  and whether each is machine-checked, paths needing approval, and where things live grouped by the first
+  segment of the capability id with the directory the owners share. Core: `buildBrief`, `renderBrief`.
+- **`surface_overview` defaults to the brief.** `detail: "full"` restores the previous listing of every
+  claim; `format: "json"` returns the brief object or, with `full`, the whole document. The tool listing
+  itself is now size-tested, since every turn pays for it.
+- **MCP prompt `orient` and resource template `surface://capability/{id}`.** Neither is in the tool list,
+  so neither costs a token per turn; a client that supports prompts can start a task with the brief in
+  context, and a single capability is small enough to attach whole.
+- **One ranking.** `rankCapabilities` in core is what the context pack and `surface_find_capability` both
+  use: a whole-word match beats a prefix beats a substring, aliases and route paths count, and the same
+  query names the same capabilities in both tools.
+- **Claude Code plugin:** a `SessionStart` hook that runs `surface brief` into the session's context, and
+  the MCP server is now the CLI-hosted one (`surface mcp`), which can rebuild the document after a
+  verification.
+
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),
   `carried` (an earlier run over byte-identical owner files), `stale`, `unproven` or `failing`; it lists
@@ -42,6 +80,16 @@ All notable changes to this project are documented here. This project adheres to
   a commit-anchored freshness loop) - with a section on why project-surface is not a context engine.
 
 ### Changed
+
+- The MCP server stats the document before every call and re-reads it only when its size or mtime changed;
+  the guarded file allow-list behind `surface_context` is reused while the document is unchanged (30 s
+  ceiling) instead of walking the tree on every call.
+- `surface_context` wraps constraint text in `<repo-data>` and ends with the trust note, like every other
+  tool that carries claims.
+- `headState` and the working-tree fingerprint ignore `.project/*.local.json`, so a session file that is not
+  gitignored does not make every verification record `dirty`.
+- A context item larger than 2 MiB is reported as such rather than as "missing, unreadable, or not one the
+  project lists".
 
 - **`surface context` no longer reads file bodies unless `--content` is given.** The packer takes a
   `FileAccess` with a size probe and sizes files by `stat`; `createGuardedAccess` applies the same

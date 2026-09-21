@@ -36,6 +36,14 @@ document is read first and verification results are carried forward, so a rescan
 | `--force` | Ignore the previous document. |
 | `--max-files <n>` | Cap the file walk (default in `packages/core/src/fs/walk.ts`). Truncation is reported as `FILE_SCAN_TRUNCATED`. |
 
+### `surface brief`
+
+One screen of orientation, meant to be read first: the stack and the counts, which commands are proven and
+at which commit, the rules at error severity and whether each is machine-checked, the paths that need
+approval, and where things live - capabilities grouped by the first segment of their id with the directory
+their owners share. Every line is a projection of a claim already in the document; nothing is added.
+The MCP `surface_overview` tool renders the same text, so a person and an agent read the same thing.
+
 ### `surface inspect [capability]`
 
 Without an argument: a summary of the project. With a capability id: its owners, contract, evidence,
@@ -86,6 +94,12 @@ stale claim and one command re-prove it.
 | `--since <ref>` / `--staged` / `paths...` | Run what `surface impact` would list for that change set: the commands bound to affected evidence and the test command of each affected package. When no capability is known to depend on the paths, every test command runs, and the output says so. |
 | `--all` | Run every test, build and typecheck command. |
 | `--timeout <seconds>` | Per-command timeout. |
+| `--if-changed` | Skip a command whose last recorded attempt failed on a working tree with this exact fingerprint: nothing changed, so nothing can change. Exit `0`, with the reason printed. |
+
+Before the first command starts, and again after the results, the session ledger speaks: a run that would
+repeat a failure on an unchanged tree, the same failure across three different edits, or a command that
+both passed and failed on identical code. The rules, and where the record lives, are in
+[sessions.md](sessions.md).
 
 Every record carries the commit the working tree was at and whether the tree was dirty (the regenerated
 `.project/surface.json` itself does not count), so `inspect` and `why` can say *which code* a claim was
@@ -146,6 +160,13 @@ files by `stat` and opens none of them.
 | `--budget <tokens>` | Default in `packages/core/src/analysis/context.ts`. |
 | `--max-capabilities <n>` | |
 | `--content` | Include file contents, not only paths. |
+| `--delta` | List a file this machine was already served, and that has not changed since, without repeating it; record this pack for the next call. The tokens not spent are reported. |
+| `--all-constraints` | Every active rule, not only the ones whose check or source covers a file in the pack. |
+
+A file that does not fit the remaining budget is sliced around the locator the document holds for it
+(`L74`, `export:createCheckout`) rather than dropped; the row says `(slice)` with the line range. Rules come
+filtered to the ones that can apply, plus every rule at error severity, with the count left out. Details in
+[sessions.md](sessions.md).
 
 ### `surface agents [--write <file>] [--include-inferred] [--max-capabilities n]`
 
@@ -162,6 +183,13 @@ and a second run with an unchanged surface is a no-op.
 The fingerprint is what makes the file honest. Every later scan compares it with what the current surface
 would render, and `surface doctor` reports `AGENTS_MD_STALE` (warn) when they differ - a hand-written
 CLAUDE.md goes stale silently; this one cannot.
+
+### `surface session [--reset]`
+
+What this machine has run and served through the tool, from `.project/session.local.json`: every attempt
+with its status, exit code, tree fingerprint and commit; the loop signals that currently hold; the context
+packs and the tokens they did not repeat. `--reset` forgets the session. The file is machine-local and never
+part of the document - [sessions.md](sessions.md) says what is recorded and what is not.
 
 ### `surface diff [--since <ref>] [--format text|markdown] [--fail-on-change]`
 

@@ -19,6 +19,8 @@ not on the list. Items link to issues where one exists; a checked box means it i
 - [x] The loop closes: `verify --stale` re-proves exactly what `doctor` reported stale, `verify --since` what a change touched; every record names the commit it ran against
 - [x] Context packs carry a trust label per file and are sized without reading bodies
 - [x] `surface gate` - proof-carrying pull requests: per touched capability, proven at the commit under review or not; the GitHub Action posts the receipt and can fail on it
+- [x] Sessions: a machine-local ledger of what was run and served, keyed to a working-tree fingerprint; `verify` and `surface_verify` decline to repeat a failure on unchanged code, `same-failure` and `flapping` name the other two loops, and context packs stop repeating files the session already served
+- [x] `surface brief` and a brief-by-default `surface_overview`; the `orient` prompt and per-capability resources over MCP; one ranking shared by the context pack and `find_capability`
 
 ## Next
 
@@ -37,7 +39,11 @@ These are out of scope by design, not by omission. See [docs/comparison.md](docs
 - **No semantic or embedding search, and no symbol index.** A surface is a model of the project, not an
   index of it. Ranking files or symbols for a query is what [ripwire](https://github.com/redhat-et/ripwire)
   and [sigmap](https://github.com/manojmallick/sigmap) do; a surface is what a retrieved file is checked
-  against. `surface context` will stay a keyword match over capability names.
+  against. `surface context` will stay a keyword match over capability names. Slicing a file around a
+  locator the document already holds is not an index; it uses a fact an adapter recorded.
+- **No memory of the conversation.** The session ledger records two facts - what was run, what was served -
+  and the three rules that follow from them by fingerprint. It does not judge progress, remember intent,
+  or see a command that did not go through the tool.
 - **No call-graph blast radius.** `surface impact` follows declared owners, contracts, evidence and
   packages. A change that reaches a capability only through an import chain is not reported, and the
   comparison page says so.

@@ -65,7 +65,7 @@ capabilities:
     title: Git-aware file discovery that never follows a symlink out of the project
     owners: [packages/core/src/fs/walk.ts, packages/core/src/git/git.ts]
     contracts: [docs/concepts.md]
-    evidence: [packages/core/test/safety.test.js]
+    evidence: [packages/core/test/safety.test.js, packages/core/test/git.test.js]
     tags: [core, safety]
 
   # ---- Evidence and safety -------------------------------------------------
@@ -84,6 +84,15 @@ capabilities:
     contracts: [docs/cli.md]
     evidence: [packages/core/test/select.test.js]
     tags: [evidence]
+
+  # ---- The session ---------------------------------------------------------
+  - id: session.ledger
+    title: The session ledger - what was run and served, and the loop signals that follow
+    description: Machine-local, append-only record behind verify, context --delta and the MCP tools. Three deterministic signals keyed to the working-tree fingerprint; never part of the surface document.
+    owners: [packages/core/src/session/**]
+    contracts: [docs/sessions.md]
+    evidence: [packages/core/test/session.test.js, test/cli.test.js]
+    tags: [session]
 
   - id: safety.redaction
     title: Secret redaction for every captured command output
@@ -116,10 +125,19 @@ capabilities:
     tags: [analysis, trust]
 
   - id: analysis.context
-    title: Token-bounded context pack with a reason per file
+    title: Token-bounded context pack with a reason per file, one ranking, delta packs and locator slices
+    description: Selects owners, contracts and evidence for a task; lists a file already served in this session instead of repeating it; slices a file that does not fit around its locator; filters rules to the ones that can apply.
     owners: [packages/core/src/analysis/context.ts]
+    contracts: [docs/cli.md, docs/sessions.md]
+    evidence: [packages/core/test/context.test.js, test/cli.test.js]
+    tags: [analysis]
+
+  - id: analysis.brief
+    title: One screen of orientation - proven commands, error rules, paths needing approval, where things live
+    description: A projection of the document at newcomer granularity, rendered once for the CLI and the MCP overview so a person and an agent read the same text.
+    owners: [packages/core/src/analysis/brief.ts]
     contracts: [docs/cli.md]
-    evidence: [test/cli.test.js]
+    evidence: [packages/core/test/brief.test.js, test/cli.test.js]
     tags: [analysis]
 
   - id: analysis.diff
@@ -249,6 +267,18 @@ capabilities:
     contracts: [docs/cli.md]
     evidence: [test/cli.test.js]
     tags: [cli]
+  - id: cli.brief
+    title: surface brief
+    owners: [packages/cli/src/commands/brief.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.session
+    title: surface session
+    owners: [packages/cli/src/commands/session.ts]
+    contracts: [docs/sessions.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
   - id: cli.diff
     title: surface diff
     owners: [packages/cli/src/commands/diff.ts]
@@ -296,7 +326,7 @@ capabilities:
     environment: [PROJECT_SURFACE_ALLOW_EXEC]
     tags: [mcp, safety]
   - id: mcp.server
-    title: The stdio MCP server
+    title: The stdio MCP server, with the orient prompt and the capability and session resources
     owners: [packages/mcp-server/src/index.ts, packages/mcp-server/src/bin.ts, packages/mcp-server/src/support.ts]
     contracts: [docs/mcp.md]
     evidence: [test/mcp.test.js]
