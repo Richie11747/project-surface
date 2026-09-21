@@ -40,6 +40,9 @@ All notable changes to this project are documented here. This project adheres to
 - **One ranking.** `rankCapabilities` in core is what the context pack and `surface_find_capability` both
   use: a whole-word match beats a prefix beats a substring, aliases and route paths count, and the same
   query names the same capabilities in both tools.
+- **Claude Code plugin:** a `SessionStart` hook that runs `surface brief` into the session's context, and
+  the MCP server is now the CLI-hosted one (`surface mcp`), which can rebuild the document after a
+  verification.
 
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),

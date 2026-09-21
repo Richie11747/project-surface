@@ -17,4 +17,8 @@ Then summarise for the user:
 If there are stale claims, name the capabilities and the command that would re-verify each one. Do not run
 verification yourself unless the user asks - `surface verify` executes project commands.
 
+Then read the `surface://session` resource (or run `session --json` the same way). If it reports a loop
+signal - `unchanged-rerun`, `same-failure` or `flapping` - say so in one line: which command, and what the
+signal advises. Nothing to report is fine; do not pad it.
+
 $ARGUMENTS
