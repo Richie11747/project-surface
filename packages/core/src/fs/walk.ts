@@ -162,6 +162,23 @@ export function readFileSafe(root: string, relPath: string): string | null {
   }
 }
 
+/**
+ * Byte size of a file inside the project, under the same rules as
+ * `readFileSafe` - null for anything that reader would refuse - so a caller
+ * can size a file without paying for its body.
+ */
+export function fileSizeSafe(root: string, relPath: string): number | null {
+  const target = resolveInside(root, relPath);
+  if (target === null) return null;
+  try {
+    const stat = lstatSync(target);
+    if (!stat.isFile() || stat.size > MAX_FILE_BYTES) return null;
+    return stat.size;
+  } catch {
+    return null;
+  }
+}
+
 export function readJsonSafe<T>(root: string, relPath: string): T | null {
   const raw = readFileSafe(root, relPath);
   if (raw === null) return null;
@@ -177,6 +194,12 @@ export function existsSafe(root: string, relPath: string): boolean {
 }
 
 export type FileReader = (relPath: string) => string | null;
+
+/** A reader plus a size probe; see `createGuardedAccess`. */
+export interface FileAccess {
+  size(relPath: string): number | null;
+  read: FileReader;
+}
 
 /**
  * Paths whose content is never handed out, whatever a surface document says.
@@ -199,11 +222,30 @@ const NEVER_SERVED: readonly RegExp[] = [
  * the credential files above, and redacts what it returns.
  */
 export function createGuardedReader(root: string, files?: readonly string[]): FileReader {
+  return createGuardedAccess(root, files).read;
+}
+
+/**
+ * The guarded reader plus a size probe under the same allow-list, so a
+ * context pack of paths can be sized with a `stat` per file and never opens a
+ * file it would refuse to serve.
+ */
+export function createGuardedAccess(root: string, files?: readonly string[]): FileAccess {
   const allowed = new Set(files ?? walkProject(root).files);
-  return (relPath) => {
+  const served = (relPath: string): string | null => {
     const path = toPosix(relPath);
-    if (!allowed.has(path) || NEVER_SERVED.some((re) => re.test(path))) return null;
-    const content = readFileSafe(root, path);
-    return content === null ? null : redactText(content);
+    return !allowed.has(path) || NEVER_SERVED.some((re) => re.test(path)) ? null : path;
+  };
+  return {
+    size: (relPath) => {
+      const path = served(relPath);
+      return path === null ? null : fileSizeSafe(root, path);
+    },
+    read: (relPath) => {
+      const path = served(relPath);
+      if (path === null) return null;
+      const content = readFileSafe(root, path);
+      return content === null ? null : redactText(content);
+    },
   };
 }

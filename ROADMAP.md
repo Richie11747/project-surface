@@ -16,6 +16,9 @@ not on the list. Items link to issues where one exists; a checked box means it i
 - [x] The repository describes itself and gates CI on its own `doctor --strict`
 - [x] Benchmark harness, recorded with the model and scored offline; weekly corpus run over fourteen public repositories
 - [x] Release pipeline with SBOM and a reviewer-gated npm publish
+- [x] The loop closes: `verify --stale` re-proves exactly what `doctor` reported stale, `verify --since` what a change touched; every record names the commit it ran against
+- [x] Context packs carry a trust label per file and are sized without reading bodies
+- [x] `surface gate` - proof-carrying pull requests: per touched capability, proven at the commit under review or not; the GitHub Action posts the receipt and can fail on it
 
 ## Next
 
@@ -31,7 +34,13 @@ not on the list. Items link to issues where one exists; a checked box means it i
 
 These are out of scope by design, not by omission. See [docs/comparison.md](docs/comparison.md).
 
-- **No semantic or embedding search.** A surface is a model of the project, not an index of it.
+- **No semantic or embedding search, and no symbol index.** A surface is a model of the project, not an
+  index of it. Ranking files or symbols for a query is what [ripwire](https://github.com/redhat-et/ripwire)
+  and [sigmap](https://github.com/manojmallick/sigmap) do; a surface is what a retrieved file is checked
+  against. `surface context` will stay a keyword match over capability names.
+- **No call-graph blast radius.** `surface impact` follows declared owners, contracts, evidence and
+  packages. A change that reaches a capability only through an import chain is not reported, and the
+  comparison page says so.
 - **No cross-repository view.** One document per repository.
 - **No code modification.** The tool reads; only the evidence runner executes, and only commands already in the document.
 - **No claim of better agent output until the benchmark says so.** `bench/RESULTS.md` is the only place that number may come from.

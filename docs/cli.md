@@ -71,19 +71,26 @@ $ surface why checkout.create
 One row per capability: owner, contract, evidence, tier, confidence, freshness. Good for a first look at a
 foreign repo, and for checking that what was verified is still verified.
 
-### `surface verify`
+### `surface verify [paths...]`
 
 Run project commands and record the result as evidence. Only commands already present in the document can
-run - there is no way to pass a shell string.
+run - there is no way to pass a shell string. The document knows which commands prove which capabilities,
+so the selection can be made by *claim* rather than by command id; that is what lets `doctor` report a
+stale claim and one command re-prove it.
 
 | Option | |
 |---|---|
 | `--command <id>` | Run this command. Repeatable. |
 | `--capability <id>` | Run the commands that exercise this capability. |
-| `--all` | Run every command. |
+| `--stale` | Run exactly the commands that re-prove every capability whose freshness is `stale`, then report how many are fresh again. Nothing stale is a clean exit `0`, so CI can run it unconditionally. |
+| `--since <ref>` / `--staged` / `paths...` | Run what `surface impact` would list for that change set: the commands bound to affected evidence and the test command of each affected package. When no capability is known to depend on the paths, every test command runs, and the output says so. |
+| `--all` | Run every test, build and typecheck command. |
 | `--timeout <seconds>` | Per-command timeout. |
 
-Output is redacted for secret-shaped strings and truncated before it is stored.
+Every record carries the commit the working tree was at and whether the tree was dirty (the regenerated
+`.project/surface.json` itself does not count), so `inspect` and `why` can say *which code* a claim was
+proven against. Output is redacted for secret-shaped strings and truncated before it is stored. Exit `2`
+when any command failed.
 
 ### `surface impact <paths...>`
 
@@ -95,10 +102,44 @@ commands to run.
 | `--staged` | Use the git staged set instead of explicit paths. |
 | `--since <ref>` | Use everything changed since a git ref. |
 
+### `surface gate [--since <ref>] [--staged] [paths...]`
+
+Does this change carry proof? For every capability the change touches, the gate says what its evidence
+describes - from the document and git alone, nothing is executed:
+
+| Verdict | Meaning |
+|---|---|
+| `proven` | Passing evidence recorded at this very commit, owner files unchanged since. |
+| `carried` | Passing evidence from an earlier commit, but the owner files are byte-identical to what that run saw (fingerprint), so it still describes them. |
+| `stale` | There is a passing proof, but it does not describe this code: owners changed since, or the record carries no commit. |
+| `unproven` | Nothing has ever exercised this capability. |
+| `failing` | The last run of its evidence failed. |
+
+It also lists violated constraints, unchecked ones, risks whose paths the change touches, and every contract
+document that did *not* change while capabilities it specifies did. Exit `2` unless every touched capability
+is `proven` or `carried` and no error-level rule is violated.
+
+| Option | |
+|---|---|
+| `--since <ref>` | The change set, everything that differs from the ref, uncommitted edits included. Default `main`. |
+| `--staged` / `paths...` | The staged set, or explicit paths. |
+| `--verify` | Prove what is not yet proven at this commit first - the same execution path as `surface verify` - then judge. |
+| `--strict` | Only `proven` passes; warn-level violations and approval-required risks block too. |
+| `--format text\|json\|markdown` | `markdown` is the receipt the GitHub Action posts; it carries a marker and is deterministic for a given document. |
+| `--timeout <seconds>` | Per-command timeout for `--verify`. |
+
+The receipt is meant to travel: an agent that made a change can paste it into the pull request, and CI
+recomputes it, so it cannot say more than the runner reproduces. A proof counts only when the run that
+produced it is recorded against the commit under review, or its owner files are byte-identical to what
+that run saw.
+
 ### `surface context "<task>"`
 
 A token-bounded context pack for a task: the capabilities most relevant to the wording, their owners,
-contracts and tests, each with a one-line reason for inclusion.
+contracts and tests, each with a one-line reason for inclusion and the provenance tier and freshness of
+the claim it belongs to - so `declared·fresh` and `inferred·stale` are visible on every line. This is not
+retrieval: it matches words against capability names, not against code. Without `--content` it sizes
+files by `stat` and opens none of them.
 
 | Option | |
 |---|---|
@@ -156,6 +197,7 @@ Serve the surface over MCP on stdio. See [mcp.md](mcp.md).
 ```yaml
 - run: npx project-surface init
 - run: npx project-surface doctor --strict
+- run: npx project-surface gate --since "origin/${{ github.base_ref }}" --verify   # pull requests
 ```
 
 Or use the composite action in [`integrations/github-action`](../integrations/github-action/README.md).

@@ -77,6 +77,14 @@ capabilities:
     evidence: [packages/core/test/safety.test.js]
     tags: [safety]
 
+  - id: evidence.select
+    title: Which commands prove which claims - the rule behind verify --stale and the MCP stale re-proof
+    description: Maps capabilities to the commands their evidence was recorded from, falling back to the package test command and saying so.
+    owners: [packages/core/src/evidence/select.ts]
+    contracts: [docs/cli.md]
+    evidence: [packages/core/test/select.test.js]
+    tags: [evidence]
+
   - id: safety.redaction
     title: Secret redaction for every captured command output
     owners: [packages/core/src/redact.ts]
@@ -98,6 +106,14 @@ capabilities:
     contracts: [docs/cli.md]
     evidence: [test/cli.test.js]
     tags: [analysis]
+
+  - id: analysis.gate
+    title: The proof gate - per touched capability, proven at the commit under review or not, and the receipt
+    description: Judges a change from the document and git alone; nothing is executed here.
+    owners: [packages/core/src/analysis/gate.ts]
+    contracts: [docs/cli.md]
+    evidence: [packages/core/test/gate.test.js]
+    tags: [analysis, trust]
 
   - id: analysis.context
     title: Token-bounded context pack with a reason per file
@@ -211,7 +227,13 @@ capabilities:
     tags: [cli]
   - id: cli.verify
     title: surface verify
-    owners: [packages/cli/src/commands/verify.ts]
+    owners: [packages/cli/src/commands/verify.ts, packages/cli/src/verification.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.gate
+    title: surface gate
+    owners: [packages/cli/src/commands/gate.ts]
     contracts: [docs/cli.md]
     evidence: [test/cli.test.js]
     tags: [cli]
@@ -260,7 +282,7 @@ capabilities:
     evidence: [test/mcp.test.js]
     tags: [mcp]
   - id: mcp.analyze-tools
-    title: Read-only MCP tools - impact, context, diff
+    title: Read-only MCP tools - impact, gate, context, diff
     owners: [packages/mcp-server/src/tools/analyze.ts]
     contracts: [docs/mcp.md]
     evidence: [test/mcp.test.js]

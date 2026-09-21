@@ -104,6 +104,10 @@ export interface VerificationRecord {
   summary?: string;
   /** Why the status is `unknown` or `skipped`. */
   reason?: string;
+  /** The commit the working tree was at when the command ran; absent outside a git repository. */
+  commit?: string;
+  /** True when the tree had uncommitted changes, so the result describes the tree, not the commit alone. */
+  dirty?: boolean;
 }
 
 export interface Command extends Claim {

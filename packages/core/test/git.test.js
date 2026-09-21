@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { changedSince, hashObjects, readGitInfo, stagedPaths } from "../dist/index.js";
+import { changedSince, hashObjects, headState, readGitInfo, stagedPaths } from "../dist/index.js";
 
 /*
  * The git queries on a throwaway repository: non-ASCII names, a scan rooted in
@@ -75,6 +75,25 @@ test("changed and staged paths are root-relative and unquoted", (t) => {
   }
 });
 
+test("changedSince falls back to a tree diff when the merge base is missing, as in a shallow clone", (t) => {
+  const root = repo();
+  if (root === null) return t.skip("git is not installed");
+  const shallow = mkdtempSync(join(tmpdir(), "project-surface-shallow-"));
+  try {
+    /* A one-commit clone of the tip and a one-commit fetch of an older ref
+       share no merge base; the three-dot form fails and the two-dot form
+       still names the file that differs between the two trees. */
+    git(shallow, "clone", "-q", "--depth", "1", root, ".");
+    const older = git(root, "rev-parse", "HEAD~2").trim();
+    git(shallow, "fetch", "-q", "--depth", "1", "origin", older);
+    assert.deepEqual(changedSince(shallow, older), ["pkg/src/café.ts"]);
+    assert.equal(changedSince(shallow, "no-such-ref-zzz"), null);
+  } finally {
+    rmSync(shallow, { recursive: true, force: true });
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("one missing path does not cost the rest of its batch their git hashes", (t) => {
   const root = repo();
   if (root === null) return t.skip("git is not installed");
@@ -83,6 +102,29 @@ test("one missing path does not cost the rest of its batch their git hashes", (t
     assert.equal(hashes.has("nope.txt"), false);
     assert.match(hashes.get("top.txt"), /^[0-9a-f]{40}$/);
     assert.match(hashes.get("pkg/src/plain.ts"), /^[0-9a-f]{40}$/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("headState names the commit, treats a regenerated surface document as clean and anything else as dirty", (t) => {
+  const root = repo();
+  if (root === null) return t.skip("git is not installed");
+  try {
+    const clean = headState(root);
+    assert.match(clean.commit, /^[0-9a-f]{40}$/);
+    assert.equal(clean.dirty, false);
+
+    /* `init` rewrites the document right before `verify` runs; that must not
+       make every verification look like it ran on a dirty tree. */
+    mkdirSync(join(root, ".project"), { recursive: true });
+    writeFileSync(join(root, ".project", "surface.json"), "{}\n");
+    assert.equal(headState(root).dirty, false);
+
+    writeFileSync(join(root, "top.txt"), "changed\n");
+    assert.equal(headState(root).dirty, true);
+
+    assert.equal(headState(mkdtempSync(join(tmpdir(), "project-surface-nogit-"))), null);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

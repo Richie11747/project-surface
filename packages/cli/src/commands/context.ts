@@ -8,9 +8,9 @@
  */
 
 import { parseArgs } from "node:util";
-import { createGuardedReader, packContext } from "@project-surface/core";
+import { createGuardedAccess, packContext } from "@project-surface/core";
 import { GLOBAL_OPTIONS, requireSurface, CliError, type GlobalOptions } from "../context.js";
-import { bullet, heading, print, printJson, style, table } from "../output.js";
+import { bullet, heading, print, printJson, style, table, tier } from "../output.js";
 
 export async function run(args: string[], options: GlobalOptions): Promise<number> {
   const { values, positionals } = parseArgs({
@@ -35,7 +35,7 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   const maxCapabilities =
     typeof values["max-capabilities"] === "string" ? Number(values["max-capabilities"]) : undefined;
 
-  const pack = packContext(surface, task, createGuardedReader(options.root), {
+  const pack = packContext(surface, task, createGuardedAccess(options.root), {
     ...(budget && Number.isFinite(budget) ? { budgetTokens: budget } : {}),
     ...(maxCapabilities && Number.isFinite(maxCapabilities) ? { maxCapabilities } : {}),
     includeContent: values.content === true,
@@ -58,7 +58,9 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
 
   print(heading("Relevant capabilities"));
   print(
-    table(pack.capabilities.map((c) => [`  ${style.bold(c.id)}`, c.title, style.dim(c.reason)]))
+    table(
+      pack.capabilities.map((c) => [`  ${style.bold(c.id)}`, c.title, trust(c.tier, c.freshness), style.dim(c.reason)])
+    )
   );
   print("");
 
@@ -69,6 +71,7 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
         `  ${i.path}`,
         style.dim(i.role),
         style.dim(`${i.estimatedTokens} tok`),
+        trust(i.trust.tier, i.trust.freshness),
         style.dim(i.reason),
       ])
     )
@@ -93,4 +96,10 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   }
 
   return 0;
+}
+
+/** `declared·fresh`, `inferred·unknown`: the two words that say whether a file comes with proof. */
+function trust(tierValue: Parameters<typeof tier>[0], freshness: string): string {
+  const mark = freshness === "fresh" ? style.green(freshness) : freshness === "stale" ? style.red(freshness) : style.dim(freshness);
+  return `${tier(tierValue)}${style.dim("·")}${mark}`;
 }

@@ -15,7 +15,7 @@ import { GENERATOR_VERSION, SURFACE_FILE } from "@project-surface/core";
 import { SurfaceUnavailable, failure, loadSurface } from "./support.js";
 import type { ToolContext, ToolResult } from "./support.js";
 import { constraintsTool, findCapabilityTool, healthTool, overviewTool, whyTool } from "./tools/read.js";
-import { contextTool, diffTool, impactTool } from "./tools/analyze.js";
+import { contextTool, diffTool, gateTool, impactTool } from "./tools/analyze.js";
 import { ALLOW_EXEC_ENV, verifyTool } from "./tools/verify.js";
 
 interface ToolDefinition {
@@ -23,7 +23,7 @@ interface ToolDefinition {
   title: string;
   description: string;
   inputSchema: Record<string, unknown>;
-  handler: (args: never, ctx: ToolContext) => ToolResult;
+  handler: (args: never, ctx: ToolContext) => ToolResult | Promise<ToolResult>;
 }
 
 /** Registration order is also the order most clients display them in. */
@@ -34,6 +34,7 @@ export const TOOLS = [
   constraintsTool,
   healthTool,
   impactTool,
+  gateTool,
   contextTool,
   diffTool,
   verifyTool,
@@ -43,20 +44,23 @@ export interface McpServerOptions {
   root: string;
   /** Defaults to the PROJECT_SURFACE_ALLOW_EXEC environment variable. */
   allowExec?: boolean;
+  /** See ToolContext.rebuild. */
+  rebuild?: ToolContext["rebuild"];
 }
 
 export function createMcpServer(options: McpServerOptions): McpServer {
   const ctx: ToolContext = {
     root: options.root,
     allowExec: options.allowExec ?? process.env[ALLOW_EXEC_ENV] === "1",
+    ...(options.rebuild ? { rebuild: options.rebuild } : {}),
   };
 
   const server = new McpServer({ name: "project-surface", version: GENERATOR_VERSION });
 
   for (const tool of TOOLS) {
-    const handler = (args: never): ToolResult => {
+    const handler = async (args: never): Promise<ToolResult> => {
       try {
-        return tool.handler(args, ctx);
+        return await tool.handler(args, ctx);
       } catch (error) {
         /* A missing surface is a normal state with a clear next action, so it
            is reported as tool content rather than as a protocol error. */

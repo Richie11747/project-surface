@@ -31,6 +31,7 @@ const COMMANDS: Record<string, () => Promise<{ run: CommandRunner }>> = {
   map: () => import("./commands/map.js"),
   verify: () => import("./commands/verify.js"),
   impact: () => import("./commands/impact.js"),
+  gate: () => import("./commands/gate.js"),
   context: () => import("./commands/context.js"),
   diff: () => import("./commands/diff.js"),
   doctor: () => import("./commands/doctor.js"),

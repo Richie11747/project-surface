@@ -20,6 +20,13 @@ export interface ToolContext {
    * the surface document can run.
    */
   allowExec: boolean;
+  /**
+   * Rebuild the document after a verification so the result reaches capability
+   * confidence and freshness. Supplied by the host that owns the adapters
+   * (the `surface mcp` command); absent in the standalone binary, which then
+   * records the result and says that `surface init` folds it in.
+   */
+  rebuild?: (previous: Surface, now: string) => Promise<Surface>;
 }
 
 export interface ToolResult {

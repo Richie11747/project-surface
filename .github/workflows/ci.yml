@@ -101,7 +101,11 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      # The comment carries the diff and the proof receipt. `verify` lets the
+      # gate run this repository's own recorded test command, so the receipt
+      # says proven at the pull request head rather than carried from main.
       - uses: ./integrations/github-action
         with:
           run: node packages/cli/dist/index.js
           comment: "true"
+          verify: "true"

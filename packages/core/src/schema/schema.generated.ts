@@ -152,7 +152,9 @@ export const SURFACE_SCHEMA: Readonly<Record<string, unknown>> = Object.freeze(
         "durationMs": { "type": "number", "minimum": 0 },
         "observedAt": { "$ref": "#/$defs/timestamp" },
         "summary": { "type": "string", "description": "Redacted and truncated command output." },
-        "reason": { "type": "string", "description": "Why the status is unknown or skipped." }
+        "reason": { "type": "string", "description": "Why the status is unknown or skipped." },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "The commit the working tree was at when the command ran. Absent when the project is not a git repository." },
+        "dirty": { "type": "boolean", "description": "True when the working tree had uncommitted changes when the command ran, so the result describes the tree, not the commit alone." }
       }
     },
     "evidenceRef": {

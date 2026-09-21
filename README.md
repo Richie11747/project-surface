@@ -96,10 +96,14 @@ Note `unverified`. Nothing has been run yet, so nothing claims to be proven. Run
 ```console
 $ surface verify --command test
 running test  npm run test
-  passed 936 ms
+  passed 859 ms
+
+Recorded
+  passed test  at 5484f6b
 
 $ surface inspect checkout.create
   Trust  0.95 high | derived | fresh
+         Proven at 5484f6b
 ```
 
 Now change the implementation and rescan:
@@ -108,14 +112,29 @@ Now change the implementation and rescan:
 $ surface doctor
   warn  STALE_CLAIM [checkout.create]
       Capability "checkout.create" was verified earlier but its files have changed since.
-      Run: surface verify --capability checkout.create
+      Run: surface verify --stale (or --capability checkout.create for this one alone)
 
 $ surface inspect checkout.create
   Trust  0.56 low | derived | stale
          Owner files changed since verification.
 ```
 
-That is the whole product. **A claim that was proven, and then stopped being proven, says so.** It stays stale across rescans until something actually re-verifies it.
+That is the whole product. **A claim that was proven, and then stopped being proven, says so.** It stays stale across rescans until something actually re-verifies it - and the document knows what that takes:
+
+```console
+$ surface verify --stale
+Re-proving 5 stale capabilities via 1 command
+
+running test  npm run test
+  passed 859 ms
+
+Recorded
+  passed test  at 5484f6b (dirty tree)
+
+  5 of 5 capabilities are fresh again
+```
+
+Five claims went stale; one command proves all five; the record says which commit it ran against and that the tree had uncommitted changes. `surface verify --since main` does the same for whatever a branch touched.
 
 ---
 
@@ -137,11 +156,56 @@ with the provenance on every line and inferred guesses left out. The block carri
 `surface doctor` reports it as stale the moment the surface changes underneath it. A hand-written CLAUDE.md
 cannot do that. This repository's own [CLAUDE.md](CLAUDE.md) is generated this way and checked in CI.
 
-Nine tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_context`, `surface_diff`, and `surface_verify`.
+Ten tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_gate`, `surface_context`, `surface_diff`, and `surface_verify`.
 
-Eight of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the ninth, and
+Nine of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the ninth, and
 [docs/mcp.md](docs/mcp.md) for the full tool reference. A Claude Code plugin and a GitHub Action live in
 [integrations/](integrations/README.md).
+
+---
+
+## Proof-carrying pull requests
+
+"Tests pass" is a statement about a run. It does not say which behaviours a change touched, nor whether the
+evidence for each of them was produced against the code under review. `surface gate` does:
+
+```console
+$ surface gate --since main
+Proof of change since main at c02ee9e
+  1 changed path(s), 5 capabilities touched
+
+  stale     checkout.complete (owner)
+  stale     checkout.create (owner)
+  ...
+
+Blocking
+  - checkout.create is stale: Owner files changed since verification.
+
+  does not pass  5 stale
+  Run with --verify to prove what is missing at this commit.
+
+$ surface gate --since main --verify
+Proving 5 capabilities via 1 command(s)
+running test  npm run test
+  passed 1960 ms
+
+  proven    checkout.complete (owner)
+  proven    checkout.create (owner)
+  ...
+
+Worth a look
+  - docs/contracts/checkout.md did not change while 5 capabilities it specifies did. Confirm the behaviour still matches the document.
+
+  passes  5 proven
+```
+
+Five verdicts, each from one fact in the document: `proven` (evidence recorded at this commit), `carried`
+(an earlier run, but the owner files are byte-identical to what it saw), `stale`, `unproven`, `failing`. The
+gate also names the contract that did not move while the behaviour did, the rule that is broken, and the
+path that needs approval. `--format markdown` is a receipt: an agent that made the change pastes it into
+the pull request, the [GitHub Action](integrations/github-action/README.md) recomputes it on the runner, and
+the two either agree or the difference is the review. No retrieval tool can produce this, because none of
+them runs anything or remembers at which commit it did.
 
 ---
 
@@ -253,9 +317,10 @@ Three things are worth noticing.
 | `surface why <id>` | How a confidence score was derived, step by step, recomputed from the document |
 | `surface agents [--write file]` | Agent instructions generated from evidence, with provenance per line and a staleness fingerprint |
 | `surface map` | Ownership table: owner, contract, evidence, confidence |
-| `surface verify` | Run project commands and record the result as evidence |
+| `surface verify` | Run project commands and record the result as evidence; `--stale` re-proves what went stale, `--since <ref>` what a change touched |
 | `surface impact <paths>` | What a change affects, and what to run |
-| `surface context "<task>"` | Token-bounded context pack, with a reason per file |
+| `surface gate --since <ref>` | Does the change carry proof? Per touched capability: proven at this commit, or not; `--verify` proves it first |
+| `surface context "<task>"` | Token-bounded context pack, with a reason and a trust label per file |
 | `surface diff --since <ref>` | What changed about the project surface |
 | `surface doctor` | Drift, stale claims, unproven behaviour |
 | `surface report` | Self-contained HTML report |
@@ -321,7 +386,9 @@ What conforming means for a document, a generator in any language, a consumer, o
 
 ## What this is not
 
-Not a multi-agent swarm, a hosted vector database, a chat UI, or an automatic code modifier. It does not require an account. It will not tell you it is AGI for your repository. How it relates to CLAUDE.md, Cursor rules, repomix, aider, Cody and Continue - including where each of them is better - is in [docs/comparison.md](docs/comparison.md).
+Not a multi-agent swarm, a hosted vector database, a chat UI, or an automatic code modifier. It does not require an account. It will not tell you it is AGI for your repository.
+
+**Not a context engine.** [sigmap](https://github.com/manojmallick/sigmap) and [ripwire](https://github.com/redhat-et/ripwire) index signatures and call graphs and rank files or symbols for a query; they are better at that than `surface context` is, and this project does not compete on it. A surface is the thing to check a retrieved file against: it records what the project claims, what proved it, at which commit, and whether that proof still holds. How it relates to those two, and to CLAUDE.md, Cursor rules, repomix, aider, Cody and Continue - including where each of them is better - is in [docs/comparison.md](docs/comparison.md).
 
 It is a small, fast, inspectable artifact that is honest about what it does not know.
 
@@ -358,7 +425,7 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 ## Status
 
-`0.2.0` is on npm - `npx project-surface init` installs it. What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
+`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, and a trust label on every file of a context pack - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
 [`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`](https://richie11747.github.io/project-surface/spec/v1/surface.schema.json)
 is its `$id`. A generator in any language can target it; [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md)
 says what that takes.

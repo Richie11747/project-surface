@@ -85,6 +85,14 @@ export {
   DEFAULT_TIMEOUT_MS,
   type RunOptions,
 } from "./evidence/runner.js";
+export {
+  commandsForStale,
+  commandsProving,
+  packageTestCommands,
+  staleCapabilities,
+  type CommandSelection,
+  type SelectedCapability,
+} from "./evidence/select.js";
 
 // Analysis
 export { detectHealth, hasBlockingFindings, sortFindings, type HealthInput } from "./analysis/health.js";
@@ -94,6 +102,16 @@ export {
   type ImpactRelation,
   type ImpactReport,
 } from "./analysis/impact.js";
+export {
+  gateChange,
+  renderGateMarkdown,
+  GATE_COMMENT_MARKER,
+  type GateOptions,
+  type GateProof,
+  type GateReport,
+  type GateVerdict,
+  type GatedCapability,
+} from "./analysis/gate.js";
 export {
   diffSurfaces,
   renderDiffMarkdown,
@@ -105,12 +123,14 @@ export {
 } from "./analysis/diff.js";
 export {
   estimateTokens,
+  estimateTokensFromBytes,
   keywords,
   packContext,
   DEFAULT_BUDGET_TOKENS,
   type ContextItem,
   type ContextPack,
   type ContextRole,
+  type ContextTrust,
   type PackOptions,
   type ScoredCapability,
 } from "./analysis/context.js";
@@ -155,7 +175,9 @@ export { expandGlob, globFilter, globToRegExp, isGlob, matchesGlob } from "./fs/
 export { parseYamlSafe } from "./fs/yaml.js";
 export {
   existsSafe,
+  createGuardedAccess,
   createGuardedReader,
+  fileSizeSafe,
   readFileSafe,
   readJsonSafe,
   toPosix,
@@ -163,6 +185,7 @@ export {
   DEFAULT_IGNORES,
   MAX_FILES,
   MAX_FILE_BYTES,
+  type FileAccess,
   type FileReader,
   type WalkResult,
   type WalkSource,
@@ -170,6 +193,8 @@ export {
 export {
   changedSince,
   hashObjects,
+  headState,
+  type HeadState,
   isRepository,
   isSafeRef,
   listFiles,

@@ -9,6 +9,7 @@
 
 import { spawnSync } from "node:child_process";
 import type { GitInfo, GitRecentChange } from "../schema/types.js";
+import { SURFACE_FILE } from "../version.js";
 
 const MAX_BUFFER = 32 * 1024 * 1024;
 const RECENT_WINDOW_DAYS = 30;
@@ -120,10 +121,20 @@ const NUL_LIST = (stdout: string): string[] => stdout.split("\0").filter((p) => 
 /** `%cI` (strict ISO 8601 with offset), optionally followed by the commit's first path. */
 const COMMIT_HEADER = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2}))(?:\n([^]*))?$/;
 
-/** Paths changed between `ref` and the working tree, relative to `root`. */
+/**
+ * Paths changed between `ref` and the working tree, relative to `root`.
+ *
+ * `ref...HEAD` diffs from the merge base, which is what a reviewer means by
+ * "since main". A shallow clone - every CI runner by default - may not hold
+ * the merge base; then the two-dot form compares the two trees directly.
+ * That over-reports (commits that landed on `ref` after the branch point
+ * show up as changes) and never under-reports, which is the safe direction
+ * for anything that gates on the result.
+ */
 export function changedSince(root: string, ref: string): string[] | null {
   if (!isSafeRef(ref)) return null;
-  const r = runGit(root, ["diff", "--name-only", "-z", "--relative", `${ref}...HEAD`]);
+  let r = runGit(root, ["diff", "--name-only", "-z", "--relative", `${ref}...HEAD`]);
+  if (!r.ok) r = runGit(root, ["diff", "--name-only", "-z", "--relative", ref, "HEAD"]);
   if (!r.ok) return null;
   const working = runGit(root, ["diff", "--name-only", "-z", "--relative", "HEAD"]);
   const dirty = working.ok ? NUL_LIST(working.stdout) : [];
@@ -175,6 +186,33 @@ function recentChanges(root: string): GitRecentChange[] {
     }))
     .sort((a, b) => b.commits - a.commits || a.path.localeCompare(b.path))
     .slice(0, RECENT_LIMIT);
+}
+
+export interface HeadState {
+  /** Full commit hash of HEAD; absent on an unborn branch. */
+  commit?: string;
+  /** True when tracked files are modified or untracked files are present. */
+  dirty: boolean;
+}
+
+/**
+ * Where the working tree stands right now, cheaply: two git calls and no log
+ * walk. This is what a verification record is anchored to, so a claim can say
+ * not only *that* a command passed but *which code* it passed against.
+ * Returns null outside a repository or when git is unavailable.
+ */
+export function headState(root: string): HeadState | null {
+  if (!isRepository(root)) return null;
+  const head = runGit(root, ["rev-parse", "HEAD"]);
+  /* The surface document itself is excluded: `init` rewrites it just before
+     `verify` runs, and a regenerated document is not a change to the code
+     being proven. Everything else counts, untracked files included. */
+  const status = runGit(root, ["status", "--porcelain", "--", ".", `:!${SURFACE_FILE}`]);
+  const commit = head.ok ? head.stdout.trim() : "";
+  return {
+    ...(/^[0-9a-f]{7,40}$/.test(commit) ? { commit } : {}),
+    dirty: status.ok ? status.stdout.trim().length > 0 : false,
+  };
 }
 
 export function readGitInfo(root: string): GitInfo {
