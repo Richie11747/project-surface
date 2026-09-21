@@ -484,7 +484,7 @@ test("verify refuses a command that is not in the document", () => {
 });
 
 test("every command answers --help and unknown commands fail", () => {
-  for (const cmd of ["init", "inspect", "why", "map", "agents", "verify", "impact", "gate", "context", "diff", "doctor", "report", "mcp"]) {
+  for (const cmd of ["init", "inspect", "why", "map", "agents", "verify", "impact", "gate", "context", "session", "diff", "doctor", "report", "mcp"]) {
     const help = surface(".", cmd, "--help");
     assert.equal(help.code, 0, `${cmd} --help exited ${help.code}`);
     assert.ok(help.stdout.length > 20, `${cmd} --help printed nothing`);
@@ -615,6 +615,69 @@ test("agents blocks remember their options and every stale file is reported, not
     findings = JSON.parse(surface(root, "doctor", "--json").stdout).findings;
     const stale = findings.filter((f) => f.code === "AGENTS_MD_STALE").map((f) => f.subject.id).sort();
     assert.deepEqual(stale, ["AGENTS.md", "CLAUDE.md"]);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+/* ---- Sessions: brief, verify loop signals, delta context, session ------- */
+
+/** A fixture copy whose `test` script fails the same way every time, committed so the tree has a fingerprint. */
+function failingFixture() {
+  const root = freshCopy();
+  const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  manifest.scripts.test = 'node -e "console.error(\'expected 1 got 2\'); process.exit(1)"';
+  writeFileSync(join(root, "package.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+  const git = (...args) => {
+    const r = spawnSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], { cwd: root, encoding: "utf8", windowsHide: true });
+    return r.error ? null : r.status;
+  };
+  if (git("init", "-q", "-b", "main") === null) return { root, git: false };
+  git("add", ".");
+  git("commit", "-q", "-m", "one");
+  return { root, git: true };
+}
+
+test("verify warns before repeating a failed run on an unchanged tree, --if-changed skips it, and session shows both", (t) => {
+  const { root, git } = failingFixture();
+  try {
+    if (!git) return t.skip("git is not installed");
+    assert.equal(surface(root, "init").code, 0);
+
+    const first = surface(root, "verify", "--command", "test");
+    assert.equal(first.code, 2, first.stderr);
+    assert.doesNotMatch(first.stdout, /unchanged-rerun/);
+
+    const second = surface(root, "verify", "--command", "test", "--json");
+    assert.equal(second.code, 2, second.stderr);
+    const report = JSON.parse(second.stdout);
+    assert.deepEqual(report.signals.map((s) => s.kind), ["unchanged-rerun"]);
+    assert.equal(report.results.length, 1);
+
+    const skipped = surface(root, "verify", "--command", "test", "--if-changed");
+    assert.equal(skipped.code, 0, skipped.stderr);
+    assert.match(skipped.stdout, /unchanged-rerun/);
+    assert.match(skipped.stdout, /Not run/);
+    const skippedJson = JSON.parse(surface(root, "verify", "--command", "test", "--if-changed", "--json").stdout);
+    assert.equal(skippedJson.results.length, 0);
+    assert.equal(skippedJson.skipped[0].id, "test");
+
+    /* An edit changes the tree, so the run is allowed again. */
+    writeFileSync(join(root, "src", "server.ts"), `${readFileSync(join(root, "src", "server.ts"), "utf8")}\n// edit\n`);
+    const third = surface(root, "verify", "--command", "test", "--if-changed", "--json");
+    assert.equal(JSON.parse(third.stdout).results.length, 1);
+
+    const session = surface(root, "session");
+    assert.equal(session.code, 0, session.stderr);
+    assert.match(session.stdout, /#1\s+test\s+failed/);
+    assert.match(session.stdout, /#3\s+test\s+failed/);
+    assert.match(session.stdout, /unchanged-rerun/);
+    const sessionJson = JSON.parse(surface(root, "session", "--json").stdout);
+    assert.equal(sessionJson.attempts.length, 3);
+    assert.equal(sessionJson.failed, 3);
+
+    assert.match(surface(root, "session", "--reset").stdout, /Forgot the session/);
+    assert.match(surface(root, "session").stdout, /Nothing recorded yet/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

@@ -6,6 +6,18 @@ All notable changes to this project are documented here. This project adheres to
 
 ### Added
 
+- **Sessions - fewer tokens, no loops.** A machine-local, append-only ledger at
+  `.project/session.local.json` (already covered by the generated `.gitignore` pattern) records what the
+  tool ran and what it served, keyed to a working-tree fingerprint - the commit plus the content hash of
+  every path that differs from it. Three deterministic signals follow: `unchanged-rerun` (the last attempt
+  of this command failed on byte-identical code; running it again cannot come out differently),
+  `same-failure` (three attempts, the same failure signature, at least two different trees: the edits are
+  not reaching it) and `flapping` (pass and fail on the same tree: not proof). `surface verify` prints them
+  and `--if-changed` skips the pointless run with exit `0`; `surface_verify` over MCP declines it - `Not
+  run.`, not an error - unless `force: true`. New `surface session [--reset]` and the `surface://session`
+  resource. Core: `assessAttempt`, `assessHistory`, `failureSignature`, `workingTreeFingerprint`,
+  `readLedger` / `writeLedger`. What is and is not recorded: [docs/sessions.md](docs/sessions.md).
+
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),
   `carried` (an earlier run over byte-identical owner files), `stale`, `unproven` or `failing`; it lists
@@ -42,6 +54,9 @@ All notable changes to this project are documented here. This project adheres to
   a commit-anchored freshness loop) - with a section on why project-surface is not a context engine.
 
 ### Changed
+
+- `headState` and the working-tree fingerprint ignore `.project/*.local.json`, so a session file that is not
+  gitignored does not make every verification record `dirty`.
 
 - **`surface context` no longer reads file bodies unless `--content` is given.** The packer takes a
   `FileAccess` with a size probe and sizes files by `stat`; `createGuardedAccess` applies the same

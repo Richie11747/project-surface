@@ -209,6 +209,36 @@ them runs anything or remembers at which commit it did.
 
 ---
 
+## Sessions: fewer tokens, no loops
+
+An agent that runs the same failing test three times on unchanged code, or asks for the same files it was
+handed two calls ago, is spending tokens on a result it already has. The document cannot say so - it is
+committed and must not change when nothing about the project did - so a *session* does: a machine-local,
+append-only ledger of what the tool ran and what it served, keyed to a fingerprint of the working tree.
+
+```console
+$ surface verify --command test
+running test  npm run test
+  failed 592 ms
+
+$ surface verify --command test --if-changed
+  warn   unchanged-rerun [test]
+      test failed at attempt #1 and nothing in the working tree has changed since. Running it again will produce the same result.
+      Change something first, or pass force to run it anyway.
+
+Not run
+  skipped test
+```
+
+Over MCP, `surface_verify` declines the same run - `Not run.`, an answer rather than an error - unless
+`force: true`. Two more signals name the other loops: `same-failure` (three attempts, one failure
+signature, different edits: the edits are not reaching it) and `flapping` (pass and fail on identical
+code: not proof).
+
+What is recorded, and what deliberately is not: [docs/sessions.md](docs/sessions.md).
+
+---
+
 ## The trust model
 
 Every claim in the document carries a provenance tier. This is the spine of the whole project.
@@ -317,10 +347,11 @@ Three things are worth noticing.
 | `surface why <id>` | How a confidence score was derived, step by step, recomputed from the document |
 | `surface agents [--write file]` | Agent instructions generated from evidence, with provenance per line and a staleness fingerprint |
 | `surface map` | Ownership table: owner, contract, evidence, confidence |
-| `surface verify` | Run project commands and record the result as evidence; `--stale` re-proves what went stale, `--since <ref>` what a change touched |
+| `surface verify` | Run project commands and record the result as evidence; `--stale` re-proves what went stale, `--since <ref>` what a change touched, `--if-changed` skips a run that cannot come out differently |
 | `surface impact <paths>` | What a change affects, and what to run |
 | `surface gate --since <ref>` | Does the change carry proof? Per touched capability: proven at this commit, or not; `--verify` proves it first |
 | `surface context "<task>"` | Token-bounded context pack, with a reason and a trust label per file |
+| `surface session` | What this machine ran and served, and the loop signals that follow; `--reset` forgets it |
 | `surface diff --since <ref>` | What changed about the project surface |
 | `surface doctor` | Drift, stale claims, unproven behaviour |
 | `surface report` | Self-contained HTML report |
@@ -418,6 +449,7 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 - [docs/concepts.md](docs/concepts.md) - what a surface is and why
 - [docs/trust-model.md](docs/trust-model.md) - what a confidence number means
+- [docs/sessions.md](docs/sessions.md) - fewer tokens, no loops: what the session records and the three signals
 - [docs/cli.md](docs/cli.md) · [docs/mcp.md](docs/mcp.md) · [docs/declarations.md](docs/declarations.md) · [docs/adapters.md](docs/adapters.md) · [docs/comparison.md](docs/comparison.md)
 - [spec/v1/SPEC.md](spec/v1/SPEC.md) - the normative format, with [validated examples](spec/v1/examples/)
 - [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md) - what a document, generator, consumer or adapter must satisfy · [spec/VERSIONING.md](spec/VERSIONING.md) - what may change within `v1`
@@ -425,7 +457,7 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 ## Status
 
-`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, and a trust label on every file of a context pack - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
+`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, a trust label on every file of a context pack, and sessions - the ledger that declines a pointless re-run - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
 [`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`](https://richie11747.github.io/project-surface/spec/v1/surface.schema.json)
 is its `$id`. A generator in any language can target it; [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md)
 says what that takes.

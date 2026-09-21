@@ -11,7 +11,8 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { GENERATOR_VERSION, SURFACE_FILE } from "@project-surface/core";
+import { nowIso, readLedger, sessionSummary, GENERATOR_VERSION, SESSION_FILE, SURFACE_FILE } from "@project-surface/core";
+import type { LoopSignal, SessionSummary } from "@project-surface/core";
 import { SurfaceUnavailable, failure, loadSurface } from "./support.js";
 import type { ToolContext, ToolResult } from "./support.js";
 import { constraintsTool, findCapabilityTool, healthTool, overviewTool, whyTool } from "./tools/read.js";
@@ -80,6 +81,25 @@ export function createMcpServer(options: McpServerOptions): McpServer {
     );
   }
 
+  server.registerResource(
+    "session",
+    "surface://session",
+    {
+      title: "This session",
+      description: `What this machine has run and served (${SESSION_FILE}), and the loop signals that follow from it.`,
+      mimeType: "text/plain",
+    },
+    (uri: URL) => ({
+      contents: [
+        {
+          uri: uri.href,
+          mimeType: "text/plain",
+          text: renderSession(sessionSummary(readLedger(ctx.root, nowIso()))),
+        },
+      ],
+    })
+  );
+
   /* Also exposed as a resource: some clients let a user open resources
      directly, which suits a document meant to be human-readable. */
   server.registerResource(
@@ -110,6 +130,27 @@ export function createMcpServer(options: McpServerOptions): McpServer {
   );
 
   return server;
+}
+
+function renderSession(summary: SessionSummary): string {
+  const lines = [
+    `Session started ${summary.startedAt}${summary.treeKnown ? "" : " (tree state unknown outside git)"}`,
+    `Runs: ${summary.attempts} (${summary.failed} failed). Context packs: ${summary.packs}, ` +
+      `~${summary.tokensServed} tokens served, ~${summary.tokensSaved} not repeated.`,
+  ];
+  if (summary.signals.length > 0) {
+    lines.push("", "Signals:");
+    for (const s of summary.signals) lines.push(signalLine(s));
+  }
+  if (summary.frequent.length > 0) {
+    lines.push("", "Served most often:");
+    for (const f of summary.frequent) lines.push(`  ${f.path} x${f.times}`);
+  }
+  return lines.join("\n");
+}
+
+function signalLine(s: LoopSignal): string {
+  return `  [${s.severity}] ${s.kind} (${s.commandId}): ${s.message} ${s.advice}`;
 }
 
 export async function startMcpServer(options: McpServerOptions): Promise<void> {

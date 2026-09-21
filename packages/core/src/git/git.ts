@@ -9,7 +9,16 @@
 
 import { spawnSync } from "node:child_process";
 import type { GitInfo, GitRecentChange } from "../schema/types.js";
+import { fingerprintFiles } from "../model/freshness.js";
 import { SURFACE_FILE } from "../version.js";
+
+/**
+ * What a change to the working tree is measured against. The surface document
+ * is excluded because `init` rewrites it just before `verify` runs, and the
+ * session file because every run appends to it: neither is a change to the
+ * code being proven.
+ */
+const NOT_A_CHANGE: readonly string[] = [`:!${SURFACE_FILE}`, ":!.project/*.local.json"];
 
 const MAX_BUFFER = 32 * 1024 * 1024;
 const RECENT_WINDOW_DAYS = 30;
@@ -204,15 +213,39 @@ export interface HeadState {
 export function headState(root: string): HeadState | null {
   if (!isRepository(root)) return null;
   const head = runGit(root, ["rev-parse", "HEAD"]);
-  /* The surface document itself is excluded: `init` rewrites it just before
-     `verify` runs, and a regenerated document is not a change to the code
-     being proven. Everything else counts, untracked files included. */
-  const status = runGit(root, ["status", "--porcelain", "--", ".", `:!${SURFACE_FILE}`]);
+  /* Everything counts, untracked files included, except what NOT_A_CHANGE names. */
+  const status = runGit(root, ["status", "--porcelain", "--", ".", ...NOT_A_CHANGE]);
   const commit = head.ok ? head.stdout.trim() : "";
   return {
     ...(/^[0-9a-f]{7,40}$/.test(commit) ? { commit } : {}),
     dirty: status.ok ? status.stdout.trim().length > 0 : false,
   };
+}
+
+/**
+ * One fingerprint for the state of the working tree: the commit plus the
+ * content hash of every path that differs from it, untracked files included.
+ * Two runs with the same fingerprint saw byte-identical code, which is what
+ * lets the session ledger say that re-running a failed command cannot produce
+ * a different result. Null outside a repository, and the ledger then says so
+ * rather than guessing.
+ */
+export function workingTreeFingerprint(root: string): string | null {
+  if (!isRepository(root)) return null;
+  const head = runGit(root, ["rev-parse", "HEAD"]);
+  const commit = head.ok ? head.stdout.trim() : "";
+  if (!/^[0-9a-f]{7,40}$/.test(commit)) return null;
+  const status = runGit(root, ["status", "--porcelain", "-z", "--untracked-files=all", "--", ".", ...NOT_A_CHANGE]);
+  if (!status.ok) return null;
+  /* `-z` entries are `XY path`; a rename adds a second NUL-separated entry
+     for the original path, which is also a path worth hashing. */
+  const paths = status.stdout
+    .split("\0")
+    .filter((entry) => entry.length > 0)
+    .map((entry) => (/^[ MADRCU?!]{2} /.test(entry) ? entry.slice(3) : entry));
+  const hashes = hashObjects(root, paths);
+  const files = paths.map((path) => ({ path, hash: hashes.get(path) ?? "missing" }));
+  return fingerprintFiles([{ path: "HEAD", hash: commit }, ...files]);
 }
 
 export function readGitInfo(root: string): GitInfo {

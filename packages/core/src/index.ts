@@ -94,6 +94,35 @@ export {
   type SelectedCapability,
 } from "./evidence/select.js";
 
+// Session
+export {
+  MAX_ATTEMPTS,
+  MAX_PACKS,
+  appendAttempt,
+  appendPack,
+  assessAttempt,
+  assessHistory,
+  attemptFrom,
+  emptyLedger,
+  failureSignature,
+  normaliseOutput,
+  renderSessionLine,
+  servedIndex,
+  sessionSummary,
+  taskKey,
+  type Attempt,
+  type AttemptInput,
+  type LoopKind,
+  type LoopSignal,
+  type PackRecord,
+  type ServedEntry,
+  type ServedFile,
+  type SessionLedger,
+  type SessionSource,
+  type SessionSummary,
+} from "./session/ledger.js";
+export { readLedger, resetLedger, sessionPath, writeLedger } from "./session/store.js";
+
 // Analysis
 export { detectHealth, hasBlockingFindings, sortFindings, type HealthInput } from "./analysis/health.js";
 export {
@@ -202,6 +231,7 @@ export {
   runGit,
   showFileAtRef,
   stagedPaths,
+  workingTreeFingerprint,
   toIsoUtc,
 } from "./git/git.js";
 
@@ -233,6 +263,7 @@ export {
   GENERATOR_NAME,
   GENERATOR_VERSION,
   SPEC_VERSION,
+  SESSION_FILE,
   SURFACE_DIR,
   SURFACE_FILE,
 } from "./version.js";
