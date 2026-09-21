@@ -179,6 +179,22 @@ export function fileSizeSafe(root: string, relPath: string): number | null {
   }
 }
 
+/**
+ * Size and modification time of a file inside the project, uncapped. Null for
+ * anything that is not a regular file the root contains.
+ */
+export function fileStatSafe(root: string, relPath: string): FileStat | null {
+  const target = resolveInside(root, relPath);
+  if (target === null) return null;
+  try {
+    const stat = lstatSync(target);
+    if (!stat.isFile()) return null;
+    return { size: stat.size, key: `${stat.size}:${Math.round(stat.mtimeMs)}` };
+  } catch {
+    return null;
+  }
+}
+
 export function readJsonSafe<T>(root: string, relPath: string): T | null {
   const raw = readFileSafe(root, relPath);
   if (raw === null) return null;
@@ -195,10 +211,23 @@ export function existsSafe(root: string, relPath: string): boolean {
 
 export type FileReader = (relPath: string) => string | null;
 
+/** What `stat` reports: the byte size, and a key that changes when the file does. */
+export interface FileStat {
+  size: number;
+  /** `${size}:${mtimeMs}` from the file system, or a content hash from a bare reader. */
+  key: string;
+}
+
 /** A reader plus a size probe; see `createGuardedAccess`. */
 export interface FileAccess {
   size(relPath: string): number | null;
   read: FileReader;
+  /**
+   * Size and change key without a body read and without the size cap, so a
+   * pack can tell an oversize file from a missing one and a later pack can
+   * tell whether a served file moved.
+   */
+  stat?(relPath: string): FileStat | null;
 }
 
 /**
@@ -240,6 +269,10 @@ export function createGuardedAccess(root: string, files?: readonly string[]): Fi
     size: (relPath) => {
       const path = served(relPath);
       return path === null ? null : fileSizeSafe(root, path);
+    },
+    stat: (relPath) => {
+      const path = served(relPath);
+      return path === null ? null : fileStatSafe(root, path);
     },
     read: (relPath) => {
       const path = served(relPath);

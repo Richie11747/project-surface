@@ -22,7 +22,7 @@ export const COMMAND_SUMMARIES: CommandSummary[] = [
   { name: "verify", usage: "surface verify [--command id] [--stale] [--since <ref>] [--all] [--if-changed]", summary: "Run project commands and record the result as evidence." },
   { name: "impact", usage: "surface impact <paths...> | --staged | --since <ref>", summary: "Predict what a change affects." },
   { name: "gate", usage: "surface gate [--since <ref>] [--verify] [--strict] [--format markdown]", summary: "Does this change carry proof? Per touched capability: proven at this commit, or not." },
-  { name: "context", usage: "surface context <task> [--budget n]", summary: "Token-bounded context pack for a task." },
+  { name: "context", usage: "surface context <task> [--budget n] [--delta] [--all-constraints]", summary: "Token-bounded context pack for a task; --delta skips files this session already served." },
   { name: "session", usage: "surface session [--reset]", summary: "What this machine ran and served, and the loop signals that follow from it." },
   { name: "agents", usage: "surface agents [--write AGENTS.md] [--include-inferred]", summary: "Agent instructions generated from evidence, with provenance per line." },
   { name: "diff", usage: "surface diff [--since <ref>]", summary: "What changed about the project surface." },

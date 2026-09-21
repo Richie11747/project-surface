@@ -1,16 +1,21 @@
 /**
  * Shared plumbing for the MCP tools.
  *
- * Two decisions worth stating. The surface is re-read on every call rather than
- * cached, because an agent and a developer are usually working in the same
- * repository at the same time and a stale in-memory copy would silently
- * contradict the file on disk. And a missing document produces an instructive
- * message rather than an error object - the model can act on "run surface init",
- * but not on ENOENT.
+ * Two decisions worth stating. The surface on disk is the truth on every call:
+ * an agent and a developer are usually working in the same repository at the
+ * same time, and an in-memory copy that outlived the file would silently
+ * contradict it. So the document is stat-ed before every use and re-read the
+ * moment its size or mtime differs - the parse is skipped, never the check.
+ * The file allow-list behind `surface_context` follows the same rule, keyed to
+ * the document's mtime with a short ceiling, because walking a large tree on
+ * every call was the slowest thing the server did. And a missing document
+ * produces an instructive message rather than an error object - the model can
+ * act on "run surface init", but not on ENOENT.
  */
 
-import { readSurface, SURFACE_FILE } from "@project-surface/core";
-import type { Surface } from "@project-surface/core";
+import { statSync } from "node:fs";
+import { createGuardedAccess, readSurface, surfacePath, SURFACE_FILE } from "@project-surface/core";
+import type { FileAccess, Surface } from "@project-surface/core";
 
 export interface ToolContext {
   root: string;
@@ -48,9 +53,34 @@ export function failure(message: string): ToolResult {
 
 export class SurfaceUnavailable extends Error {}
 
+interface CachedSurface {
+  stamp: string;
+  surface: Surface;
+}
+
+const surfaces = new Map<string, CachedSurface>();
+
+/** `size:mtime` of the document, or null when it cannot be stat-ed. */
+function surfaceStamp(root: string): string | null {
+  try {
+    const stat = statSync(surfacePath(root));
+    return `${stat.size}:${Math.round(stat.mtimeMs)}`;
+  } catch {
+    return null;
+  }
+}
+
 export function loadSurface(ctx: ToolContext): Surface {
+  const stamp = surfaceStamp(ctx.root);
+  const cached = surfaces.get(ctx.root);
+  if (stamp !== null && cached && cached.stamp === stamp) return cached.surface;
+
   const { surface, errors } = readSurface(ctx.root);
-  if (surface) return surface;
+  if (surface) {
+    if (stamp !== null) surfaces.set(ctx.root, { stamp, surface });
+    return surface;
+  }
+  surfaces.delete(ctx.root);
   if (errors.length > 0) {
     throw new SurfaceUnavailable(
       `${SURFACE_FILE} exists but does not match the project-surface/v1 schema:\n` +
@@ -62,6 +92,31 @@ export function loadSurface(ctx: ToolContext): Surface {
     `This project has no ${SURFACE_FILE} yet, so there is nothing to query. ` +
       `Ask the user to run: surface init`
   );
+}
+
+interface CachedAccess {
+  stamp: string | null;
+  builtAt: number;
+  access: FileAccess;
+}
+
+const accesses = new Map<string, CachedAccess>();
+/** The allow-list is rebuilt at least this often even when the document is unchanged. */
+const ACCESS_TTL_MS = 30_000;
+
+/**
+ * The guarded reader for `surface_context`, reused while the document is
+ * unchanged. A file created after the walk is not served until the next
+ * rebuild - it is not in the document either, so nothing points at it.
+ */
+export function guardedAccess(ctx: ToolContext): FileAccess {
+  const stamp = surfaceStamp(ctx.root);
+  const cached = accesses.get(ctx.root);
+  const now = Date.now();
+  if (cached && cached.stamp === stamp && now - cached.builtAt < ACCESS_TTL_MS) return cached.access;
+  const access = createGuardedAccess(ctx.root);
+  accesses.set(ctx.root, { stamp, builtAt: now, access });
+  return access;
 }
 
 /** Compact one-line rendering used across several tools. */
