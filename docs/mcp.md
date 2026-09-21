@@ -39,9 +39,14 @@ reported as tool content with that instruction, not as a protocol error.
 | `surface_gate` | `paths?`, `since?`, `strict?` | The pull-request gate, from the document alone: per touched capability, `proven` at this commit, `carried`, `stale`, `unproven` or `failing`, plus violated rules and touched risks. Nothing is executed. |
 | `surface_context` | `task`, `budgetTokens?`, `includeContent?` | Token-bounded context pack with a reason per file, and on every file the provenance tier and freshness of the claim it belongs to. |
 | `surface_diff` | `since?` | What changed about the surface since a git ref. |
-| `surface_verify` | `commandId?` or `stale?: true`, `timeoutSeconds?` | Runs one recorded command, or with `stale: true` exactly the commands that re-prove every stale capability, and stores the result as evidence with the commit it ran against. Served through `surface mcp`, it then rebuilds the document so freshness is re-anchored in the same call. **Gated - see below.** |
+| `surface_verify` | `commandId?` or `stale?: true`, `timeoutSeconds?`, `force?` | Runs one recorded command, or with `stale: true` exactly the commands that re-prove every stale capability, and stores the result as evidence with the commit it ran against. Served through `surface mcp`, it then rebuilds the document so freshness is re-anchored in the same call. Declines - `Not run.`, not an error - to repeat a run that failed on an unchanged working tree unless `force: true`. **Gated - see below.** |
 
-A resource, `surface`, serves the full document as `application/json`.
+## Resources
+
+| | Name | Serves |
+|---|---|---|
+| Resource | `surface://session` | What this machine has run and served, and the loop signals that currently hold. |
+| Resource | `file://.project/surface.json` | The full document as `application/json`. |
 
 ## Execution gate
 

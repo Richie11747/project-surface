@@ -86,6 +86,12 @@ stale claim and one command re-prove it.
 | `--since <ref>` / `--staged` / `paths...` | Run what `surface impact` would list for that change set: the commands bound to affected evidence and the test command of each affected package. When no capability is known to depend on the paths, every test command runs, and the output says so. |
 | `--all` | Run every test, build and typecheck command. |
 | `--timeout <seconds>` | Per-command timeout. |
+| `--if-changed` | Skip a command whose last recorded attempt failed on a working tree with this exact fingerprint: nothing changed, so nothing can change. Exit `0`, with the reason printed. |
+
+Before the first command starts, and again after the results, the session ledger speaks: a run that would
+repeat a failure on an unchanged tree, the same failure across three different edits, or a command that
+both passed and failed on identical code. The rules, and where the record lives, are in
+[sessions.md](sessions.md).
 
 Every record carries the commit the working tree was at and whether the tree was dirty (the regenerated
 `.project/surface.json` itself does not count), so `inspect` and `why` can say *which code* a claim was
@@ -162,6 +168,13 @@ and a second run with an unchanged surface is a no-op.
 The fingerprint is what makes the file honest. Every later scan compares it with what the current surface
 would render, and `surface doctor` reports `AGENTS_MD_STALE` (warn) when they differ - a hand-written
 CLAUDE.md goes stale silently; this one cannot.
+
+### `surface session [--reset]`
+
+What this machine has run and served through the tool, from `.project/session.local.json`: every attempt
+with its status, exit code, tree fingerprint and commit; the loop signals that currently hold; the context
+packs and the tokens they did not repeat. `--reset` forgets the session. The file is machine-local and never
+part of the document - [sessions.md](sessions.md) says what is recorded and what is not.
 
 ### `surface diff [--since <ref>] [--format text|markdown] [--fail-on-change]`
 
