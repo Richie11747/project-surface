@@ -1,7 +1,7 @@
 {
   "name": "project-surface",
-  "version": "0.1.0",
-  "description": "Ask Claude what your project can do, where it lives, what proves it, and what a change will affect - from a verified, committed surface document.",
+  "version": "0.2.0",
+  "description": "Ask Claude what your project can do, where it lives, what proves it, and what a change will affect - from a verified, committed surface document. Starts every session with one screen of orientation, and declines to repeat a failed run on unchanged code.",
   "author": {
     "name": "project-surface contributors",
     "url": "https://github.com/Richie11747/project-surface"
@@ -9,7 +9,14 @@
   "homepage": "https://github.com/Richie11747/project-surface",
   "repository": "https://github.com/Richie11747/project-surface",
   "license": "Apache-2.0",
-  "keywords": ["mcp", "codebase", "context", "static-analysis"],
+  "keywords": [
+    "mcp",
+    "codebase",
+    "context",
+    "static-analysis",
+    "sessions"
+  ],
   "mcpServers": "./.mcp.json",
-  "commands": "./commands/"
+  "commands": "./commands/",
+  "hooks": "./hooks/hooks.json"
 }
