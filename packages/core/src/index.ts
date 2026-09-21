@@ -94,7 +94,44 @@ export {
   type SelectedCapability,
 } from "./evidence/select.js";
 
+// Session
+export {
+  MAX_ATTEMPTS,
+  MAX_PACKS,
+  appendAttempt,
+  appendPack,
+  assessAttempt,
+  assessHistory,
+  attemptFrom,
+  emptyLedger,
+  failureSignature,
+  normaliseOutput,
+  renderSessionLine,
+  servedIndex,
+  sessionSummary,
+  taskKey,
+  type Attempt,
+  type AttemptInput,
+  type LoopKind,
+  type LoopSignal,
+  type PackRecord,
+  type ServedFile,
+  type SessionLedger,
+  type SessionSource,
+  type SessionSummary,
+} from "./session/ledger.js";
+export { readLedger, resetLedger, sessionPath, writeLedger } from "./session/store.js";
+
 // Analysis
+export {
+  buildBrief,
+  renderBrief,
+  type Brief,
+  type BriefArea,
+  type BriefCare,
+  type BriefCommand,
+  type BriefRule,
+} from "./analysis/brief.js";
 export { detectHealth, hasBlockingFindings, sortFindings, type HealthInput } from "./analysis/health.js";
 export {
   analyzeImpact,
@@ -126,13 +163,21 @@ export {
   estimateTokensFromBytes,
   keywords,
   packContext,
+  rankCapabilities,
+  relevantConstraints,
+  sliceAround,
   DEFAULT_BUDGET_TOKENS,
+  SLICE_MAX_LINES,
   type ContextItem,
   type ContextPack,
+  type ContextRange,
   type ContextRole,
   type ContextTrust,
+  type OmittedItem,
   type PackOptions,
+  type RankedCapability,
   type ScoredCapability,
+  type ServedEntry,
 } from "./analysis/context.js";
 
 export {
@@ -178,6 +223,7 @@ export {
   createGuardedAccess,
   createGuardedReader,
   fileSizeSafe,
+  fileStatSafe,
   readFileSafe,
   readJsonSafe,
   toPosix,
@@ -186,6 +232,7 @@ export {
   MAX_FILES,
   MAX_FILE_BYTES,
   type FileAccess,
+  type FileStat,
   type FileReader,
   type WalkResult,
   type WalkSource,
@@ -202,6 +249,7 @@ export {
   runGit,
   showFileAtRef,
   stagedPaths,
+  workingTreeFingerprint,
   toIsoUtc,
 } from "./git/git.js";
 
@@ -233,6 +281,7 @@ export {
   GENERATOR_NAME,
   GENERATOR_VERSION,
   SPEC_VERSION,
+  SESSION_FILE,
   SURFACE_DIR,
   SURFACE_FILE,
 } from "./version.js";

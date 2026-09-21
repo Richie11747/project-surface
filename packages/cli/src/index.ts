@@ -25,6 +25,7 @@ type CommandRunner = (args: string[], options: GlobalOptions) => Promise<number>
 
 const COMMANDS: Record<string, () => Promise<{ run: CommandRunner }>> = {
   init: () => import("./commands/init.js"),
+  brief: () => import("./commands/brief.js"),
   inspect: () => import("./commands/inspect.js"),
   why: () => import("./commands/why.js"),
   agents: () => import("./commands/agents.js"),
@@ -33,6 +34,7 @@ const COMMANDS: Record<string, () => Promise<{ run: CommandRunner }>> = {
   impact: () => import("./commands/impact.js"),
   gate: () => import("./commands/gate.js"),
   context: () => import("./commands/context.js"),
+  session: () => import("./commands/session.js"),
   diff: () => import("./commands/diff.js"),
   doctor: () => import("./commands/doctor.js"),
   report: () => import("./commands/report.js"),

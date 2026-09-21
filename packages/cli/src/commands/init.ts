@@ -8,7 +8,7 @@
  */
 
 import { parseArgs } from "node:util";
-import { buildSurface, readSurface, writeSurface, SURFACE_FILE } from "@project-surface/core";
+import { buildSurface, isRepository, readSurface, runGit, writeSurface, SESSION_FILE, SURFACE_FILE } from "@project-surface/core";
 import { builtinAdapters } from "../adapters.js";
 import { GLOBAL_OPTIONS, type GlobalOptions } from "../context.js";
 import { bullet, heading, print, printJson, style } from "../output.js";
@@ -71,8 +71,13 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   );
   print("");
   print(style.dim(`  ${written}`));
+  /* The session file is machine-local. The tool never edits .gitignore - that
+     is a source file - so it says once when the pattern is missing. */
+  if (isRepository(options.root) && !runGit(options.root, ["check-ignore", "-q", SESSION_FILE]).ok) {
+    print(style.dim(`  Add .project/*.local.json to .gitignore: session state (${SESSION_FILE}) is machine-local.`));
+  }
   print("");
-  print(`Next: ${style.bold("surface inspect")} to see what was found.`);
+  print(`Next: ${style.bold("surface brief")} for one screen of orientation, ${style.bold("surface inspect")} for everything.`);
 
   return 0;
 }
