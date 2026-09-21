@@ -9,11 +9,22 @@
  * tools/verify.ts for the reasoning.
  */
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { nowIso, readLedger, sessionSummary, GENERATOR_VERSION, SESSION_FILE, SURFACE_FILE } from "@project-surface/core";
+import { z } from "zod";
+import {
+  buildBrief,
+  indexById,
+  nowIso,
+  readLedger,
+  renderBrief,
+  sessionSummary,
+  GENERATOR_VERSION,
+  SESSION_FILE,
+  SURFACE_FILE,
+} from "@project-surface/core";
 import type { LoopSignal, SessionSummary } from "@project-surface/core";
-import { SurfaceUnavailable, failure, loadSurface } from "./support.js";
+import { SurfaceUnavailable, describeCapability, failure, loadSurface } from "./support.js";
 import type { ToolContext, ToolResult } from "./support.js";
 import { constraintsTool, findCapabilityTool, healthTool, overviewTool, whyTool } from "./tools/read.js";
 import { contextTool, diffTool, gateTool, impactTool } from "./tools/analyze.js";
@@ -81,6 +92,81 @@ export function createMcpServer(options: McpServerOptions): McpServer {
     );
   }
 
+  /* A prompt costs nothing per turn - it is not in the tool list - and a
+     client that supports prompts can start a task with the brief already in
+     context, which is the cheapest orientation the server can offer. */
+  server.registerPrompt(
+    "orient",
+    {
+      title: "Orient in this repository",
+      description:
+        "One screen of what the project is, which commands are proven, which rules fail the build and where things live - " +
+        "then the call to make next. Pass a task to have it named.",
+      argsSchema: { task: z.string().optional().describe("What you are about to do, if known.") },
+    },
+    (args: { task?: string }) => {
+      let body: string;
+      try {
+        body = renderBrief(buildBrief(loadSurface(ctx)));
+      } catch (error) {
+        body = (error as Error).message;
+      }
+      const next = args.task
+        ? `Now call surface_context with task: ${JSON.stringify(args.task)} before reading any file.`
+        : "Before reading any file, call surface_context with the task in plain language.";
+      return { messages: [{ role: "user" as const, content: { type: "text" as const, text: `${body}\n\n${next}` } }] };
+    }
+  );
+
+  /* Also exposed as resources: some clients let a user open resources
+     directly, which suits a document meant to be human-readable, and a
+     single capability is small enough to attach whole. */
+  server.registerResource(
+    "capability",
+    new ResourceTemplate("surface://capability/{id}", {
+      list: () => {
+        try {
+          return {
+            resources: loadSurface(ctx).capabilities.map((c) => ({
+              uri: `surface://capability/${c.id}`,
+              name: c.id,
+              description: c.title,
+              mimeType: "text/plain",
+            })),
+          };
+        } catch {
+          return { resources: [] };
+        }
+      },
+    }),
+    {
+      title: "One capability",
+      description: "Owners, contract, evidence and trust for a single capability id.",
+      mimeType: "text/plain",
+    },
+    (uri: URL, variables: Record<string, string | string[]>) => {
+      const id = String(variables["id"] ?? "");
+      try {
+        const surface = loadSurface(ctx);
+        const capability = surface.capabilities.find((c) => c.id === id || c.aliases?.includes(id));
+        if (!capability) {
+          return { contents: [{ uri: uri.href, mimeType: "text/plain", text: `No capability with id ${id}.` }] };
+        }
+        const evidence = indexById(surface.evidence);
+        const detail = capability.evidence
+          .map((ref) => {
+            const entry = evidence.get(ref.id);
+            return `    ${entry?.path ?? ref.id} - status ${entry?.status ?? "unknown"}, linked by ${ref.link}`;
+          })
+          .join("\n");
+        const text = describeCapability(capability) + (detail ? `\n  evidence detail:\n${detail}` : "");
+        return { contents: [{ uri: uri.href, mimeType: "text/plain", text }] };
+      } catch (error) {
+        return { contents: [{ uri: uri.href, mimeType: "text/plain", text: (error as Error).message }] };
+      }
+    }
+  );
+
   server.registerResource(
     "session",
     "surface://session",
@@ -100,8 +186,6 @@ export function createMcpServer(options: McpServerOptions): McpServer {
     })
   );
 
-  /* Also exposed as a resource: some clients let a user open resources
-     directly, which suits a document meant to be human-readable. */
   server.registerResource(
     "surface",
     `file://${SURFACE_FILE}`,

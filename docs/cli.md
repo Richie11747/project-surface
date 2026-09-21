@@ -36,6 +36,14 @@ document is read first and verification results are carried forward, so a rescan
 | `--force` | Ignore the previous document. |
 | `--max-files <n>` | Cap the file walk (default in `packages/core/src/fs/walk.ts`). Truncation is reported as `FILE_SCAN_TRUNCATED`. |
 
+### `surface brief`
+
+One screen of orientation, meant to be read first: the stack and the counts, which commands are proven and
+at which commit, the rules at error severity and whether each is machine-checked, the paths that need
+approval, and where things live - capabilities grouped by the first segment of their id with the directory
+their owners share. Every line is a projection of a claim already in the document; nothing is added.
+The MCP `surface_overview` tool renders the same text, so a person and an agent read the same thing.
+
 ### `surface inspect [capability]`
 
 Without an argument: a summary of the project. With a capability id: its owners, contract, evidence,

@@ -124,6 +124,15 @@ export {
 export { readLedger, resetLedger, sessionPath, writeLedger } from "./session/store.js";
 
 // Analysis
+export {
+  buildBrief,
+  renderBrief,
+  type Brief,
+  type BriefArea,
+  type BriefCare,
+  type BriefCommand,
+  type BriefRule,
+} from "./analysis/brief.js";
 export { detectHealth, hasBlockingFindings, sortFindings, type HealthInput } from "./analysis/health.js";
 export {
   analyzeImpact,
@@ -155,6 +164,7 @@ export {
   estimateTokensFromBytes,
   keywords,
   packContext,
+  rankCapabilities,
   relevantConstraints,
   sliceAround,
   DEFAULT_BUDGET_TOKENS,
@@ -166,6 +176,7 @@ export {
   type ContextTrust,
   type OmittedItem,
   type PackOptions,
+  type RankedCapability,
   type ScoredCapability,
 } from "./analysis/context.js";
 

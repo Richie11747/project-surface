@@ -156,7 +156,7 @@ with the provenance on every line and inferred guesses left out. The block carri
 `surface doctor` reports it as stale the moment the surface changes underneath it. A hand-written CLAUDE.md
 cannot do that. This repository's own [CLAUDE.md](CLAUDE.md) is generated this way and checked in CI.
 
-Ten tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_gate`, `surface_context`, `surface_diff`, and `surface_verify`.
+Ten tools are exposed: `surface_overview`, `surface_find_capability`, `surface_why`, `surface_constraints`, `surface_health`, `surface_impact`, `surface_gate`, `surface_context`, `surface_diff`, and `surface_verify` - plus an `orient` prompt and per-capability resources that cost nothing per turn.
 
 Nine of them are strictly read-only. See [Trust and safety](#trust-and-safety) for the ninth, and
 [docs/mcp.md](docs/mcp.md) for the full tool reference. A Claude Code plugin and a GitHub Action live in
@@ -247,7 +247,9 @@ Files
 
 A file that does not fit the budget is sliced around the locator the document already holds for it rather
 than dropped, and the rules come filtered to the ones that can apply to the files in the pack, with the
-count left out. What is recorded, and what deliberately is not: [docs/sessions.md](docs/sessions.md).
+count left out. `surface brief` - one screen of proven commands, error-severity rules, paths needing
+approval and where things live - is the first thing to read, and the MCP `surface_overview` shows an agent
+the same text. What is recorded, and what deliberately is not: [docs/sessions.md](docs/sessions.md).
 
 ---
 
@@ -355,6 +357,7 @@ Three things are worth noticing.
 | Command | What it does |
 |---|---|
 | `surface init` | Detect the stack and write `.project/surface.json` |
+| `surface brief` | One screen of orientation: proven commands, error rules, paths needing care, where things live |
 | `surface inspect [capability]` | What the project does, and what proves it |
 | `surface why <id>` | How a confidence score was derived, step by step, recomputed from the document |
 | `surface agents [--write file]` | Agent instructions generated from evidence, with provenance per line and a staleness fingerprint |
@@ -469,7 +472,7 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 ## Status
 
-`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, a trust label on every file of a context pack, and sessions - the ledger that declines a pointless re-run and stops a context pack repeating itself - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
+`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, a trust label on every file of a context pack, and sessions - the ledger that declines a pointless re-run and stops a context pack repeating itself, with `surface brief` and a brief-by-default `surface_overview` - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
 [`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`](https://richie11747.github.io/project-surface/spec/v1/surface.schema.json)
 is its `$id`. A generator in any language can target it; [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md)
 says what that takes.

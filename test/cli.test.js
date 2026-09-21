@@ -484,7 +484,7 @@ test("verify refuses a command that is not in the document", () => {
 });
 
 test("every command answers --help and unknown commands fail", () => {
-  for (const cmd of ["init", "inspect", "why", "map", "agents", "verify", "impact", "gate", "context", "session", "diff", "doctor", "report", "mcp"]) {
+  for (const cmd of ["init", "brief", "inspect", "why", "map", "agents", "verify", "impact", "gate", "context", "session", "diff", "doctor", "report", "mcp"]) {
     const help = surface(".", cmd, "--help");
     assert.equal(help.code, 0, `${cmd} --help exited ${help.code}`);
     assert.ok(help.stdout.length > 20, `${cmd} --help printed nothing`);
@@ -637,6 +637,26 @@ function failingFixture() {
   git("commit", "-q", "-m", "one");
   return { root, git: true };
 }
+
+test("brief is one screen in text and a structured object in JSON", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    const text = surface(root, "brief");
+    assert.equal(text.code, 0, text.stderr);
+    assert.match(text.stdout, /^checkout-api - typescript/);
+    for (const heading of ["Commands", "Rules that fail the build", "Where things live", "Next"]) assert.ok(text.stdout.includes(heading), heading);
+    assert.match(text.stdout, /checkout\s+\d+\s+src\/checkout/);
+    assert.ok(text.stdout.length < 4000, `brief is ${text.stdout.length} chars`);
+
+    const json = JSON.parse(surface(root, "brief", "--json").stdout);
+    assert.equal(json.project.name, "checkout-api");
+    assert.ok(json.areas.some((a) => a.prefix === "checkout" && a.dir === "src/checkout"));
+    assert.equal(surface(root, "brief", "--bogus").code, 1);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 
 test("verify warns before repeating a failed run on an unchanged tree, --if-changed skips it, and session shows both", (t) => {
   const { root, git } = failingFixture();
