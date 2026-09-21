@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { packContext, relevantConstraints, sliceAround } from "../dist/index.js";
+import { packContext, rankCapabilities, relevantConstraints, sliceAround } from "../dist/index.js";
 
 /**
  * The context pack is sized without opening files unless content was asked
@@ -143,4 +143,19 @@ test("rules: error severity always; a scoped check only when it covers a pack pa
   const all = packContext(s, "handler", statAccess({ "src/a.ts": "x" }), { allConstraints: true });
   assert.equal(all.constraints.length, 4);
   assert.equal(all.constraintsOmitted, 0);
+});
+
+test("ranking: a whole word beats a prefix beats a substring; aliases and routes count; stopwords do not", () => {
+  const s = surface();
+  s.capabilities = [
+    cap("author.list", "derived", undefined),
+    cap("auth.verify", "derived", undefined, { title: "Verify a token" }),
+    cap("authentication", "derived", undefined, { aliases: ["login"] }),
+    cap("checkout.create", "derived", undefined, { route: { method: "POST", path: "/checkout" } }),
+  ];
+  assert.deepEqual(rankCapabilities(s, "auth").map((r) => r.capability.id), ["auth.verify", "authentication", "author.list"]);
+  assert.deepEqual(rankCapabilities(s, "login").map((r) => r.capability.id), ["authentication"]);
+  assert.deepEqual(rankCapabilities(s, "POST /checkout").map((r) => r.capability.id), ["checkout.create"]);
+  assert.deepEqual(rankCapabilities(s, "the a an").map((r) => r.capability.id).length, 4);
+  assert.deepEqual(rankCapabilities(s, "nothing-here"), []);
 });

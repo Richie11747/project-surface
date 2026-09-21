@@ -28,6 +28,18 @@ All notable changes to this project are documented here. This project adheres to
 - **Relevant rules.** The pack's constraints are every active rule at error severity plus the ones whose
   check globs or sources cover a file in the pack; `constraintsOmitted` counts the rest, and
   `--all-constraints` / `allConstraints: true` lists them. Core: `relevantConstraints`.
+- **`surface brief`** - one screen of orientation: proven commands with their commit, error-severity rules
+  and whether each is machine-checked, paths needing approval, and where things live grouped by the first
+  segment of the capability id with the directory the owners share. Core: `buildBrief`, `renderBrief`.
+- **`surface_overview` defaults to the brief.** `detail: "full"` restores the previous listing of every
+  claim; `format: "json"` returns the brief object or, with `full`, the whole document. The tool listing
+  itself is now size-tested, since every turn pays for it.
+- **MCP prompt `orient` and resource template `surface://capability/{id}`.** Neither is in the tool list,
+  so neither costs a token per turn; a client that supports prompts can start a task with the brief in
+  context, and a single capability is small enough to attach whole.
+- **One ranking.** `rankCapabilities` in core is what the context pack and `surface_find_capability` both
+  use: a whole-word match beats a prefix beats a substring, aliases and route paths count, and the same
+  query names the same capabilities in both tools.
 
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),
