@@ -168,6 +168,52 @@
       "confidence": 0.4
     },
     {
+      "id": "inventory.quote.any",
+      "title": "ANY inventory/quote",
+      "description": "HTTP endpoint declared in inventory/urls.py. The method is not determinable statically.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/urls.py",
+          "locator": "L8"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "http",
+        "any"
+      ],
+      "route": {
+        "method": "ANY",
+        "path": "inventory/quote"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "inventory/urls.py",
+            "locator": "L8"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
       "id": "inventory.release",
       "title": "release",
       "description": "Public function in inventory/reserve.py.",
@@ -351,6 +397,52 @@
           {
             "path": "inventory/reserve.py",
             "locator": "L57"
+          }
+        ],
+        "adapter": "python",
+        "observedAt": "2026-01-01T00:00:00Z"
+      },
+      "freshness": {
+        "status": "unknown",
+        "ownersFingerprint": "<normalised>",
+        "staleAfterDays": 14,
+        "reason": "Never verified."
+      },
+      "confidence": 0.7
+    },
+    {
+      "id": "inventory.search.any",
+      "title": "ANY ^inventory/search/",
+      "description": "HTTP endpoint declared in inventory/urls.py. The method is not determinable statically.",
+      "kind": "route",
+      "packageId": "root",
+      "owners": [
+        {
+          "path": "inventory/urls.py",
+          "locator": "L9"
+        }
+      ],
+      "contracts": [
+        {
+          "path": "docs/inventory.md"
+        }
+      ],
+      "evidence": [],
+      "environment": [],
+      "tags": [
+        "http",
+        "any"
+      ],
+      "route": {
+        "method": "ANY",
+        "path": "^inventory/search/"
+      },
+      "provenance": {
+        "tier": "derived",
+        "sources": [
+          {
+            "path": "inventory/urls.py",
+            "locator": "L9"
           }
         ],
         "adapter": "python",
@@ -555,7 +647,7 @@
     {
       "code": "LOW_CONFIDENCE_MAJORITY",
       "severity": "warn",
-      "message": "6 of 8 capabilities are low confidence: most of this surface is inference, not evidence.",
+      "message": "6 of 10 capabilities are low confidence: most of this surface is inference, not evidence.",
       "subject": {
         "kind": "project",
         "id": "capabilities"
@@ -582,6 +674,26 @@
       "subject": {
         "kind": "capability",
         "id": "inventory.main"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"inventory.quote.any\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "inventory.quote.any"
+      },
+      "remediation": "Add a test that imports the owner file, or declare existing evidence."
+    },
+    {
+      "code": "UNPROVEN_CAPABILITY",
+      "severity": "info",
+      "message": "Capability \"inventory.search.any\" has no test or build output proving it works.",
+      "subject": {
+        "kind": "capability",
+        "id": "inventory.search.any"
       },
       "remediation": "Add a test that imports the owner file, or declare existing evidence."
     },

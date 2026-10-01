@@ -6,6 +6,10 @@ All notable changes to this project are documented here. This project adheres to
 
 ### Added
 
+- **Python adapter**: Django `path("...", view)` and `re_path(...)` entries in a `urls.py` are
+  recognised as `ANY` routes. The method is not determinable statically and the description says so.
+  Covered by `fixtures/py-api` and a parser test.
+
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),
   `carried` (an earlier run over byte-identical owner files), `stale`, `unproven` or `failing`; it lists
