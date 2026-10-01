@@ -336,7 +336,7 @@ under `doctor --strict` - so CI can gate on it. Full reference: [docs/cli.md](do
 | Stack | Depth |
 |---|---|
 | TypeScript / JavaScript | Full. Compiler-API parse: package manifests, scripts, workspaces, exports, routes (Express, Fastify, Hono, Next.js App Router), env usage, and **import-graph test linking**. |
-| Python | Full. `pyproject.toml`, entry points, pytest config, public symbols, FastAPI/Flask route decorators, env usage, import-based test linking. |
+| Python | Full. `pyproject.toml`, entry points, pytest config, public symbols, FastAPI/Flask route decorators, Django `path`/`re_path` in `urls.py`, env usage, import-based test linking. |
 | Go | Structural. `go.mod`, packages, exported declarations, router registrations, env usage. Line-based rather than AST-based, and it marks the stack unavailable when the Go toolchain is absent. |
 | Rust | Structural. `Cargo.toml` (workspace members, binaries, `rust-version`), public items, axum / actix-web / rocket routes, env usage. A workspace member with a binary gets its own `cargo run -p <crate>` (and `--bin` for named targets). Integration tests are linked through their `use` lines (`import-graph`), whatever attribute marks them (`#[test]`, `#[tokio::test]`, `#[sqlx::test]`); inline `#[cfg(test)]` modules through their own file. Marks the stack unavailable without `cargo`. |
 | Anything else | Manifest-only. `Makefile`, `justfile` and `Taskfile` targets become commands; `.env.example` names become environment. **No capability is guessed** - an unrecognised project gets `NO_CAPABILITIES` and a pointer to declarations, never an empty document. |
