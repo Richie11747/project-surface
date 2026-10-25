@@ -17,6 +17,6 @@
     "@project-surface/adapter-typescript": "0.2.0",
     "@project-surface/core": "0.2.0",
     "@anthropic-ai/sdk": "^0.125.0",
-    "zod": "^4.6.2"
+    "zod": "^4.6.5"
   }
 }
