@@ -19,7 +19,7 @@
   "dependencies": {
     "@project-surface/adapter-sdk": "0.2.0",
     "@project-surface/core": "0.2.0",
-    "typescript": "^5.7.2"
+    "typescript": "^6.0.3"
   },
   "publishConfig": { "access": "public" }
 }
