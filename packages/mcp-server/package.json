@@ -30,7 +30,7 @@
     "node": ">=20.10.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@project-surface/core": "0.2.0",
     "zod": "^4.6.2"
   },
