@@ -17,6 +17,9 @@ All notable changes to this project are documented here. This project adheres to
   run.`, not an error - unless `force: true`. New `surface session [--reset]` and the `surface://session`
   resource. Core: `assessAttempt`, `assessHistory`, `failureSignature`, `workingTreeFingerprint`,
   `readLedger` / `writeLedger`. What is and is not recorded: [docs/sessions.md](docs/sessions.md).
+- **Python adapter**: Django `path("...", view)` and `re_path(...)` entries in a `urls.py` are
+  recognised as `ANY` routes. The method is not determinable statically and the description says so.
+  Covered by `fixtures/py-api` and a parser test.
 
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),

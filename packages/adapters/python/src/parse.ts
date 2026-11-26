@@ -8,7 +8,9 @@
  *
  * The cost is real and is reflected in the provenance. Structure that Python
  * states unambiguously at column zero - a top-level def, a route decorator, an
- * os.environ lookup - is read reliably and reported as `derived`. Anything that
+ * os.environ lookup - is read reliably and reported as `derived`. Django
+ * `path()` / `re_path()` entries in a `urls.py` are the one indented form
+ * that is still a fact on the line, so those are read too. Anything that
  * would need scope analysis is simply not claimed.
  */
 
@@ -19,6 +21,8 @@ const TOP_LEVEL_CLASS = /^class\s+([A-Za-z_][A-Za-z0-9_]*)\s*[(:]/;
 const DECORATOR_ROUTE = /^@([A-Za-z_][A-Za-z0-9_.]*)\.(get|post|put|patch|delete|head|options)\(\s*["']([^"']+)["']/;
 const DECORATOR_FLASK = /^@([A-Za-z_][A-Za-z0-9_.]*)\.route\(\s*["']([^"']+)["']/;
 const FLASK_METHODS = /methods\s*=\s*\[([^\]]*)\]/;
+/** Django `path("...", view)` / `re_path(...)`. `re_path` first so it is not eaten as `path`. */
+const DJANGO_ROUTE = /\b(?:re_path|path)\(\s*[rR]?["']([^"']+)["']/g;
 const ENV_PATTERNS = [
   /os\.environ\.get\(\s*["']([A-Z][A-Z0-9_]*)["']/g,
   /os\.environ\[\s*["']([A-Z][A-Z0-9_]*)["']\s*\]/g,
@@ -67,12 +71,18 @@ export interface ParsedPython {
 /* A `#` inside a string literal - a route path such as `"/#/anchor"` - is not a comment. */
 const stripComment = (line: string): string => stripLineComment(line, "#", "\"'");
 
-export function parsePython(content: string): ParsedPython {
+function isDjangoUrls(filePath: string): boolean {
+  const file = filePath.split("/").pop() ?? filePath;
+  return file === "urls.py";
+}
+
+export function parsePython(content: string, filePath = ""): ParsedPython {
   const lines = content.split("\n");
   const symbols: PySymbol[] = [];
   const routes: PyRoute[] = [];
   const imports: PyImport[] = [];
   const envNames = new Set<string>();
+  const readDjangoRoutes = isDjangoUrls(filePath);
 
   let pendingRoutes: PyRoute[] = [];
 
@@ -81,6 +91,12 @@ export function parsePython(content: string): ParsedPython {
     const line = stripComment(raw);
     const trimmed = line.trim();
     const atColumnZero = line.length > 0 && !/^\s/.test(line);
+
+    if (readDjangoRoutes) {
+      for (const match of matchAll(DJANGO_ROUTE, line)) {
+        if (match[1]) routes.push({ method: "ANY", path: match[1], line: lineNumber });
+      }
+    }
 
     if (atColumnZero) {
       const decorated = DECORATOR_ROUTE.exec(trimmed);
