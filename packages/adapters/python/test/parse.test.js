@@ -32,3 +32,34 @@ test("isPythonTest is a filename rule; conftest is excluded by the adapter, not 
   assert.equal(isPythonTest("tests/a_test.py"), true);
   assert.equal(isPythonTest("tests/conftest.py"), false);
 });
+
+test("parsePython reads path() and re_path() in a urls.py, including indented lines", () => {
+  const parsed = parsePython(
+    `
+urlpatterns = [
+    path("inventory/quote", views.quote_list),
+    re_path(r"^inventory/search/", views.search),
+    django.urls.path("inventory/legacy", views.legacy),
+]
+`,
+    "inventory/urls.py"
+  );
+
+  assert.deepEqual(parsed.routes, [
+    { method: "ANY", path: "inventory/quote", line: 3 },
+    { method: "ANY", path: "^inventory/search/", line: 4 },
+    { method: "ANY", path: "inventory/legacy", line: 5 },
+  ]);
+});
+
+test("parsePython ignores Django URL helpers outside urls.py", () => {
+  const parsed = parsePython(`
+from pathlib import Path
+
+def register():
+    path("not-a-route", views.quote_list)
+    re_path(r"^also-not-a-route/", views.search)
+`);
+
+  assert.deepEqual(parsed.routes, []);
+});

@@ -200,7 +200,7 @@ export const pythonAdapter: Adapter = {
     for (const path of candidates.slice(0, MAX_PARSED_FILES)) {
       const content = ctx.readFile(path);
       if (content === null) continue;
-      const file = parsePython(content);
+      const file = parsePython(content, path);
       if (isPythonTest(path)) tests.set(path, file);
       else parsed.set(path, file);
     }
@@ -247,7 +247,10 @@ export const pythonAdapter: Adapter = {
         capabilities.push({
           id: capabilityIdFromRoute(route.method, route.path),
           title: `${route.method} ${route.path}`,
-          description: `HTTP endpoint declared in ${path}.`,
+          description:
+            route.method === "ANY"
+              ? `HTTP endpoint declared in ${path}. The method is not determinable statically.`
+              : `HTTP endpoint declared in ${path}.`,
           kind: "route",
           packageId,
           owners: [source(path, `L${route.line}`)],
