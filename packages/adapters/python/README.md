@@ -7,7 +7,7 @@ Python adapter for [project-surface](https://github.com/Richie11747/project-surf
 | Project metadata, scripts, entry points | `pyproject.toml` |
 | Test configuration | pytest sections in `pyproject.toml` |
 | Public symbols | Module-level definitions |
-| HTTP routes | FastAPI and Flask route decorators |
+| HTTP routes | FastAPI and Flask route decorators; Django `path()` / `re_path()` in `urls.py` |
 | Environment variables | `os.environ[...]`, `os.environ.get(...)`, `os.getenv(...)` |
 | Evidence | Tests linked to the modules they import (`import-graph`) |
 
