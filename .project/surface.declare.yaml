@@ -65,7 +65,7 @@ capabilities:
     title: Git-aware file discovery that never follows a symlink out of the project
     owners: [packages/core/src/fs/walk.ts, packages/core/src/git/git.ts]
     contracts: [docs/concepts.md]
-    evidence: [packages/core/test/safety.test.js]
+    evidence: [packages/core/test/safety.test.js, packages/core/test/git.test.js]
     tags: [core, safety]
 
   # ---- Evidence and safety -------------------------------------------------
@@ -84,6 +84,22 @@ capabilities:
     contracts: [docs/cli.md]
     evidence: [packages/core/test/select.test.js]
     tags: [evidence]
+
+  # ---- The session ---------------------------------------------------------
+  - id: session.ledger
+    title: The session ledger - what was run and served, and the loop signals that follow
+    description: Machine-local, append-only record behind verify, context --delta and the MCP tools. Three deterministic signals keyed to the working-tree fingerprint; never part of the surface document.
+    owners: [packages/core/src/session/**]
+    contracts: [docs/sessions.md]
+    evidence: [packages/core/test/session.test.js, test/cli.test.js]
+    tags: [session]
+
+  - id: safety.redaction
+    title: Secret redaction for every captured command output
+    owners: [packages/core/src/redact.ts]
+    contracts: [docs/trust-model.md]
+    evidence: [packages/core/test/redact.test.js]
+    tags: [safety]
 
   - id: safety.redaction
     title: Secret redaction for every captured command output
@@ -247,6 +263,12 @@ capabilities:
     title: surface context
     owners: [packages/cli/src/commands/context.ts]
     contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
+  - id: cli.session
+    title: surface session
+    owners: [packages/cli/src/commands/session.ts]
+    contracts: [docs/sessions.md]
     evidence: [test/cli.test.js]
     tags: [cli]
   - id: cli.diff

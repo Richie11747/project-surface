@@ -16,3 +16,10 @@ export const SURFACE_FILE = ".project/surface.json";
 /** Human declarations. Always wins over inference. */
 export const DECLARATIONS_FILE = ".project/surface.declare.yaml";
 
+/**
+ * Machine-local session state: what was run, what was served, and what that
+ * says about the current run. Never committed - `.project/*.local.json` is the
+ * documented gitignore pattern - and never part of the surface document.
+ */
+export const SESSION_FILE = ".project/session.local.json";
+

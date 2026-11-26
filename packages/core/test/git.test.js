@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { changedSince, hashObjects, headState, readGitInfo, stagedPaths } from "../dist/index.js";
+import { changedSince, hashObjects, headState, readGitInfo, stagedPaths, workingTreeFingerprint } from "../dist/index.js";
 
 /*
  * The git queries on a throwaway repository: non-ASCII names, a scan rooted in
@@ -127,5 +127,41 @@ test("headState names the commit, treats a regenerated surface document as clean
     assert.equal(headState(mkdtempSync(join(tmpdir(), "project-surface-nogit-"))), null);
   } finally {
     rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("the working-tree fingerprint is stable until something changes, and null outside git", (t) => {
+  const root = repo();
+  if (root === null) return t.skip("git is not installed");
+  try {
+    const clean = workingTreeFingerprint(root);
+    assert.match(clean, /^[0-9a-f]{32}$/);
+    assert.equal(workingTreeFingerprint(root), clean);
+
+    /* The document and the session file are not changes to the code. */
+    mkdirSync(join(root, ".project"), { recursive: true });
+    writeFileSync(join(root, ".project", "surface.json"), "{}\n");
+    writeFileSync(join(root, ".project", "session.local.json"), "{}\n");
+    assert.equal(workingTreeFingerprint(root), clean);
+    assert.equal(headState(root).dirty, false);
+
+    writeFileSync(join(root, "top.txt"), "changed\n");
+    const edited = workingTreeFingerprint(root);
+    assert.notEqual(edited, clean);
+    writeFileSync(join(root, "untracked.txt"), "new\n");
+    const added = workingTreeFingerprint(root);
+    assert.notEqual(added, edited);
+    rmSync(join(root, "untracked.txt"));
+    assert.equal(workingTreeFingerprint(root), edited);
+    writeFileSync(join(root, "top.txt"), "top\n");
+    assert.equal(workingTreeFingerprint(root), clean);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+  const plain = mkdtempSync(join(tmpdir(), "project-surface-nogit-"));
+  try {
+    assert.equal(workingTreeFingerprint(plain), null);
+  } finally {
+    rmSync(plain, { recursive: true, force: true });
   }
 });

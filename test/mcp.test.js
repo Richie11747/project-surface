@@ -240,3 +240,42 @@ test("a missing document is reported as guidance, not a protocol error", async (
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("surface_verify declines to repeat a failed run on an unchanged tree unless forced", async (t) => {
+  const root = mkdtempSync(join(tmpdir(), "project-surface-mcp-loop-"));
+  cpSync(join(FIXTURES_DIR, "ts-api"), root, { recursive: true });
+  rmSync(join(root, "expected.surface.json"), { force: true });
+  const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  manifest.scripts.test = 'node -e "console.error(\'expected 1 got 2\'); process.exit(1)"';
+  writeFileSync(join(root, "package.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+  const git = (...args) =>
+    spawnSync("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], { cwd: root, encoding: "utf8", windowsHide: true });
+  if (git("init", "-q", "-b", "main").error) {
+    rmSync(root, { recursive: true, force: true });
+    return t.skip("git is not installed");
+  }
+  git("add", ".");
+  git("commit", "-q", "-m", "one");
+  spawnSync(process.execPath, [CLI, "init", "--root", root], { encoding: "utf8" });
+  const client = await connect(root, { PROJECT_SURFACE_ALLOW_EXEC: "1" });
+  try {
+    const first = textOf(await client.callTool({ name: "surface_verify", arguments: { commandId: "test", timeoutSeconds: 120 } }));
+    assert.match(first, /Result: failed/);
+    assert.match(first, /Session: 1 run, 1 failed/);
+
+    const declined = await client.callTool({ name: "surface_verify", arguments: { commandId: "test" } });
+    assert.notEqual(declined.isError, true);
+    assert.match(textOf(declined), /^Not run\./);
+    assert.match(textOf(declined), /nothing in the working tree has changed/);
+
+    const forced = textOf(await client.callTool({ name: "surface_verify", arguments: { commandId: "test", force: true, timeoutSeconds: 120 } }));
+    assert.match(forced, /Result: failed/);
+    assert.match(forced, /Session: 2 runs, 2 failed/);
+
+    const session = await client.readResource({ uri: "surface://session" });
+    assert.match(session.contents[0].text, /unchanged-rerun/);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});

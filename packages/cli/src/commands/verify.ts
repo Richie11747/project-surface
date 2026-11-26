@@ -22,7 +22,7 @@ import {
   resolveAllowedCommand,
   stagedPaths,
 } from "@project-surface/core";
-import type { Command, CommandSelection, Surface, VerificationRecord } from "@project-surface/core";
+import type { Command, CommandSelection, LoopSignal, Surface, VerificationRecord } from "@project-surface/core";
 import { GLOBAL_OPTIONS, requireSurface, CliError, type GlobalOptions } from "../context.js";
 import { bullet, heading, print, printJson, style } from "../output.js";
 import { recordRuns } from "../verification.js";
@@ -54,6 +54,7 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
       since: { type: "string" },
       staged: { type: "boolean", default: false },
       timeout: { type: "string" },
+      "if-changed": { type: "boolean", default: false },
     },
   });
 
@@ -65,7 +66,15 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
       /* Nothing stale, or nothing affected, is a clean result - CI runs
          `verify --stale` unconditionally and must not fail on a quiet day. */
       if (options.json) {
-        printJson({ selection: describe(selection), results: [], refreshed: [], stillStale: [], warnings: [] });
+        printJson({
+          selection: describe(selection),
+          results: [],
+          skipped: [],
+          signals: [],
+          refreshed: [],
+          stillStale: [],
+          warnings: [],
+        });
       } else {
         print(style.dim(`  ${selection.empty}`));
       }
@@ -80,8 +89,13 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   if (!options.json) announce(selection);
 
   const timeoutMs = typeof values.timeout === "string" ? Number(values.timeout) * 1000 : undefined;
-  const { results, rebuilt, warnings } = await recordRuns(options.root, surface, selection.commands, {
+  const { results, skipped, signals, rebuilt, warnings } = await recordRuns(options.root, surface, selection.commands, {
     ...(timeoutMs && Number.isFinite(timeoutMs) ? { timeoutMs } : {}),
+    ifChanged: values["if-changed"] === true,
+    onSignals: (before) => {
+      /* The session speaks once, before the first command starts. */
+      if (!options.json) printSignals(before);
+    },
     onStart: (command) => {
       if (!options.json) print(`${style.dim("running")} ${style.bold(command.id)}  ${command.run}`);
     },
@@ -102,10 +116,19 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
     printJson({
       selection: describe(selection),
       results: results.map((r) => ({ id: r.command.id, run: r.command.run, ...r.record })),
+      skipped: skipped.map((s) => ({ id: s.command.id, run: s.command.run, reason: s.signal.message })),
+      signals: [...signals.before, ...signals.after],
       refreshed,
       stillStale,
       warnings,
     });
+  } else if (results.length === 0) {
+    /* Everything was skipped: the ledger had the answer already. */
+    printSignals(signals.before);
+    print(heading("Not run"));
+    for (const { command } of skipped) print(`  ${style.dim("skipped")} ${command.id}`);
+    print("");
+    print(style.dim("  Nothing changed since these last failed. Edit something, or run without --if-changed."));
   } else {
     print("");
     print(heading("Recorded"));
@@ -123,12 +146,28 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
       print(`  ${style.green(String(refreshed.length))} of ${watched.length} ${noun} ${state}`);
       for (const id of stillStale) print(bullet(`${id} ${style.dim("- still stale: its commands did not pass")}`));
     }
+    for (const { command } of skipped) print(`  ${style.dim("skipped")} ${command.id} ${style.dim("- unchanged since it last failed")}`);
     for (const w of warnings) print(style.yellow(`  ${w}`));
+    if (signals.after.length > 0) {
+      print("");
+      printSignals(signals.after);
+    }
     print("");
     print(style.dim("  Capability confidence and freshness updated. See: surface inspect"));
   }
 
   return results.some((r) => r.record.status === "failed") ? 2 : 0;
+}
+
+/** A loop signal reads like a health finding: severity, kind, then the reason and what to do. */
+function printSignals(signals: readonly LoopSignal[]): void {
+  for (const signal of signals) {
+    const colour = signal.severity === "warn" ? style.yellow : style.dim;
+    print(`  ${colour(signal.severity.padEnd(6))} ${style.bold(signal.kind)} ${style.dim(`[${signal.commandId}]`)}`);
+    print(`      ${signal.message}`);
+    print(style.dim(`      ${signal.advice}`));
+  }
+  if (signals.length > 0) print("");
 }
 
 function select(surface: Surface, root: string, values: Record<string, unknown>, positionals: string[]): Selection {

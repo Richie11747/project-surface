@@ -20,14 +20,23 @@
 
 import { z } from "zod";
 import {
+  appendAttempt,
+  assessAttempt,
+  assessHistory,
+  attemptFrom,
   commandsForStale,
   headState,
   nowIso,
+  readLedger,
+  renderSessionLine,
   resolveAllowedCommand,
   runCommand,
+  sessionSummary,
+  workingTreeFingerprint,
+  writeLedger,
   writeSurface,
 } from "@project-surface/core";
-import type { Command, Surface, VerificationRecord } from "@project-surface/core";
+import type { Command, LoopSignal, Surface, VerificationRecord } from "@project-surface/core";
 import { failure, loadSurface, text } from "../support.js";
 import type { ToolContext, ToolResult } from "../support.js";
 
@@ -37,6 +46,7 @@ interface VerifyArgs {
   commandId?: string;
   stale?: boolean;
   timeoutSeconds?: number;
+  force?: boolean;
 }
 
 export const verifyTool = {
@@ -46,7 +56,8 @@ export const verifyTool = {
     "Run one of the project commands already recorded in the surface and store the result as evidence, " +
     "or pass stale: true to re-run exactly the commands that prove every capability whose owner files " +
     "changed since it was last verified. Only commands present in the surface document can be run; " +
-    "arbitrary shell strings are not accepted. Requires the operator to have enabled execution.",
+    "arbitrary shell strings are not accepted. Requires the operator to have enabled execution. " +
+    "Declines to repeat a run that failed on an unchanged working tree unless force is set.",
   inputSchema: {
     commandId: z
       .string()
@@ -59,6 +70,10 @@ export const verifyTool = {
         "Re-prove every stale capability: runs the commands its evidence was recorded from, then re-anchors freshness. Ignored when commandId is given."
       ),
     timeoutSeconds: z.number().int().min(1).max(900).optional(),
+    force: z
+      .boolean()
+      .optional()
+      .describe("Run even though the session shows the last attempt failed on this exact working tree."),
   },
   async handler(args: VerifyArgs, ctx: ToolContext): Promise<ToolResult> {
     const surface = loadSurface(ctx);
@@ -98,6 +113,22 @@ export const verifyTool = {
     /* Read once, before anything runs, so the record names the tree the
        commands actually saw. */
     const head = headState(ctx.root);
+    const tree = workingTreeFingerprint(ctx.root);
+    let ledger = readLedger(ctx.root, now);
+
+    /* The session ledger knows what the last run on this exact tree produced.
+       Repeating a failed run on byte-identical code cannot produce a different
+       result, so it is declined - not as an error, as an answer. */
+    const before = commands.flatMap((command) => assessAttempt(ledger, attemptFrom("mcp", command, tree)));
+    const unchanged = before.filter((s) => s.kind === "unchanged-rerun");
+    if (unchanged.length > 0 && !args.force) {
+      return text(
+        ["Not run.", ...unchanged.flatMap((s) => [s.message, s.advice]), "", renderSessionLine(sessionSummary(ledger))].join(
+          "\n"
+        )
+      );
+    }
+
     const results: Array<{ command: Command; record: VerificationRecord }> = [];
     for (const command of commands) {
       const observed = runCommand(ctx.root, command, {
@@ -108,7 +139,10 @@ export const verifyTool = {
         ? { ...observed, ...(head.commit ? { commit: head.commit } : {}), dirty: head.dirty }
         : observed;
       results.push({ command, record });
+      ledger = appendAttempt(ledger, attemptFrom("mcp", command, tree, record), now).ledger;
+      writeLedger(ctx.root, ledger);
     }
+    const after: LoopSignal[] = commands.flatMap((command) => assessHistory(ledger, attemptFrom("mcp", command, tree)));
 
     const updated: Surface = {
       ...surface,
@@ -182,7 +216,13 @@ export const verifyTool = {
       lines.push("");
     }
 
+    for (const signal of after) {
+      lines.push(`${signal.severity === "warn" ? "Warning" : "Note"} (${signal.kind}): ${signal.message}`);
+      lines.push(`  ${signal.advice}`);
+    }
+    if (after.length > 0) lines.push("");
     lines.push(rebuildNote);
+    lines.push(renderSessionLine(sessionSummary(ledger)));
     return text(lines.join("\n"));
   },
 };
