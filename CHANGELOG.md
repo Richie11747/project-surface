@@ -6,6 +6,9 @@ All notable changes to this project are documented here. This project adheres to
 
 ### Added
 
+- **Python adapter**: Django `path("...", view)` and `re_path(...)` entries in a `urls.py` are
+  recognised as `ANY` routes. The method is not determinable statically and the description says so.
+  Covered by `fixtures/py-api` and a parser test.
 - **Sessions - fewer tokens, no loops.** A machine-local, append-only ledger at
   `.project/session.local.json` (already covered by the generated `.gitignore` pattern) records what the
   tool ran and what it served, keyed to a working-tree fingerprint - the commit plus the content hash of
@@ -40,10 +43,9 @@ All notable changes to this project are documented here. This project adheres to
 - **One ranking.** `rankCapabilities` in core is what the context pack and `surface_find_capability` both
   use: a whole-word match beats a prefix beats a substring, aliases and route paths count, and the same
   query names the same capabilities in both tools.
-- **Python adapter**: Django `path("...", view)` and `re_path(...)` entries in a `urls.py` are
-  recognised as `ANY` routes. The method is not determinable statically and the description says so.
-  Covered by `fixtures/py-api` and a parser test.
-
+- **Claude Code plugin:** a `SessionStart` hook that runs `surface brief` into the session's context, and
+  the MCP server is now the CLI-hosted one (`surface mcp`), which can rebuild the document after a
+  verification.
 - **`surface gate` - proof-carrying pull requests.** For every capability a change touches (`--since <ref>`,
   `--staged` or paths), the gate says what its evidence describes: `proven` (recorded at this commit),
   `carried` (an earlier run over byte-identical owner files), `stale`, `unproven` or `failing`; it lists

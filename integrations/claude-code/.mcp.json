@@ -2,7 +2,10 @@
   "mcpServers": {
     "project-surface": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/../../packages/mcp-server/dist/bin.js"]
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/../../packages/cli/dist/index.js",
+        "mcp"
+      ]
     }
   }
 }
