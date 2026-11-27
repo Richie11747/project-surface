@@ -30,7 +30,7 @@ reported as tool content with that instruction, not as a protocol error.
 
 | Tool | Input | Returns |
 |---|---|---|
-| `surface_overview` | `format?: "text" \| "json"` | Project name, stacks, packages, counts, health summary. |
+| `surface_overview` | `detail?: "brief" \| "full"`, `format?: "text" \| "json"` | Call this first. `brief` (default) is one screen: proven commands, error-severity rules, paths needing approval, and where things live grouped by area - the same text `surface brief` prints. `full` lists every claim; with `format: "json"` it is the whole document. |
 | `surface_find_capability` | `query`, `limit?` | Capabilities matching an id, route path or plain description - with owners, contracts, evidence and trust. |
 | `surface_why` | `id`, `format?` | How a claim's confidence was derived: sources, evidence and its outcome, promotion, freshness, and each arithmetic step. Recomputed from the document and checked against the recorded score. |
 | `surface_constraints` | `includeStale?` | Active constraints and their severity. |
@@ -41,10 +41,15 @@ reported as tool content with that instruction, not as a protocol error.
 | `surface_diff` | `since?` | What changed about the surface since a git ref. |
 | `surface_verify` | `commandId?` or `stale?: true`, `timeoutSeconds?`, `force?` | Runs one recorded command, or with `stale: true` exactly the commands that re-prove every stale capability, and stores the result as evidence with the commit it ran against. Served through `surface mcp`, it then rebuilds the document so freshness is re-anchored in the same call. Declines - `Not run.`, not an error - to repeat a run that failed on an unchanged working tree unless `force: true`. **Gated - see below.** |
 
-## Resources
+## Prompt and resources
+
+These cost nothing per turn - none of them is in the tool list - and a client that supports them can
+orient before the first tool call.
 
 | | Name | Serves |
 |---|---|---|
+| Prompt | `orient` (`task?`) | The brief as a user message, followed by the call to make next - `surface_context` with the task, if one was given. |
+| Resource | `surface://capability/{id}` | One capability: owners with locators, contracts, evidence and its status, trust. The template lists every id. |
 | Resource | `surface://session` | What this machine has run and served, and the loop signals that currently hold. |
 | Resource | `file://.project/surface.json` | The full document as `application/json`. |
 

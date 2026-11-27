@@ -25,6 +25,7 @@ type CommandRunner = (args: string[], options: GlobalOptions) => Promise<number>
 
 const COMMANDS: Record<string, () => Promise<{ run: CommandRunner }>> = {
   init: () => import("./commands/init.js"),
+  brief: () => import("./commands/brief.js"),
   inspect: () => import("./commands/inspect.js"),
   why: () => import("./commands/why.js"),
   agents: () => import("./commands/agents.js"),

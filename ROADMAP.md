@@ -20,6 +20,7 @@ not on the list. Items link to issues where one exists; a checked box means it i
 - [x] Context packs carry a trust label per file and are sized without reading bodies
 - [x] `surface gate` - proof-carrying pull requests: per touched capability, proven at the commit under review or not; the GitHub Action posts the receipt and can fail on it
 - [x] Sessions: a machine-local ledger of what was run and served, keyed to a working-tree fingerprint; `verify` and `surface_verify` decline to repeat a failure on unchanged code, `same-failure` and `flapping` name the other two loops, and context packs stop repeating files the session already served
+- [x] `surface brief` and a brief-by-default `surface_overview`; the `orient` prompt and per-capability resources over MCP; one ranking shared by the context pack and `find_capability`
 
 ## Next
 

@@ -175,35 +175,90 @@ function toAccess(files: FileAccess | FileReader): FileAccess {
 
 const FRESHNESS_ORDER: Record<Freshness["status"], number> = { fresh: 0, unknown: 1, stale: 2 };
 
-function scoreCapability(
-  capability: Surface["capabilities"][number],
-  terms: string[]
-): { score: number; matched: string[] } {
+export interface RankedCapability {
+  capability: Capability;
+  score: number;
+  matched: string[];
+  reason: string;
+}
+
+/**
+ * How well one term matches one field. A whole word beats a prefix beats a
+ * substring, so "auth" prefers `auth.verify-token` over `author`.
+ */
+function termScore(term: string, text: string): number {
+  if (text.length === 0) return 0;
+  const words = text.split(/[^a-z0-9]+/);
+  if (words.includes(term)) return 3;
+  if (words.some((w) => w.startsWith(term))) return 2;
+  return text.includes(term) ? 1 : 0;
+}
+
+function scoreCapability(capability: Capability, terms: string[]): { score: number; matched: string[] } {
   if (terms.length === 0) return { score: capability.confidence, matched: [] };
 
-  /* Lower-cased once here, not once per term per field. */
+  /* Lower-cased once here, not once per term per field. Each field has a
+     weight; a term takes the best-scoring field only, so one word does not
+     count five times for appearing in id, title and path. */
+  const route = capability.route ? `${capability.route.method ?? ""} ${capability.route.path}` : "";
   const haystacks: Array<[string, number]> = [
-    [capability.id.toLowerCase(), 3],
-    [capability.title.toLowerCase(), 3],
-    [(capability.description ?? "").toLowerCase(), 1],
-    [capability.tags.join(" ").toLowerCase(), 2],
-    [capability.owners.map((o) => o.path).join(" ").toLowerCase(), 2],
+    [capability.id.toLowerCase(), 1],
+    [capability.title.toLowerCase(), 1],
+    [(capability.aliases ?? []).join(" ").toLowerCase(), 1],
+    [route.toLowerCase(), 1],
+    [capability.tags.join(" ").toLowerCase(), 0.75],
+    [capability.owners.map((o) => o.path).join(" ").toLowerCase(), 0.75],
+    [(capability.description ?? "").toLowerCase(), 0.5],
   ];
 
   let score = 0;
   const matched: string[] = [];
   for (const term of terms) {
-    for (const [text, weight] of haystacks) {
-      if (text.includes(term)) {
-        score += weight;
-        matched.push(term);
-        break;
-      }
+    let best = 0;
+    for (const [text, weight] of haystacks) best = Math.max(best, termScore(term, text) * weight);
+    if (best > 0) {
+      score += best;
+      matched.push(term);
     }
   }
   /* Confidence breaks ties: between two equally relevant capabilities, prefer
      the one we actually have evidence for. */
   return { score: score + capability.confidence, matched: [...new Set(matched)] };
+}
+
+/**
+ * The one ranking every tool uses for "which capabilities does this text
+ * name": the context pack, `find_capability`, and anything else that takes a
+ * query. Keyword matching over the document, by design - see the header.
+ */
+export function rankCapabilities(
+  surface: Surface,
+  query: string,
+  options: { limit?: number } = {}
+): RankedCapability[] {
+  const terms = keywords(query);
+  const freshnessOf = (c: Capability): Freshness["status"] => c.freshness?.status ?? "unknown";
+  const ranked = surface.capabilities
+    .map((capability) => {
+      const { score, matched } = scoreCapability(capability, terms);
+      return {
+        capability,
+        score,
+        matched,
+        reason:
+          matched.length > 0 ? `Matches: ${matched.join(", ")}.` : "No keyword match; included by confidence ranking.",
+      };
+    })
+    .filter((r) => terms.length === 0 || r.score > r.capability.confidence)
+    /* Equal relevance and equal confidence: a claim whose proof still holds
+       beats one that was never proven, which beats one whose proof went stale. */
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        FRESHNESS_ORDER[freshnessOf(a.capability)] - FRESHNESS_ORDER[freshnessOf(b.capability)] ||
+        a.capability.id.localeCompare(b.capability.id)
+    );
+  return options.limit === undefined ? ranked : ranked.slice(0, options.limit);
 }
 
 /* ---- Slicing ------------------------------------------------------------ */
@@ -297,30 +352,7 @@ export function packContext(
   const budgetTokens = options.budgetTokens ?? DEFAULT_BUDGET_TOKENS;
   const maxCapabilities = options.maxCapabilities ?? 8;
   const freshnessOf = (c: Capability): Freshness["status"] => c.freshness?.status ?? "unknown";
-  const terms = keywords(task);
-
-  const ranked = surface.capabilities
-    .map((capability) => {
-      const { score, matched } = scoreCapability(capability, terms);
-      return {
-        capability,
-        score,
-        reason:
-          matched.length > 0
-            ? `Matches: ${matched.join(", ")}.`
-            : "No keyword match; included by confidence ranking.",
-      };
-    })
-    .filter((r) => terms.length === 0 || r.score > r.capability.confidence)
-    /* Equal relevance and equal confidence: a claim whose proof still holds
-       beats one that was never proven, which beats one whose proof went stale. */
-    .sort(
-      (a, b) =>
-        b.score - a.score ||
-        FRESHNESS_ORDER[freshnessOf(a.capability)] - FRESHNESS_ORDER[freshnessOf(b.capability)] ||
-        a.capability.id.localeCompare(b.capability.id)
-    )
-    .slice(0, maxCapabilities);
+  const ranked = rankCapabilities(surface, task, { limit: maxCapabilities });
 
   const evidenceById = indexById(surface.evidence);
   const items: ContextItem[] = [];

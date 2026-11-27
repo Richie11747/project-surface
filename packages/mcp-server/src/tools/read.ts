@@ -5,7 +5,7 @@
  */
 
 import { z } from "zod";
-import { explainClaim, indexById } from "@project-surface/core";
+import { buildBrief, explainClaim, indexById, rankCapabilities, renderBrief } from "@project-surface/core";
 import { describeCapability, json, loadSurface, repoData, text, trustNote } from "../support.js";
 import type { ToolContext, ToolResult } from "../support.js";
 
@@ -13,11 +13,20 @@ export const overviewTool = {
   name: "surface_overview",
   title: "Project overview",
   description:
-    "Understand the project as a whole: what it is, which stacks it uses, which commands actually run it, " +
-    "what rules apply, and which environment variables it needs. Call this before exploring files.",
-  inputSchema: { format: z.enum(["text", "json"]).optional() },
-  handler(args: { format?: "text" | "json" }, ctx: ToolContext): ToolResult {
+    "Call this first. One screen of orientation: what the project is, which commands are proven to run it, " +
+    "which rules fail the build, which paths need approval, and where things live. " +
+    "Pass detail: full for every claim in the document.",
+  inputSchema: {
+    detail: z.enum(["brief", "full"]).optional().describe("brief (default) fits one screen; full lists every claim."),
+    format: z.enum(["text", "json"]).optional(),
+  },
+  handler(args: { detail?: "brief" | "full"; format?: "text" | "json" }, ctx: ToolContext): ToolResult {
     const surface = loadSurface(ctx);
+    if (args.detail !== "full") {
+      const brief = buildBrief(surface);
+      if (args.format === "json") return json(brief);
+      return text(`${renderBrief(brief)}\n\n${trustNote()}`);
+    }
     if (args.format === "json") return json(surface);
 
     const lines = [
@@ -70,31 +79,21 @@ export const findCapabilityTool = {
     const needle = args.query.toLowerCase().trim();
     const limit = args.limit ?? 5;
 
-    const scored = surface.capabilities
-      .map((c) => {
-        const haystack = `${c.id} ${c.title} ${c.description ?? ""} ${c.tags.join(" ")} ${c.owners.map((o) => o.path).join(" ")}`.toLowerCase();
-        let score = 0;
-        if (c.id === needle) score += 100;
-        if (c.id.includes(needle)) score += 20;
-        if (haystack.includes(needle)) score += 10;
-        for (const word of needle.split(/\s+/).filter((w) => w.length > 2)) {
-          if (haystack.includes(word)) score += 3;
-        }
-        return { c, score: score + c.confidence };
-      })
-      .filter((s) => s.score > 1)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
+    /* An exact id wins outright; otherwise the same ranking the context pack
+       uses, so the two tools never disagree about what a query names. */
+    const exact = surface.capabilities.filter((c) => c.id === needle || c.aliases?.includes(needle));
+    const ranked = rankCapabilities(surface, args.query).map((r) => r.capability);
+    const scored = [...exact, ...ranked.filter((c) => !exact.includes(c))].slice(0, limit);
 
     if (scored.length === 0) {
-      return text(
-        `No capability matches "${args.query}".\n` +
-          `Known capabilities: ${surface.capabilities.map((c) => c.id).join(", ") || "none"}`
-      );
+      const ids = surface.capabilities.map((c) => c.id);
+      const shown = ids.slice(0, 25);
+      const more = ids.length > shown.length ? `, ...and ${ids.length - shown.length} more (surface_overview detail: full)` : "";
+      return text(`No capability matches "${args.query}".\nKnown capabilities: ${shown.join(", ") || "none"}${more}`);
     }
 
     const evidenceById = indexById(surface.evidence);
-    const blocks = scored.map(({ c }) => {
+    const blocks = scored.map((c) => {
       const evidence = c.evidence
         .map((ref) => {
           const entry = evidenceById.get(ref.id);

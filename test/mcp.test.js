@@ -85,6 +85,14 @@ test("read-only tools answer from the document", async () => {
     const overview = textOf(await client.callTool({ name: "surface_overview", arguments: {} }));
     assert.match(overview, /checkout-api/);
     assert.match(overview, /typescript/);
+    /* Brief by default: one screen, areas rather than every claim. */
+    assert.match(overview, /Where things live/);
+    assert.doesNotMatch(overview, /Capabilities:\n/);
+    const full = textOf(await client.callTool({ name: "surface_overview", arguments: { detail: "full" } }));
+    assert.match(full, /Capabilities:\n/);
+    assert.match(full, /checkout\.get/);
+    const briefJson = JSON.parse(textOf(await client.callTool({ name: "surface_overview", arguments: { format: "json" } })));
+    assert.ok(Array.isArray(briefJson.areas));
 
     const found = textOf(await client.callTool({ name: "surface_find_capability", arguments: { query: "create checkout" } }));
     assert.match(found, /checkout\.create/);
@@ -241,6 +249,64 @@ test("a missing document is reported as guidance, not a protocol error", async (
   }
 });
 
+test("the tool listing stays small: every turn pays for it", async () => {
+  const root = preparedFixture();
+  const client = await connect(root);
+  try {
+    const { tools } = await client.listTools();
+    const chars = JSON.stringify(tools).length;
+    assert.ok(chars / 4 < 2200, `tool listing is ~${Math.ceil(chars / 4)} tokens`);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("the orient prompt and the capability and session resources are served without a tool call", async () => {
+  const root = preparedFixture();
+  const client = await connect(root);
+  try {
+    const { prompts } = await client.listPrompts();
+    assert.deepEqual(prompts.map((p) => p.name), ["orient"]);
+    const prompt = await client.getPrompt({ name: "orient", arguments: { task: "add a status field" } });
+    const text = prompt.messages.map((m) => m.content.text).join("\n");
+    assert.match(text, /Where things live/);
+    assert.match(text, /surface_context with task: "add a status field"/);
+
+    const { resourceTemplates } = await client.listResourceTemplates();
+    assert.ok(resourceTemplates.some((r) => r.uriTemplate === "surface://capability/{id}"));
+    const capability = await client.readResource({ uri: "surface://capability/checkout.create" });
+    assert.match(capability.contents[0].text, /src\/checkout\/create\.ts/);
+    const missing = await client.readResource({ uri: "surface://capability/nope" });
+    assert.match(missing.contents[0].text, /No capability/);
+
+    const session = await client.readResource({ uri: "surface://session" });
+    assert.match(session.contents[0].text, /Runs: 0/);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("surface_context serves a file once per session and says so the second time", async () => {
+  const root = preparedFixture();
+  const client = await connect(root);
+  try {
+    const first = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout" } }));
+    assert.match(first, /src\/checkout\/create\.ts \[owner/);
+    assert.match(first, /Session: 0 runs, 1 context pack/);
+    const second = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout status" } }));
+    assert.match(second, /src\/checkout\/create\.ts \[already served/);
+    assert.match(second, /tokens not repeated/);
+    const full = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout", mode: "full" } }));
+    assert.match(full, /src\/checkout\/create\.ts \[owner/);
+    assert.match(full, /<repo-data>/);
+  } finally {
+    await client.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("surface_verify declines to repeat a failed run on an unchanged tree unless forced", async (t) => {
   const root = mkdtempSync(join(tmpdir(), "project-surface-mcp-loop-"));
   cpSync(join(FIXTURES_DIR, "ts-api"), root, { recursive: true });
@@ -274,38 +340,6 @@ test("surface_verify declines to repeat a failed run on an unchanged tree unless
 
     const session = await client.readResource({ uri: "surface://session" });
     assert.match(session.contents[0].text, /unchanged-rerun/);
-  } finally {
-    await client.close();
-    rmSync(root, { recursive: true, force: true });
-  }
-});
-
-test("the tool listing stays small: every turn pays for it", async () => {
-  const root = preparedFixture();
-  const client = await connect(root);
-  try {
-    const { tools } = await client.listTools();
-    const chars = JSON.stringify(tools).length;
-    assert.ok(chars / 4 < 2200, `tool listing is ~${Math.ceil(chars / 4)} tokens`);
-  } finally {
-    await client.close();
-    rmSync(root, { recursive: true, force: true });
-  }
-});
-
-test("surface_context serves a file once per session and says so the second time", async () => {
-  const root = preparedFixture();
-  const client = await connect(root);
-  try {
-    const first = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout" } }));
-    assert.match(first, /src\/checkout\/create\.ts \[owner/);
-    assert.match(first, /Session: 0 runs, 1 context pack/);
-    const second = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout status" } }));
-    assert.match(second, /src\/checkout\/create\.ts \[already served/);
-    assert.match(second, /tokens not repeated/);
-    const full = textOf(await client.callTool({ name: "surface_context", arguments: { task: "checkout", mode: "full" } }));
-    assert.match(full, /src\/checkout\/create\.ts \[owner/);
-    assert.match(full, /<repo-data>/);
   } finally {
     await client.close();
     rmSync(root, { recursive: true, force: true });

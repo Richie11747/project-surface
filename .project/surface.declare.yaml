@@ -101,13 +101,6 @@ capabilities:
     evidence: [packages/core/test/redact.test.js]
     tags: [safety]
 
-  - id: safety.redaction
-    title: Secret redaction for every captured command output
-    owners: [packages/core/src/redact.ts]
-    contracts: [docs/trust-model.md]
-    evidence: [packages/core/test/redact.test.js]
-    tags: [safety]
-
   # ---- Analyses ------------------------------------------------------------
   - id: analysis.health
     title: Drift, stale claims and unproven behaviour as health findings
@@ -137,6 +130,14 @@ capabilities:
     owners: [packages/core/src/analysis/context.ts]
     contracts: [docs/cli.md, docs/sessions.md]
     evidence: [packages/core/test/context.test.js, test/cli.test.js]
+    tags: [analysis]
+
+  - id: analysis.brief
+    title: One screen of orientation - proven commands, error rules, paths needing approval, where things live
+    description: A projection of the document at newcomer granularity, rendered once for the CLI and the MCP overview so a person and an agent read the same text.
+    owners: [packages/core/src/analysis/brief.ts]
+    contracts: [docs/cli.md]
+    evidence: [packages/core/test/brief.test.js, test/cli.test.js]
     tags: [analysis]
 
   - id: analysis.diff
@@ -266,6 +267,12 @@ capabilities:
     contracts: [docs/cli.md]
     evidence: [test/cli.test.js]
     tags: [cli]
+  - id: cli.brief
+    title: surface brief
+    owners: [packages/cli/src/commands/brief.ts]
+    contracts: [docs/cli.md]
+    evidence: [test/cli.test.js]
+    tags: [cli]
   - id: cli.session
     title: surface session
     owners: [packages/cli/src/commands/session.ts]
@@ -319,7 +326,7 @@ capabilities:
     environment: [PROJECT_SURFACE_ALLOW_EXEC]
     tags: [mcp, safety]
   - id: mcp.server
-    title: The stdio MCP server
+    title: The stdio MCP server, with the orient prompt and the capability and session resources
     owners: [packages/mcp-server/src/index.ts, packages/mcp-server/src/bin.ts, packages/mcp-server/src/support.ts]
     contracts: [docs/mcp.md]
     evidence: [test/mcp.test.js]

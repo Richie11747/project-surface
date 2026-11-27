@@ -77,7 +77,7 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
     print(style.dim(`  Add .project/*.local.json to .gitignore: session state (${SESSION_FILE}) is machine-local.`));
   }
   print("");
-  print(`Next: ${style.bold("surface inspect")} to see what was found.`);
+  print(`Next: ${style.bold("surface brief")} for one screen of orientation, ${style.bold("surface inspect")} for everything.`);
 
   return 0;
 }
