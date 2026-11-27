@@ -233,9 +233,21 @@ Not run
 Over MCP, `surface_verify` declines the same run - `Not run.`, an answer rather than an error - unless
 `force: true`. Two more signals name the other loops: `same-failure` (three attempts, one failure
 signature, different edits: the edits are not reaching it) and `flapping` (pass and fail on identical
-code: not proof).
+code: not proof). Context packs use the same ledger:
 
-What is recorded, and what deliberately is not: [docs/sessions.md](docs/sessions.md).
+```console
+$ surface context "checkout status" --delta
+Context for: checkout status
+  898 of 900 tokens used; 2 file(s) already served, ~1196 tokens not repeated
+
+Files
+  src/checkout/create.ts         repeat    598 tok  derived·unknown  Implements the capability. Served in pack #4; unchanged since, not repeated.
+  docs/contracts/checkout.md     contract  127 tok  derived·unknown  Specifies the capability.
+```
+
+A file that does not fit the budget is sliced around the locator the document already holds for it rather
+than dropped, and the rules come filtered to the ones that can apply to the files in the pack, with the
+count left out. What is recorded, and what deliberately is not: [docs/sessions.md](docs/sessions.md).
 
 ---
 
@@ -350,7 +362,7 @@ Three things are worth noticing.
 | `surface verify` | Run project commands and record the result as evidence; `--stale` re-proves what went stale, `--since <ref>` what a change touched, `--if-changed` skips a run that cannot come out differently |
 | `surface impact <paths>` | What a change affects, and what to run |
 | `surface gate --since <ref>` | Does the change carry proof? Per touched capability: proven at this commit, or not; `--verify` proves it first |
-| `surface context "<task>"` | Token-bounded context pack, with a reason and a trust label per file |
+| `surface context "<task>"` | Token-bounded context pack, with a reason and a trust label per file; `--delta` does not repeat what the session already served |
 | `surface session` | What this machine ran and served, and the loop signals that follow; `--reset` forgets it |
 | `surface diff --since <ref>` | What changed about the project surface |
 | `surface doctor` | Drift, stale claims, unproven behaviour |
@@ -457,7 +469,7 @@ Development: `npm install && npm run build && npm test`. See [CONTRIBUTING.md](C
 
 ## Status
 
-`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, a trust label on every file of a context pack, and sessions - the ledger that declines a pointless re-run - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
+`0.2.0` is on npm - `npx project-surface init` installs it. On `main` since then, unreleased: `surface gate` (proof-carrying pull requests, with the receipt posted by the GitHub Action), `surface verify --stale` / `--since`, verification records that name the commit they ran against, a trust label on every file of a context pack, and sessions - the ledger that declines a pointless re-run and stops a context pack repeating itself - see [CHANGELOG.md](CHANGELOG.md#unreleased). What is done, what is next and what is deliberately not claimed: [ROADMAP.md](ROADMAP.md). The schema is versioned as `project-surface/v1` and published at a stable, versioned URL -
 [`https://richie11747.github.io/project-surface/spec/v1/surface.schema.json`](https://richie11747.github.io/project-surface/spec/v1/surface.schema.json)
 is its `$id`. A generator in any language can target it; [spec/v1/CONFORMANCE.md](spec/v1/CONFORMANCE.md)
 says what that takes.

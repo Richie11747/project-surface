@@ -8,7 +8,17 @@
  */
 
 import { parseArgs } from "node:util";
-import { createGuardedAccess, packContext } from "@project-surface/core";
+import {
+  appendPack,
+  createGuardedAccess,
+  nowIso,
+  packContext,
+  readLedger,
+  servedIndex,
+  taskKey,
+  workingTreeFingerprint,
+  writeLedger,
+} from "@project-surface/core";
 import { GLOBAL_OPTIONS, requireSurface, CliError, type GlobalOptions } from "../context.js";
 import { bullet, heading, print, printJson, style, table, tier } from "../output.js";
 
@@ -22,6 +32,8 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
       budget: { type: "string" },
       "max-capabilities": { type: "string" },
       content: { type: "boolean", default: false },
+      delta: { type: "boolean", default: false },
+      "all-constraints": { type: "boolean", default: false },
     },
   });
 
@@ -35,11 +47,33 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   const maxCapabilities =
     typeof values["max-capabilities"] === "string" ? Number(values["max-capabilities"]) : undefined;
 
+  /* With --delta the session ledger says which files this machine was already
+     served and has not changed since; the pack lists them without repeating
+     them, and the pack itself is recorded for the next call. */
+  const now = nowIso();
+  const ledger = values.delta ? readLedger(options.root, now) : undefined;
   const pack = packContext(surface, task, createGuardedAccess(options.root), {
     ...(budget && Number.isFinite(budget) ? { budgetTokens: budget } : {}),
     ...(maxCapabilities && Number.isFinite(maxCapabilities) ? { maxCapabilities } : {}),
     includeContent: values.content === true,
+    ...(ledger ? { served: servedIndex(ledger) } : {}),
+    allConstraints: values["all-constraints"] === true,
   });
+  if (ledger) {
+    const files = pack.items.flatMap((i) =>
+      i.key && !i.partial ? [{ path: i.path, key: i.key, tokens: i.estimatedTokens }] : []
+    );
+    const record = {
+      source: "cli" as const,
+      task,
+      taskKey: taskKey(task),
+      tree: workingTreeFingerprint(options.root),
+      files,
+      usedTokens: pack.usedTokens,
+      savedTokens: pack.savedTokens,
+    };
+    writeLedger(options.root, appendPack(ledger, record, now).ledger);
+  }
 
   if (options.json) {
     printJson(pack);
@@ -47,7 +81,8 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   }
 
   print(heading(`Context for: ${task}`));
-  print(style.dim(`  ${pack.usedTokens} of ${pack.budgetTokens} tokens used`));
+  const saved = pack.repeated > 0 ? `; ${pack.repeated} file(s) already served, ~${pack.savedTokens} tokens not repeated` : "";
+  print(style.dim(`  ${pack.usedTokens} of ${pack.budgetTokens} tokens used${saved}`));
   print("");
 
   if (pack.capabilities.length === 0) {
@@ -68,8 +103,8 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
   print(
     table(
       pack.items.map((i) => [
-        `  ${i.path}`,
-        style.dim(i.role),
+        `  ${i.path}${i.range ? style.dim(`:${i.range.start}-${i.range.end}`) : ""}`,
+        style.dim(i.repeat ? "repeat" : i.partial ? `${i.role} (slice)` : i.role),
         style.dim(`${i.estimatedTokens} tok`),
         trust(i.trust.tier, i.trust.freshness),
         style.dim(i.reason),
@@ -77,10 +112,13 @@ export async function run(args: string[], options: GlobalOptions): Promise<numbe
     )
   );
 
-  if (pack.constraints.length > 0) {
+  if (pack.constraints.length > 0 || pack.constraintsOmitted > 0) {
     print("");
     print(heading("Constraints that apply"));
     for (const c of pack.constraints) print(bullet(c.rule));
+    if (pack.constraintsOmitted > 0) {
+      print(style.dim(`    +${pack.constraintsOmitted} rule(s) that cannot apply to these files; --all-constraints lists them`));
+    }
   }
 
   if (pack.commands.length > 0) {

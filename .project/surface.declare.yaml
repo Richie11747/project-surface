@@ -132,10 +132,11 @@ capabilities:
     tags: [analysis, trust]
 
   - id: analysis.context
-    title: Token-bounded context pack with a reason per file
+    title: Token-bounded context pack with a reason per file, one ranking, delta packs and locator slices
+    description: Selects owners, contracts and evidence for a task; lists a file already served in this session instead of repeating it; slices a file that does not fit around its locator; filters rules to the ones that can apply.
     owners: [packages/core/src/analysis/context.ts]
-    contracts: [docs/cli.md]
-    evidence: [test/cli.test.js]
+    contracts: [docs/cli.md, docs/sessions.md]
+    evidence: [packages/core/test/context.test.js, test/cli.test.js]
     tags: [analysis]
 
   - id: analysis.diff

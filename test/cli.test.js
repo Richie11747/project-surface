@@ -682,3 +682,35 @@ test("verify warns before repeating a failed run on an unchanged tree, --if-chan
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("context --delta lists a file served before without repeating it, and records the pack in the session", () => {
+  const root = freshCopy();
+  try {
+    assert.equal(surface(root, "init").code, 0);
+    const first = JSON.parse(surface(root, "context", "checkout", "--delta", "--json").stdout);
+    assert.equal(first.repeated, 0);
+    assert.ok(first.items.some((i) => i.path === "src/checkout/create.ts" && !i.repeat));
+    assert.ok(first.usedTokens > 0);
+
+    const second = JSON.parse(surface(root, "context", "checkout status", "--delta", "--json").stdout);
+    assert.ok(second.repeated > 0);
+    const create = second.items.find((i) => i.path === "src/checkout/create.ts");
+    assert.deepEqual(create.repeat, { since: 1 });
+    assert.ok(second.usedTokens < first.usedTokens);
+    assert.equal(second.savedTokens > 0, true);
+
+    /* Without --delta the session is neither read nor written. */
+    const full = JSON.parse(surface(root, "context", "checkout", "--json").stdout);
+    assert.equal(full.repeated, 0);
+    const session = JSON.parse(surface(root, "session", "--json").stdout);
+    assert.equal(session.packs.length, 2);
+
+    const text = surface(root, "context", "checkout", "--delta");
+    assert.match(text.stdout, /not repeated/);
+    assert.match(text.stdout, /rule\(s\) that cannot apply|Constraints that apply/);
+    const all = JSON.parse(surface(root, "context", "checkout", "--all-constraints", "--json").stdout);
+    assert.equal(all.constraintsOmitted, 0);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

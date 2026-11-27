@@ -5,19 +5,27 @@
 import { z } from "zod";
 import {
   analyzeImpact,
+  appendPack,
   changedSince,
   diffSurfaces,
-  createGuardedAccess,
   gateChange,
   headState,
+  nowIso,
   packContext,
+  readLedger,
+  renderSessionLine,
+  servedIndex,
+  sessionSummary,
   showFileAtRef,
   stagedPaths,
+  taskKey,
   validateSurface,
+  workingTreeFingerprint,
+  writeLedger,
   SURFACE_FILE,
 } from "@project-surface/core";
 import type { Surface } from "@project-surface/core";
-import { loadSurface, text, trustNote } from "../support.js";
+import { guardedAccess, loadSurface, repoData, text, trustNote } from "../support.js";
 import type { ToolContext, ToolResult } from "../support.js";
 
 export const gateTool = {
@@ -137,27 +145,64 @@ export const contextTool = {
   title: "Task context pack",
   description:
     "Select the smallest set of files worth reading for a task, within a token budget, with a stated reason " +
-    "for every inclusion and an explicit list of what was left out. Use this instead of reading the tree.",
+    "for every inclusion and an explicit list of what was left out. Use this instead of reading the tree. " +
+    "By default a file already served in this session and unchanged since is listed, not repeated.",
   inputSchema: {
     task: z.string().describe("What you are about to do, in plain language."),
     budgetTokens: z.number().int().min(500).max(200_000).optional(),
     includeContent: z.boolean().optional().describe("Return file contents as well as paths."),
+    maxCapabilities: z.number().int().min(1).max(50).optional(),
+    mode: z
+      .enum(["delta", "full"])
+      .optional()
+      .describe("delta (default): skip files served earlier in this session and unchanged since. full: repeat them."),
+    allConstraints: z.boolean().optional().describe("List every active rule, not only those that can apply to the files."),
   },
   handler(
-    args: { task: string; budgetTokens?: number; includeContent?: boolean },
+    args: {
+      task: string;
+      budgetTokens?: number;
+      includeContent?: boolean;
+      maxCapabilities?: number;
+      mode?: "delta" | "full";
+      allConstraints?: boolean;
+    },
     ctx: ToolContext
   ): ToolResult {
     const surface = loadSurface(ctx);
-    const pack = packContext(surface, args.task, createGuardedAccess(ctx.root), {
+    const now = nowIso();
+    let ledger = readLedger(ctx.root, now);
+    const pack = packContext(surface, args.task, guardedAccess(ctx), {
       ...(args.budgetTokens ? { budgetTokens: args.budgetTokens } : {}),
+      ...(args.maxCapabilities ? { maxCapabilities: args.maxCapabilities } : {}),
       includeContent: args.includeContent === true,
+      ...(args.mode === "full" ? {} : { served: servedIndex(ledger) }),
+      allConstraints: args.allConstraints === true,
     });
+    /* Whole files only: a slice served now must not count as the file served. */
+    const files = pack.items.flatMap((i) =>
+      i.key && !i.partial ? [{ path: i.path, key: i.key, tokens: i.estimatedTokens }] : []
+    );
+    ledger = appendPack(
+      ledger,
+      {
+        source: "mcp",
+        task: args.task,
+        taskKey: taskKey(args.task),
+        tree: workingTreeFingerprint(ctx.root),
+        files,
+        usedTokens: pack.usedTokens,
+        savedTokens: pack.savedTokens,
+      },
+      now
+    ).ledger;
+    writeLedger(ctx.root, ledger);
 
-    const lines = [
-      `Context for: ${pack.task}`,
-      `Budget: ${pack.usedTokens} of ${pack.budgetTokens} tokens`,
-      "",
-    ];
+    const saved =
+      pack.repeated > 0
+        ? `; ${pack.repeated} file(s) served earlier and unchanged, ~${pack.savedTokens} tokens not repeated`
+        : "";
+    const lines = [`Context for: ${pack.task}`, `Budget: ${pack.usedTokens} of ${pack.budgetTokens} tokens${saved}`, ""];
 
     if (pack.capabilities.length === 0) {
       lines.push("No capability matched that description. Call surface_overview to see what exists.");
@@ -169,12 +214,21 @@ export const contextTool = {
 
     lines.push("", "Files to read:");
     for (const i of pack.items) {
-      lines.push(`  ${i.path} [${i.role}, ${i.trust.tier}/${i.trust.freshness}, ~${i.estimatedTokens} tokens] - ${i.reason}`);
+      const where = i.range ? `:${i.range.start}-${i.range.end}` : "";
+      const role = i.repeat ? "already served" : i.partial ? `${i.role}, slice` : i.role;
+      lines.push(
+        `  ${i.path}${where} [${role}, ${i.trust.tier}/${i.trust.freshness}, ~${i.estimatedTokens} tokens] - ${i.reason}`
+      );
     }
 
-    if (pack.constraints.length > 0) {
+    if (pack.constraints.length > 0 || pack.constraintsOmitted > 0) {
       lines.push("", "Constraints:");
-      for (const c of pack.constraints) lines.push(`  [${c.severity}] ${c.rule}`);
+      lines.push(repoData(pack.constraints.map((c) => `  [${c.severity}] ${c.rule}`).join("\n")));
+      if (pack.constraintsOmitted > 0) {
+        lines.push(
+          `  (+${pack.constraintsOmitted} rule(s) that cannot apply to these files; allConstraints: true lists them)`
+        );
+      }
     }
     if (pack.commands.length > 0) {
       lines.push("", "Verify with:");
@@ -189,10 +243,12 @@ export const contextTool = {
       lines.push("", "Contents:");
       for (const i of pack.items) {
         if (i.content === undefined) continue;
-        lines.push("", `--- ${i.path} ---`, i.content);
+        const where = i.range ? ` (lines ${i.range.start}-${i.range.end})` : "";
+        lines.push("", `--- ${i.path}${where} ---`, i.content);
       }
     }
 
+    lines.push("", renderSessionLine(sessionSummary(ledger)), trustNote());
     return text(lines.join("\n"));
   },
 };

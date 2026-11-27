@@ -152,6 +152,13 @@ files by `stat` and opens none of them.
 | `--budget <tokens>` | Default in `packages/core/src/analysis/context.ts`. |
 | `--max-capabilities <n>` | |
 | `--content` | Include file contents, not only paths. |
+| `--delta` | List a file this machine was already served, and that has not changed since, without repeating it; record this pack for the next call. The tokens not spent are reported. |
+| `--all-constraints` | Every active rule, not only the ones whose check or source covers a file in the pack. |
+
+A file that does not fit the remaining budget is sliced around the locator the document holds for it
+(`L74`, `export:createCheckout`) rather than dropped; the row says `(slice)` with the line range. Rules come
+filtered to the ones that can apply, plus every rule at error severity, with the count left out. Details in
+[sessions.md](sessions.md).
 
 ### `surface agents [--write <file>] [--include-inferred] [--max-capabilities n]`
 
