@@ -91,7 +91,7 @@ capabilities:
     description: Machine-local, append-only record behind verify, context --delta and the MCP tools. Three deterministic signals keyed to the working-tree fingerprint; never part of the surface document.
     owners: [packages/core/src/session/**]
     contracts: [docs/sessions.md]
-    evidence: [packages/core/test/session.test.js, test/cli.test.js]
+    evidence: [packages/core/test/session.test.js, packages/core/test/shell.test.js, test/cli.test.js]
     tags: [session]
 
   - id: safety.redaction
@@ -279,6 +279,13 @@ capabilities:
     contracts: [docs/sessions.md]
     evidence: [test/cli.test.js]
     tags: [cli]
+  - id: cli.hook
+    title: surface hook - the session ledger in front of and behind an agent's shell
+    description: Claude Code PreToolUse / PostToolUse / PostToolUseFailure hook for Bash. Denies a documented command re-run on an unchanged tree after a failure; records shell runs of documented commands. Silent on anything it cannot match.
+    owners: [packages/cli/src/commands/hook.ts]
+    contracts: [docs/sessions.md]
+    evidence: [test/cli.test.js]
+    tags: [cli, session]
   - id: cli.diff
     title: surface diff
     owners: [packages/cli/src/commands/diff.ts]

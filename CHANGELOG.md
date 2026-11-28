@@ -20,6 +20,12 @@ All notable changes to this project are documented here. This project adheres to
   run.`, not an error - unless `force: true`. New `surface session [--reset]` and the `surface://session`
   resource. Core: `assessAttempt`, `assessHistory`, `failureSignature`, `workingTreeFingerprint`,
   `readLedger` / `writeLedger`. What is and is not recorded: [docs/sessions.md](docs/sessions.md).
+- **Shell hook.** `surface hook pre-bash|post-bash`, wired by the Claude Code plugin to `PreToolUse`,
+  `PostToolUse` and `PostToolUseFailure` for `Bash`: a shell line that is exactly a documented command
+  (`npm test`, `npm t`, `cd bench && npm run score`, with an optional `2>&1 | tail -n`) is recorded in the
+  session ledger with `source: "hook"`, and re-running it after a failure on an unchanged working tree is
+  denied with the reason. Any line it cannot match, and any problem, ends in silence and exit `0`. Core:
+  `parseShellRun`, `canonicalRun`, `matchShellCommand`.
 - **Delta context packs.** `surface context --delta` and, by default, `surface_context` over MCP list a
   file already served in this session and unchanged since - path, role, trust, which pack served it -
   without repeating it or charging it to the budget; `repeated` and `savedTokens` make the saving visible.

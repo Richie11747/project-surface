@@ -484,7 +484,7 @@ test("verify refuses a command that is not in the document", () => {
 });
 
 test("every command answers --help and unknown commands fail", () => {
-  for (const cmd of ["init", "brief", "inspect", "why", "map", "agents", "verify", "impact", "gate", "context", "session", "diff", "doctor", "report", "mcp"]) {
+  for (const cmd of ["init", "brief", "inspect", "why", "map", "agents", "verify", "impact", "gate", "context", "session", "hook", "diff", "doctor", "report", "mcp"]) {
     const help = surface(".", cmd, "--help");
     assert.equal(help.code, 0, `${cmd} --help exited ${help.code}`);
     assert.ok(help.stdout.length > 20, `${cmd} --help printed nothing`);
@@ -698,6 +698,86 @@ test("verify warns before repeating a failed run on an unchanged tree, --if-chan
 
     assert.match(surface(root, "session", "--reset").stdout, /Forgot the session/);
     assert.match(surface(root, "session").stdout, /Nothing recorded yet/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+/** `surface hook <mode>` with a Claude Code hook payload on stdin. */
+function hook(root, mode, payload) {
+  const input = typeof payload === "string" ? payload : JSON.stringify({ cwd: root, tool_name: "Bash", ...payload });
+  const result = spawnSync(process.execPath, [CLI, "hook", mode, "--root", root], {
+    encoding: "utf8",
+    input,
+    env: { ...process.env, NO_COLOR: "1" },
+  });
+  return { code: result.status, stdout: result.stdout, stderr: result.stderr };
+}
+
+const failedBash = (command) => ({
+  hook_event_name: "PostToolUseFailure",
+  tool_input: { command },
+  error: "Exit code 1\nexpected 1 got 2",
+  is_interrupt: false,
+});
+
+test("hook pre-bash and post-bash: shell runs of a documented command land in the session, an unchanged re-run is denied", (t) => {
+  const { root, git } = failingFixture();
+  try {
+    if (!git) return t.skip("git is not installed");
+    assert.equal(surface(root, "init").code, 0);
+    const silent = (r) => {
+      assert.equal(r.code, 0, r.stderr);
+      assert.equal(r.stdout, "");
+    };
+
+    /* Anything it cannot be sure about ends in silence and exit 0. */
+    silent(hook(root, "pre-bash", "not json"));
+    silent(hook(root, "pre-bash", { hook_event_name: "PreToolUse", tool_input: { command: "ls -la" } }));
+    silent(hook(root, "pre-bash", { hook_event_name: "PreToolUse", tool_name: "Read", tool_input: { file_path: "x" } }));
+    silent(hook(root, "pre-bash", { hook_event_name: "PreToolUse", tool_input: { command: "npm test" } }));
+    assert.equal(hook(root, "sideways", {}).code, 1);
+
+    /* An interrupted run is not a verdict and is not recorded. */
+    silent(hook(root, "post-bash", { ...failedBash("npm test"), is_interrupt: true }));
+    silent(hook(root, "post-bash", { hook_event_name: "PostToolUse", tool_input: { command: "npm test" }, tool_response: { interrupted: true } }));
+    assert.equal(JSON.parse(surface(root, "session", "--json").stdout).attempts.length, 0);
+
+    silent(hook(root, "post-bash", failedBash("npm test 2>&1 | tail -20")));
+    const attempts = JSON.parse(surface(root, "session", "--json").stdout).attempts;
+    assert.equal(attempts.length, 1);
+    assert.equal(attempts[0].source, "hook");
+    assert.equal(attempts[0].commandId, "test");
+    assert.equal(attempts[0].status, "failed");
+    assert.equal(attempts[0].exitCode, 1);
+
+    /* Same tree, any spelling of the same command: denied, with the reason. */
+    const denied = hook(root, "pre-bash", { hook_event_name: "PreToolUse", tool_input: { command: "npm run test" } });
+    assert.equal(denied.code, 0, denied.stderr);
+    const decision = JSON.parse(denied.stdout).hookSpecificOutput;
+    assert.equal(decision.hookEventName, "PreToolUse");
+    assert.equal(decision.permissionDecision, "deny");
+    assert.match(decision.permissionDecisionReason, /not run/);
+    /* A different command is not affected. */
+    silent(hook(root, "pre-bash", { hook_event_name: "PreToolUse", tool_input: { command: "npm run typecheck" } }));
+
+    /* An edit lifts it; the same failure across edits is then named. */
+    const server = join(root, "src", "server.ts");
+    writeFileSync(server, `${readFileSync(server, "utf8")}\n// edit 1\n`);
+    silent(hook(root, "pre-bash", { hook_event_name: "PreToolUse", tool_input: { command: "npm test" } }));
+    silent(hook(root, "post-bash", failedBash("npm test")));
+    writeFileSync(server, `${readFileSync(server, "utf8")}\n// edit 2\n`);
+    const third = hook(root, "post-bash", failedBash("npm test"));
+    assert.equal(third.code, 0, third.stderr);
+    const context = JSON.parse(third.stdout).hookSpecificOutput;
+    assert.equal(context.hookEventName, "PostToolUseFailure");
+    assert.match(context.additionalContext, /same-failure/);
+
+    /* A pass is recorded too. */
+    writeFileSync(server, `${readFileSync(server, "utf8")}\n// edit 3\n`);
+    hook(root, "post-bash", { hook_event_name: "PostToolUse", tool_input: { command: "npm test" }, tool_response: { stdout: "ok", stderr: "", interrupted: false } });
+    const last = JSON.parse(surface(root, "session", "--json").stdout).attempts.at(-1);
+    assert.equal(last.status, "passed");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

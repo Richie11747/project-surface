@@ -19,7 +19,8 @@ import type { Command, Timestamp, VerificationRecord } from "../schema/types.js"
 export const MAX_ATTEMPTS = 200;
 export const MAX_PACKS = 50;
 
-export type SessionSource = "cli" | "mcp";
+/** Who made the attempt: `surface verify`, the MCP tool, or the shell hook. */
+export type SessionSource = "cli" | "mcp" | "hook";
 
 export interface Attempt {
   seq: number;

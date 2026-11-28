@@ -191,6 +191,14 @@ with its status, exit code, tree fingerprint and commit; the loop signals that c
 packs and the tokens they did not repeat. `--reset` forgets the session. The file is machine-local and never
 part of the document - [sessions.md](sessions.md) says what is recorded and what is not.
 
+### `surface hook pre-bash|post-bash`
+
+A Claude Code hook, not a command for people: it reads the hook payload on stdin. `pre-bash` denies a Bash
+call that is exactly a documented command whose last attempt failed on this byte-identical working tree;
+`post-bash` records the shell run in the session and returns `same-failure` / `flapping` as context. Every
+problem ends in silence and exit `0`. The Claude Code plugin installs both; what is matched and what is
+not: [sessions.md](sessions.md#the-shell-hook).
+
 ### `surface diff [--since <ref>] [--format text|markdown] [--fail-on-change]`
 
 What changed about the project surface between the committed document and the working tree.
