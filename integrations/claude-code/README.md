@@ -19,11 +19,16 @@ Then, in a project that has run `surface init`, ask in a fresh session:
 ## As a plugin
 
 This directory is a Claude Code plugin. It registers the MCP server from this checkout (so `npm run build`
-first), adds a `/surface` command that runs `doctor` and summarises the result, and installs one hook:
-on `SessionStart` it runs `surface brief`, so every session opens with one screen of orientation - the
+first), adds a `/surface` command that runs `doctor` and summarises the result, and installs two hooks.
+On `SessionStart` it runs `surface brief`, so every session opens with one screen of orientation - the
 proven commands, the rules that fail the build, the paths that need approval, and where things live - at
 a cost of a few hundred tokens, once. A project without a surface document prints nothing and the session
 starts normally.
+
+Around the `Bash` tool it runs `surface hook pre-bash|post-bash`: a shell line that is exactly a documented
+command (`npm test`, `cd bench && npm run score`) is recorded in the session ledger, and re-running it after
+a failure on byte-identical code is denied with the reason - edit something first. Any other line passes
+through untouched. Details: [docs/sessions.md](../../docs/sessions.md#the-shell-hook).
 
 The server it registers is the CLI-hosted one (`surface mcp`), which owns the adapters and rebuilds the
 document after a verification so freshness is re-anchored in the same call. Its `surface_context` tool

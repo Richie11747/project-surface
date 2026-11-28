@@ -26,9 +26,14 @@ whether the tree was dirty, the exit status, and two fingerprints:
 default) is appended as a *pack*: the task, the working-tree fingerprint, and for every whole file served
 its path, a change key (`size:mtime`), and its token estimate. A slice is not recorded as the file.
 
-Nothing else is recorded. In particular a command run any other way - `npm test` in a shell, a test
-runner in an editor - is invisible to the session. The signals below are about runs that went through the
-tool; the document does not claim to know about the rest.
+**Shell runs, through the hook.** An agent that types `npm test` into its shell bypasses the tool, and that
+is the run an agent repeats. `surface hook pre-bash|post-bash` (installed by the Claude Code plugin, see
+[The shell hook](#the-shell-hook)) records such a run as an attempt with `source: "hook"` when - and only
+when - the line is exactly a documented command.
+
+Nothing else is recorded. A test runner in an editor, a line the hook could not match, or a shell without
+the hook is invisible to the session. The signals below are about runs the ledger saw; the document does
+not claim to know about the rest.
 
 ## The three signals
 
@@ -50,6 +55,8 @@ appear:
 - The MCP `surface_verify` tool **declines** a run under `unchanged-rerun` - the response begins `Not run.`
   and is not an error - unless `force: true` is passed. After a run it appends any history signals and a
   one-line session summary.
+- The shell hook **denies** a Bash call under `unchanged-rerun`, with the reason, and adds `same-failure`
+  or `flapping` to the agent's context after one. See below.
 - `surface session` lists every attempt, the signals that currently hold, and the packs; `--reset` forgets
   everything. Over MCP the same summary is the `surface://session` resource.
 
@@ -73,6 +80,34 @@ Two more things keep a pack small without hiding anything, and neither needs the
 - **Relevant rules.** Every active rule at error severity is always in the pack. Any other rule is included
   when a glob of its check, or a file it was read from, covers a file in the pack; the number left out is
   reported. `--all-constraints` (CLI) or `allConstraints: true` (MCP) lists them all.
+
+## The shell hook
+
+`surface hook pre-bash` and `surface hook post-bash` read a Claude Code hook payload on stdin. The plugin in
+`integrations/claude-code` wires them to `PreToolUse`, `PostToolUse` and `PostToolUseFailure` for the `Bash`
+tool.
+
+**What is matched.** One command, optionally preceded by a single `cd <dir> &&`, optionally followed by
+`2>&1` and one `| tail ...` or `| head ...` - the shapes an agent uses to keep output short, none of which
+change what runs. The run string is compared after one spelling per meaning (`npm test`, `npm t` and
+`npm run test` are the same; `pnpm build` is not `pnpm run build`, because it may be a built-in), and the
+directory after the `cd` must be the command's `cwd` relative to the project root. Anything that chains
+(`;`, `&&`, `||`), substitutes (`$(...)`, backticks), redirects, runs in the background, or pipes into
+anything but `tail`/`head` is not matched.
+
+**What it does.**
+
+- `pre-bash`: when the line is a documented command whose last attempt failed on this exact working-tree
+  fingerprint, it answers `permissionDecision: "deny"` with the reason. Any edit lifts it;
+  `surface session --reset` forgets the history. It never answers `allow` - that would skip the user's own
+  permission prompts.
+- `post-bash`: a completed call is a pass; a failed one is recorded with the exit code from the first line
+  of the error (`Exit code N`) and the sanitised output for the failure signature. An interrupted call, or a
+  failure that does not say how it ended, is not a verdict on the command and is not recorded. If the
+  history now says `same-failure` or `flapping`, it is returned as `additionalContext`.
+
+**What it never does.** A hook must never be the reason a tool call fails: no surface document, no git,
+malformed stdin, another tool or an unmatched line all end in silence and exit `0`.
 
 ## What this is not
 

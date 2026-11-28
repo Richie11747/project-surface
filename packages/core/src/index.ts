@@ -122,6 +122,7 @@ export {
   type SessionSummary,
 } from "./session/ledger.js";
 export { readLedger, resetLedger, sessionPath, writeLedger } from "./session/store.js";
+export { canonicalRun, matchShellCommand, normaliseCwd, parseShellRun, type ShellRun } from "./session/shell.js";
 
 // Analysis
 export {
